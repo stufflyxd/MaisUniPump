@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class TelaPrincipalAluno : AppCompatActivity() {
@@ -22,12 +23,16 @@ class TelaPrincipalAluno : AppCompatActivity() {
     private lateinit var tvSequencia: TextView
     private lateinit var tvRecorde: TextView
 
+    // este TextView está dentro do card "Treino do dia"
+    private lateinit var tvFichaCard: TextView
+
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_principal_aluno)
 
+        // --- Bind de views ---
         nomeUser      = findViewById(R.id.nomeUser)
         visualizar    = findViewById(R.id.btn_visualizar)
         linkRelatorio = findViewById(R.id.link_relatorio)
@@ -35,18 +40,19 @@ class TelaPrincipalAluno : AppCompatActivity() {
 
         tvSequencia   = findViewById(R.id.tvSequencia)
         tvRecorde     = findViewById(R.id.Recorde)
+        tvFichaCard   = findViewById(R.id.text_ficha) // TextView do card de treino
 
-        // Saudação
+        // --- Saudação ---
         val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
-        val nome = prefs.getString("nome", "Usuário")
+        val nome  = prefs.getString("nome", "Usuário") ?: "Usuário"
         nomeUser.text = "Olá, $nome!"
 
-        // Ações de botão
+        // --- Ações ---
         onClickVisualizar()
         onClickRelatorio()
         onClickNotificao()
 
-        // Bottom nav
+        // --- Bottom Navigation ---
         findViewById<BottomNavigationView>(R.id.bottom_navigation)
             .setOnItemSelectedListener { item ->
                 when (item.itemId) {
@@ -68,16 +74,18 @@ class TelaPrincipalAluno : AppCompatActivity() {
                 }
             }
 
-        // Carrega pela primeira vez
+        // --- Inicializa dados ---
         carregarSequencia()
+        loadPrimeiraFicha()  // Pega a primeira ficha e preenche o card
     }
 
     override fun onResume() {
         super.onResume()
-        // Revalida ao voltar para a tela
         carregarSequencia()
+        loadPrimeiraFicha()
     }
 
+    /** Lê os campos sequenciaDias e recordeDias e, se passou 1 dia, zera sequenciaDias */
     private fun carregarSequencia() {
         val uid = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
             .getString("alunoDocId", null) ?: return
@@ -88,8 +96,8 @@ class TelaPrincipalAluno : AppCompatActivity() {
             val rec       = doc.getLong("recordeDias")   ?: 0L
             val lastStamp = doc.getTimestamp("lastTreino")
 
-            // calcula 'ontem' (1 dia atrás) e zera hora/min/seg
-            val agora = Timestamp.now().toDate()
+            // 1 dia atrás, sem hora
+            val agora  = Timestamp.now().toDate()
             val limite = java.util.Calendar.getInstance().apply {
                 time = agora
                 add(java.util.Calendar.DAY_OF_YEAR, -1)
@@ -100,17 +108,10 @@ class TelaPrincipalAluno : AppCompatActivity() {
             }.time
 
             if (lastStamp == null || lastStamp.toDate().before(limite)) {
-                // se passou 1 dia sem treinar, reseta no banco
-                if (seq != 0L) {
-                    alunoRef.update("sequenciaDias", 0)
-                        .addOnFailureListener { e ->
-                            Log.e("TelaPrincipalAluno", "erro ao resetar sequência", e)
-                        }
-                }
+                if (seq != 0L) alunoRef.update("sequenciaDias", 0)
                 tvSequencia.text = "0 🔥"
                 tvRecorde.text   = "$rec dias"
             } else {
-                // ainda dentro de 24h
                 tvSequencia.text = "$seq 🔥"
                 tvRecorde.text   = "$rec dias"
             }
@@ -119,16 +120,51 @@ class TelaPrincipalAluno : AppCompatActivity() {
         }
     }
 
+    /**
+     * Busca a **primeira** ficha da coleção "treino" do aluno,
+     * exatamente na ordem do Firestore (sem orderBy),
+     * e preenche o card com "Ficha <letra>" + "<título>".
+     */
+    private fun loadPrimeiraFicha() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            tvFichaCard.text = "Faça login"
+            return
+        }
+
+        val uid = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+            .getString("alunoDocId", null) ?: run {
+            tvFichaCard.text = "Aluno não encontrado"
+            return
+        }
+
+        db.collection("alunos")
+            .document(uid)
+            .collection("treino")
+            .get()
+            .addOnSuccessListener { snaps ->
+                val doc = snaps.documents.firstOrNull()
+                if (doc == null) {
+                    tvFichaCard.text = "Nenhuma ficha"
+                    return@addOnSuccessListener
+                }
+                val letra  = doc.getString("letra").orEmpty()
+                val titulo = doc.getString("nome").orEmpty()
+                // só mostramos a letra + título, não "Feito pelo..."
+                tvFichaCard.text = "Ficha $letra\n$titulo"
+            }
+            .addOnFailureListener { e ->
+                Log.e("TelaPrincipalAluno", "erro ao carregar ficha", e)
+                tvFichaCard.text = "Erro ao carregar"
+            }
+    }
+
     private fun onClickVisualizar() {
         visualizar.setOnClickListener {
             val uid = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
                 .getString("alunoDocId", null)
             if (uid.isNullOrBlank()) {
-                Toast.makeText(
-                    this,
-                    "Usuário não encontrado. Faça login novamente.",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this, "Usuário não encontrado.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
@@ -139,30 +175,23 @@ class TelaPrincipalAluno : AppCompatActivity() {
                 .addOnSuccessListener { snaps ->
                     val doc = snaps.documents.firstOrNull()
                     if (doc == null) {
-                        Toast.makeText(
-                            this,
-                            "Nenhuma ficha encontrada",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        Toast.makeText(this, "Nenhuma ficha encontrada", Toast.LENGTH_LONG).show()
                         return@addOnSuccessListener
                     }
-                    val docId = doc.id
-                    val letra = doc.getString("letra") ?: ""
+                    val docId  = doc.id
+                    val letra  = doc.getString("letra").orEmpty()
+                    val titulo = doc.getString("nome").orEmpty()
 
-                    // Cria a Intent corretamente
                     Intent(this, TelaFichaTreinoAluno::class.java).apply {
                         putExtra("docIdTreino", docId)
                         putExtra("letra", letra)
+                        putExtra("titulo", titulo)
                         startActivity(this)
                     }
                 }
                 .addOnFailureListener { e ->
                     Log.e("TelaPrincipalAluno", "erro ao buscar ficha", e)
-                    Toast.makeText(
-                        this,
-                        "Falha ao carregar ficha",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this, "Falha ao carregar ficha", Toast.LENGTH_LONG).show()
                 }
         }
     }
