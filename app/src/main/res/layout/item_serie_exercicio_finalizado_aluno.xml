@@ -1,0 +1,78 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/fundo_preto_rounded"
+    android:padding="8dp"
+    android:layout_marginBottom="8dp">
+
+    <!-- Número da série: ocupa 1 parte do espaço e centraliza -->
+    <TextView
+        android:id="@+id/tvNumSerie"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="1"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:gravity="center" />
+
+    <!-- Peso: largura fixa -->
+    <TextView
+        android:id="@+id/tvPeso"
+        android:layout_width="65dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#202020"
+        android:padding="8dp"
+        android:text="8 Kg"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:gravity="center" />
+
+    <!-- Repetições: largura fixa -->
+    <TextView
+        android:id="@+id/tvReps"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#202020"
+        android:drawableLeft="@drawable/icon_repeticao"
+        android:drawablePadding="8dp"
+        android:drawableTint="#FFFFFF"
+        android:padding="8dp"
+        android:text="10"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:gravity="center" />
+
+    <!-- Duração: largura fixa -->
+    <TextView
+        android:id="@+id/tvDuracao"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#202020"
+        android:drawableLeft="@drawable/icon_relogio"
+        android:drawablePadding="8dp"
+        android:drawableTint="#FFFFFF"
+        android:padding="8dp"
+        android:text="30"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:gravity="center"/>
+
+    <!-- CheckBox no final -->
+    <CheckBox
+        android:id="@+id/cbFeito"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="#FFFFFF"/>
+
+</LinearLayout>

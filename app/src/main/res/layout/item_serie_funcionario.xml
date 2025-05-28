@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/fundo_preto_rounded"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp">
+
+    <!-- Número da série -->
+    <TextView
+        android:id="@+id/tvOrdem"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Repetições -->
+    <EditText
+        android:id="@+id/tvReps"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#202020"
+        android:drawableStart="@drawable/icon_repeticao"
+        android:drawablePadding="6dp"
+        android:drawableTint="#FFFFFF"
+        android:padding="8dp"
+        android:text="10"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="3"
+        android:hint="Reps"
+        android:textColorHint="#888888" />
+
+    <!-- Peso -->
+    <EditText
+        android:id="@+id/tvPeso"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#202020"
+        android:padding="5dp"
+        android:text="8 Kg"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:maxLength="6"
+        android:hint="Kg"
+        android:textColorHint="#888888" />
+
+    <!-- Tempo de descanso -->
+    <EditText
+        android:id="@+id/tvDescanso"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#202020"
+        android:drawableStart="@drawable/icon_relogio"
+        android:drawablePadding="6dp"
+        android:drawableTint="#FFFFFF"
+        android:padding="8dp"
+        android:text="30"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="3"
+        android:hint="Seg"
+        android:textColorHint="#888888" />
+
+
+    <!-- Botão de excluir -->
+    <ImageButton
+        android:id="@+id/btnExcluirSerie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:backgroundTint="@color/black"
+        android:contentDescription="Botão de excluir exercício"
+        android:src="@drawable/icon_lixeiro" />
+
+
+</LinearLayout>
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/fundo_preto_rounded"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/tvOrdem"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
+
+    <EditText
+        android:id="@+id/tvReps"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#202020"
+        android:drawableLeft="@drawable/icon_repeticao"
+        android:drawablePadding="8dp"
+        android:drawableTint="#FFFFFF"
+        android:padding="8dp"
+        android:text="10"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:gravity="center"/>
+
+
+
+    &lt;!&ndash;<TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="repetições"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>&ndash;&gt;
+
+    <EditText
+        android:id="@+id/tvPeso"
+        android:layout_width="65dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#202020"
+        android:padding="8dp"
+        android:text="8 Kg"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:gravity="center"/>
+
+    &lt;!&ndash;<TextView
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="kg"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>&ndash;&gt;
+
+    <EditText
+        android:id="@+id/tvDescanso"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:backgroundTint="#202020"
+        android:drawableLeft="@drawable/icon_relogio"
+        android:drawablePadding="8dp"
+        android:drawableTint="#FFFFFF"
+        android:padding="8dp"
+        android:text="30"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:gravity="center"/>
+
+    &lt;!&ndash;<TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="segundos"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>&ndash;&gt;
+
+    <ImageButton
+        android:id="@+id/btnExcluirSerie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:contentDescription="Botão de excluir exercício"
+        android:src="@drawable/icon_lixeiro" />
+
+</LinearLayout>-->
+
+
+
+<!--
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:gravity="center_vertical"
+android:background="@drawable/fundo_preto_rounded"
+android:padding="8dp"
+android:layout_marginBottom="8dp">
+
+&lt;!&ndash; Número da série: ocupa 1 parte do espaço e centraliza &ndash;&gt;
+<TextView
+    android:id="@+id/tvNumSerie"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="1"
+    android:textColor="#FFFFFF"
+    android:textSize="20sp"
+    android:gravity="center" />
+
+&lt;!&ndash; Peso: largura fixa &ndash;&gt;
+<TextView
+    android:id="@+id/tvPeso"
+    android:layout_width="65dp"
+    android:layout_height="48dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/rounded_edittext"
+    android:backgroundTint="#202020"
+    android:padding="8dp"
+    android:text="8 Kg"
+    android:textColor="#FFFFFF"
+    android:textSize="16sp"
+    android:gravity="center" />
+
+&lt;!&ndash; Repetições: largura fixa &ndash;&gt;
+<TextView
+    android:id="@+id/tvReps"
+    android:layout_width="60dp"
+    android:layout_height="48dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/rounded_edittext"
+    android:backgroundTint="#202020"
+    android:drawableLeft="@drawable/icon_repeticao"
+    android:drawablePadding="8dp"
+    android:drawableTint="#FFFFFF"
+    android:padding="8dp"
+    android:text="10"
+    android:textColor="#FFFFFF"
+    android:textSize="16sp"
+    android:gravity="center" />
+
+&lt;!&ndash; Duração: largura fixa &ndash;&gt;
+<TextView
+    android:id="@+id/tvDuracao"
+    android:layout_width="60dp"
+    android:layout_height="48dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/rounded_edittext"
+    android:backgroundTint="#202020"
+    android:drawableLeft="@drawable/icon_relogio"
+    android:drawablePadding="8dp"
+    android:drawableTint="#FFFFFF"
+    android:padding="8dp"
+    android:text="30"
+    android:textColor="#FFFFFF"
+    android:textSize="16sp"
+    android:gravity="center"/>
+
+&lt;!&ndash; CheckBox no final &ndash;&gt;
+<CheckBox
+    android:id="@+id/cbFeito"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:buttonTint="#FFFFFF"/>
+
+</LinearLayout>-->

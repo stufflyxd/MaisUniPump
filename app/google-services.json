@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "460450903016",
+    "project_id": "unipump-av3",
+    "storage_bucket": "unipump-av3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460450903016:android:a2284293c77a0ed5362a5d",
+        "android_client_info": {
+          "package_name": "com.example.unipump"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqCYL6eFO6Nqry7_urjUU3-kRGwC8hg5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

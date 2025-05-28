@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/fundo_preto_rounded"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/tvOrdem"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
+
+    <EditText
+        android:id="@+id/tvReps"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:text="10"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="repetições"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
+
+    <EditText
+        android:id="@+id/tvPeso"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:text="10"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="kg"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
+
+    <EditText
+        android:id="@+id/tvDescanso"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:text="10"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="segundos"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
+
+</LinearLayout>

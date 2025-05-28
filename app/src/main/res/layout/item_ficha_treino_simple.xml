@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#333333">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/etLetraFicha"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/circular_background"
+            android:backgroundTint="@color/blue"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:maxLength="1"
+            android:inputType="textCapCharacters" />
+
+        <EditText
+            android:id="@+id/etNomeFicha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:hint="Nome da Ficha"
+            android:textColorHint="#999999" />
+
+        <ImageButton
+            android:id="@+id/btnAddExercicio"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/circular_background"
+            android:backgroundTint="#4CAF50"
+            android:src="@drawable/plus_circle"
+            android:contentDescription="Adicionar Exercício"
+            android:scaleType="center" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
