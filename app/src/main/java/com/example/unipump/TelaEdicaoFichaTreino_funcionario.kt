@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ScrollView
 import android.widget.Toast
@@ -26,23 +25,21 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
 
     private lateinit var btnNavegacao: BottomNavigationView
     private lateinit var btnSetaVoltar: ImageButton
-    private lateinit var btnAdicionarExercicio: Button
     private lateinit var recyclerViewFichas: RecyclerView
     private lateinit var scrollView: ScrollView
 
     // Firestore
     private lateinit var db: FirebaseFirestore
     private var alunoDocId: String = ""
-    private var documentId: String = "" // NOVO: ID único do documento no Firestore
+    private var documentId: String = ""
     private var fichaLetra: String = ""
     private var fichaNome: String = ""
     private var fichaDescricao: String = ""
 
-    // DEPRECADO: fichaId será substituído por documentId
     @Deprecated("Use documentId instead")
     private var fichaId: String = ""
 
-    // Adapter - Uma única ficha será exibida, mas mantemos a estrutura de lista
+    // Adapter
     private lateinit var fichaTreinoAdapter: FichaTreinoFunAdapter
     private val fichasList = mutableListOf<fichaTreinoFun>()
 
@@ -62,7 +59,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
 
             // Recuperar dados da ficha específica
             if (!recuperarDadosIntent()) {
-                return // Se não conseguir recuperar dados, sai da activity
+                return
             }
 
             // Inicializar views
@@ -74,13 +71,10 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             // Configurar RecyclerView
             setupRecyclerView()
 
-            // Debug da estrutura do Firestore
-            debugFirestoreStructure()
-
             // Configurar eventos
             configurarEventos()
 
-            // Carregar APENAS a ficha específica do Firestore
+            // Carregar dados do Firestore
             carregarFichaEspecificaDoFirestore()
 
         } catch (e: Exception) {
@@ -90,6 +84,31 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         }
     }
 
+    // Método chamado quando a activity volta ao foco
+    override fun onResume() {
+        super.onResume()
+        Log.d("LIFECYCLE", "onResume - Recarregando dados do Firestore")
+
+        // Sempre recarregar dados quando voltar para a tela
+        recarregarDadosDoFirestore()
+    }
+
+    // Método para recarregar dados do Firestore
+    private fun recarregarDadosDoFirestore() {
+        Log.d("RELOAD_DATA", "=== RECARREGANDO DADOS DO FIRESTORE ===")
+
+        // Limpar lista atual
+        fichasList.clear()
+
+        // Notificar adapter que os dados foram limpos
+        if (::fichaTreinoAdapter.isInitialized) {
+            fichaTreinoAdapter.notifyDataSetChanged()
+        }
+
+        // Carregar dados atualizados
+        carregarFichaEspecificaDoFirestore()
+    }
+
     // Método para tratar retorno da TelaCriarFichaTreino_Funcionario
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -97,60 +116,54 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         Log.d("ACTIVITY_RESULT", "=== ON ACTIVITY RESULT ===")
         Log.d("ACTIVITY_RESULT", "Request Code: $requestCode")
         Log.d("ACTIVITY_RESULT", "Result Code: $resultCode")
-        Log.d("ACTIVITY_RESULT", "Data: $data")
 
         if (requestCode == REQUEST_CODE_ADD_EXERCICIO) {
-            if (resultCode == RESULT_OK) {
-                Log.d("ACTIVITY_RESULT", "✅ Exercício adicionado com sucesso!")
+            when (resultCode) {
+                RESULT_OK -> {
+                    Log.d("ACTIVITY_RESULT", "✅ Exercício adicionado com sucesso!")
 
-                // Extrair dados do resultado (se disponíveis)
-                data?.let { intent ->
-                    val exercicioAdicionado = intent.getStringExtra("exercicio_adicionado")
-                    val grupoMuscular = intent.getStringExtra("exercicio_grupo")
-                    val mensagem = intent.getStringExtra("message")
-                    val success = intent.getBooleanExtra("success", false)
+                    // Extrair dados do resultado
+                    data?.let { intent ->
+                        val exercicioAdicionado = intent.getStringExtra("exercicio_adicionado")
+                        val success = intent.getBooleanExtra("success", false)
 
-                    Log.d("ACTIVITY_RESULT", "Dados do resultado:")
-                    Log.d("ACTIVITY_RESULT", "  - exercicio_adicionado: '$exercicioAdicionado'")
-                    Log.d("ACTIVITY_RESULT", "  - exercicio_grupo: '$grupoMuscular'")
-                    Log.d("ACTIVITY_RESULT", "  - message: '$mensagem'")
-                    Log.d("ACTIVITY_RESULT", "  - success: $success")
-
-                    if (success && !exercicioAdicionado.isNullOrEmpty()) {
-                        Toast.makeText(
-                            this,
-                            "✅ '$exercicioAdicionado' foi adicionado à ficha!",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (success && !exercicioAdicionado.isNullOrEmpty()) {
+                            Toast.makeText(
+                                this,
+                                "✅ '$exercicioAdicionado' foi adicionado à ficha!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
+
+                    // IMPORTANTE: Recarregar dados do Firestore
+                    Log.d("ACTIVITY_RESULT", "🔄 Recarregando dados do Firestore...")
+
+                    // Delay para garantir que o Firestore foi atualizado
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        recarregarDadosDoFirestore()
+                    }, 500) // 500ms de delay
                 }
 
-                // Recarregar a ficha do Firestore para mostrar o novo exercício
-                Log.d("ACTIVITY_RESULT", "🔄 Recarregando ficha do Firestore...")
-                carregarFichaEspecificaDoFirestore()
+                RESULT_CANCELED -> {
+                    Log.d("ACTIVITY_RESULT", "❌ Operação cancelada pelo usuário")
+                }
 
-            } else if (resultCode == RESULT_CANCELED) {
-                Log.d("ACTIVITY_RESULT", "❌ Operação cancelada pelo usuário")
-                Toast.makeText(this, "Operação cancelada", Toast.LENGTH_SHORT).show()
-            } else {
-                Log.w("ACTIVITY_RESULT", "⚠️ Resultado inesperado: $resultCode")
+                else -> {
+                    Log.w("ACTIVITY_RESULT", "⚠️ Resultado inesperado: $resultCode")
+                }
             }
-        } else {
-            Log.d("ACTIVITY_RESULT", "Request code diferente: $requestCode")
         }
     }
 
-    // MÉTODO CORRIGIDO: Agora recupera o documentId
     private fun recuperarDadosIntent(): Boolean {
         return try {
-            // CRÍTICO: Recuperar o documentId passado da tela anterior
             documentId = intent.getStringExtra("documentId") ?: ""
             alunoDocId = intent.getStringExtra("alunoDocId") ?: ""
             fichaLetra = intent.getStringExtra("ficha_letra") ?: ""
             fichaNome = intent.getStringExtra("ficha_nome") ?: ""
             fichaDescricao = intent.getStringExtra("ficha_descricao") ?: ""
 
-            // Para compatibilidade com código antigo
             fichaId = documentId
 
             Log.d("EDICAO_FICHA", "=== DADOS RECUPERADOS ===")
@@ -167,24 +180,29 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             }
 
             // Verificações de segurança
-            if (documentId.isEmpty()) {
-                Toast.makeText(this, "ERRO: ID do documento não encontrado!", Toast.LENGTH_LONG).show()
-                Log.e("EDICAO_FICHA", "Document ID está vazio - não será possível salvar alterações!")
-                finish()
-                false
-            } else if (alunoDocId.isEmpty()) {
-                Toast.makeText(this, "ERRO: ID do aluno não encontrado!", Toast.LENGTH_LONG).show()
-                Log.e("EDICAO_FICHA", "Aluno ID está vazio!")
-                finish()
-                false
-            } else if (fichaLetra.isEmpty()) {
-                Toast.makeText(this, "ERRO: Letra da ficha não encontrada!", Toast.LENGTH_SHORT).show()
-                Log.e("EDICAO_FICHA", "Ficha letra está vazia!")
-                finish()
-                false
-            } else {
-                Log.d("EDICAO_FICHA", "✅ Todos os dados necessários foram recuperados com sucesso")
-                true
+            when {
+                documentId.isEmpty() -> {
+                    Toast.makeText(this, "ERRO: ID do documento não encontrado!", Toast.LENGTH_LONG).show()
+                    Log.e("EDICAO_FICHA", "Document ID está vazio!")
+                    finish()
+                    false
+                }
+                alunoDocId.isEmpty() -> {
+                    Toast.makeText(this, "ERRO: ID do aluno não encontrado!", Toast.LENGTH_LONG).show()
+                    Log.e("EDICAO_FICHA", "Aluno ID está vazio!")
+                    finish()
+                    false
+                }
+                fichaLetra.isEmpty() -> {
+                    Toast.makeText(this, "ERRO: Letra da ficha não encontrada!", Toast.LENGTH_SHORT).show()
+                    Log.e("EDICAO_FICHA", "Ficha letra está vazia!")
+                    finish()
+                    false
+                }
+                else -> {
+                    Log.d("EDICAO_FICHA", "✅ Todos os dados necessários foram recuperados com sucesso")
+                    true
+                }
             }
         } catch (e: Exception) {
             Log.e("EDICAO_FICHA_ERROR", "Erro ao recuperar dados do intent", e)
@@ -198,7 +216,6 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         try {
             btnNavegacao = findViewById(R.id.bottom_navigation)
             btnSetaVoltar = findViewById(R.id.SetaVoltarTelaEdicaoFicha)
-            btnAdicionarExercicio = findViewById(R.id.btnAdicionar)
             recyclerViewFichas = findViewById(R.id.recyclerViewFichas)
             scrollView = findViewById(R.id.scrollView)
 
@@ -218,23 +235,12 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         fichaTreinoAdapter = FichaTreinoFunAdapter(
             fichas = fichasList,
             onExcluirFicha = { fichaIdCallback: String, position: Int ->
-                // Callback para excluir ficha completa
                 excluirFichaCompleta(fichaIdCallback, position)
             },
             onFichaAlterada = { fichaAlterada: fichaTreinoFun, position: Int ->
-                // CALLBACK PRINCIPAL: Quando qualquer coisa na ficha for alterada
                 Log.d("FICHA_ALTERADA", "Ficha alterada: ${fichaAlterada.letra} - ${fichaAlterada.nome}")
                 Log.d("FICHA_ALTERADA", "Total de exercícios: ${fichaAlterada.exercicios.size}")
 
-                // Listar exercícios e suas séries para debug
-                fichaAlterada.exercicios.forEachIndexed { exIndex, exercicio ->
-                    Log.d("FICHA_ALTERADA", "  Exercício $exIndex: ${exercicio.nome} (${exercicio.series.size} séries)")
-                    exercicio.series.forEachIndexed { serieIndex, serie ->
-                        Log.d("FICHA_ALTERADA", "    Série ${serie.numero}: ${serie.repeticoes} reps, ${serie.peso}, ${serie.tempo}s")
-                    }
-                }
-
-                // Chamar o método que já existe para alterações
                 onFichaAlterada(fichaAlterada, position)
             }
         )
@@ -242,88 +248,18 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         recyclerViewFichas.apply {
             layoutManager = LinearLayoutManager(this@TelaEdicaoFichaTreino_funcionario)
             adapter = fichaTreinoAdapter
-
-            // Configurações otimizadas
             isNestedScrollingEnabled = false
-            setHasFixedSize(false) // Permitir altura variável
-            itemAnimator = null // Remover animações para melhor performance
+            setHasFixedSize(false)
+            itemAnimator = null
         }
 
-        // Debug do RecyclerView
-        recyclerViewFichas.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            Log.d("RECYCLERVIEW_DEBUG", "=== LAYOUT CHANGE ===")
-            Log.d("RECYCLERVIEW_DEBUG", "Altura do RecyclerView: ${recyclerViewFichas.height}")
-            Log.d("RECYCLERVIEW_DEBUG", "Itens visíveis: ${recyclerViewFichas.childCount}")
-            Log.d("RECYCLERVIEW_DEBUG", "Adapter count: ${fichaTreinoAdapter.itemCount}")
-
-            // Verificar altura de cada item
-            for (i in 0 until recyclerViewFichas.childCount) {
-                val child = recyclerViewFichas.getChildAt(i)
-                Log.d("RECYCLERVIEW_DEBUG", "Item $i altura: ${child.height}px")
-            }
-            Log.d("RECYCLERVIEW_DEBUG", "========================")
-        }
-    }
-
-    // MÉTODO CORRIGIDO: Agora usa o documentId diretamente
-    private fun debugFirestoreStructure() {
-        Log.d("DEBUG_FIRESTORE", "=== INICIANDO DEBUG DA ESTRUTURA ESPECÍFICA ===")
-        Log.d("DEBUG_FIRESTORE", "Document ID: $documentId")
-        Log.d("DEBUG_FIRESTORE", "Aluno ID: $alunoDocId")
-
-        db.collection("alunos")
-            .document(alunoDocId)
-            .collection("treino")
-            .document(documentId) // USAR DOCUMENT ID ESPECÍFICO
-            .get()
-            .addOnSuccessListener { document ->
-                Log.d("DEBUG_FIRESTORE", "Documento encontrado: ${document.exists()}")
-
-                if (document.exists()) {
-                    Log.d("DEBUG_FIRESTORE", "=== Dados do Documento ===")
-                    Log.d("DEBUG_FIRESTORE", "ID: ${document.id}")
-                    Log.d("DEBUG_FIRESTORE", "Letra: ${document.getString("letra")}")
-                    Log.d("DEBUG_FIRESTORE", "Nome: ${document.getString("nome")}")
-
-                    // Debug específico dos exercícios
-                    val exercicios = document.get("exercicios")
-                    Log.d("DEBUG_FIRESTORE", "Exercícios (objeto completo): $exercicios")
-                    Log.d("DEBUG_FIRESTORE", "Tipo dos exercícios: ${exercicios?.javaClass?.simpleName}")
-
-                    if (exercicios is List<*>) {
-                        Log.d("DEBUG_FIRESTORE", "Exercícios é uma lista com ${exercicios.size} itens")
-                        exercicios.forEachIndexed { exIndex, exercicio ->
-                            Log.d("DEBUG_FIRESTORE", "  Exercício $exIndex: $exercicio")
-                            if (exercicio is Map<*, *>) {
-                                val nome = exercicio["nome"]
-                                val series = exercicio["series"]
-                                Log.d("DEBUG_FIRESTORE", "    Nome: $nome")
-                                Log.d("DEBUG_FIRESTORE", "    Séries: $series")
-                                if (series is List<*>) {
-                                    Log.d("DEBUG_FIRESTORE", "    Número de séries: ${series.size}")
-                                }
-                            }
-                        }
-                    } else {
-                        Log.w("DEBUG_FIRESTORE", "Exercícios NÃO é uma lista! Tipo: ${exercicios?.javaClass}")
-                    }
-                } else {
-                    Log.w("DEBUG_FIRESTORE", "Documento não existe!")
-                }
-
-                Log.d("DEBUG_FIRESTORE", "=== FIM DO DEBUG ===")
-            }
-            .addOnFailureListener { e ->
-                Log.e("DEBUG_FIRESTORE", "Erro no debug", e)
-                e.printStackTrace()
-            }
+        Log.d("EDICAO_FICHA", "RecyclerView configurado com sucesso")
     }
 
     // Método chamado quando uma ficha é alterada
     private fun onFichaAlterada(fichaAlterada: fichaTreinoFun, position: Int) {
         Log.d("FICHA_ALTERADA", "Ficha alterada: ${fichaAlterada.letra} - ${fichaAlterada.nome}")
 
-        // Marcar que há alterações pendentes
         hasUnsavedChanges = true
 
         // Cancelar timer anterior
@@ -338,10 +274,9 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                     salvarFichaAlteradaNoFirestore(fichaAlterada)
                 }
             }
-        }, 1000) // Aguarda 1 segundo após a última alteração
+        }, 1000)
     }
 
-    // MÉTODO CORRIGIDO: Agora usa documentId para salvar
     private fun salvarFichaAlteradaNoFirestore(ficha: fichaTreinoFun) {
         Log.d("FIRESTORE_SAVE_IMMEDIATE", "=== SALVANDO ALTERAÇÕES ===")
         Log.d("FIRESTORE_SAVE_IMMEDIATE", "Document ID: $documentId")
@@ -352,18 +287,15 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             return
         }
 
-        // CRÍTICO: Usar valores atuais do objeto ficha (que já foi atualizado pelo adapter)
         val letraAtualizada = ficha.letra
         val nomeAtualizado = ficha.nome
 
-        Log.d("FIRESTORE_SAVE_IMMEDIATE", "Valores a salvar - Letra: '$letraAtualizada', Nome: '$nomeAtualizado'")
-
-        // Converter exercícios para o formato do Firestore
+        // MODIFICADO: Converter exercícios para o formato do Firestore COM FRAME
         val exerciciosArray = ficha.exercicios.map { exercicio ->
             mapOf(
                 "nome" to exercicio.nome,
+                "frame" to (exercicio.frame ?: ""), // NOVO: Incluir frame real
                 "execucao" to "Execução normal",
-                "frame" to "URL...",
                 "series" to exercicio.series.map { serie ->
                     mapOf(
                         "ordem" to serie.numero.toString(),
@@ -384,8 +316,6 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             "dataModificacao" to com.google.firebase.Timestamp.now()
         )
 
-        Log.d("FIRESTORE_SAVE_IMMEDIATE", "Caminho: alunos/$alunoDocId/treino/$documentId")
-
         db.collection("alunos")
             .document(alunoDocId)
             .collection("treino")
@@ -395,11 +325,8 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                 Log.d("FIRESTORE_SAVE_IMMEDIATE", "✅ Ficha '$letraAtualizada' salva com sucesso!")
                 hasUnsavedChanges = false
 
-                // Atualizar variáveis locais para sincronia
                 fichaLetra = letraAtualizada
                 fichaNome = nomeAtualizado
-
-                Log.d("FIRESTORE_SAVE_IMMEDIATE", "Variáveis locais atualizadas")
             }
             .addOnFailureListener { e ->
                 Log.e("FIRESTORE_SAVE_IMMEDIATE", "❌ Erro ao salvar ficha", e)
@@ -423,11 +350,9 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
     private fun excluirFichaCompleta(fichaIdCallback: String, position: Int) {
         Log.d("EXCLUIR_FICHA", "Iniciando exclusão da ficha ID: $fichaIdCallback, posição: $position")
 
-        // 1. Excluir do Firestore primeiro
         excluirFichaDoFirestore(fichaIdCallback) { sucesso ->
             runOnUiThread {
                 if (sucesso) {
-                    // 2. Se excluiu do Firestore com sucesso, remover da tela
                     fichaTreinoAdapter.removeFicha(position)
 
                     Toast.makeText(
@@ -436,20 +361,14 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    Log.d("EXCLUIR_FICHA", "Ficha excluída com sucesso")
-
-                    // 3. Se era a única ficha, voltar para tela anterior
                     if (fichasList.isEmpty()) {
                         Toast.makeText(
                             this@TelaEdicaoFichaTreino_funcionario,
                             "Não há mais fichas para editar",
                             Toast.LENGTH_SHORT
                         ).show()
-
-                        // Voltar para tela anterior
                         finish()
                     }
-
                 } else {
                     Toast.makeText(
                         this@TelaEdicaoFichaTreino_funcionario,
@@ -479,20 +398,17 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             }
     }
 
-    // MÉTODO CORRIGIDO: Agora carrega usando documentId diretamente
+    // MÉTODO PRINCIPAL: Carrega dados do Firestore e atualiza RecyclerView COM FRAME
     private fun carregarFichaEspecificaDoFirestore() {
         try {
-            fichasList.clear()
-
-            Log.d("FIRESTORE_EDICAO", "=== CARREGANDO FICHA ESPECÍFICA ===")
+            Log.d("FIRESTORE_EDICAO", "=== CARREGANDO FICHA ESPECÍFICA COM GLIDE ===")
             Log.d("FIRESTORE_EDICAO", "Document ID: $documentId")
             Log.d("FIRESTORE_EDICAO", "Aluno ID: $alunoDocId")
 
-            // BUSCAR DIRETAMENTE PELO DOCUMENT ID (MAIS EFICIENTE)
             db.collection("alunos")
                 .document(alunoDocId)
                 .collection("treino")
-                .document(documentId) // USAR DOCUMENT ID ESPECÍFICO
+                .document(documentId)
                 .get()
                 .addOnSuccessListener { document ->
                     try {
@@ -505,47 +421,33 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                                     this@TelaEdicaoFichaTreino_funcionario,
                                     "Ficha não encontrada", Toast.LENGTH_SHORT
                                 ).show()
-                                finish() // Voltar se não encontrar
+                                finish()
                             }
                             return@addOnSuccessListener
                         }
 
-                        // Processar o documento
+                        // Processar dados do documento
                         val letra = document.getString("letra") ?: ""
                         val nome = document.getString("nome") ?: ""
 
-                        Log.d("FIRESTORE_EDICAO", "Processando ficha: $documentId - Letra: $letra - Nome: $nome")
-
-                        // Debug dos exercícios
-                        val exerciciosRaw = document.get("exercicios")
-                        Log.d("FIRESTORE_EDICAO", "Exercícios RAW do Firestore: $exerciciosRaw")
-                        Log.d("FIRESTORE_EDICAO", "Tipo dos exercícios: ${exerciciosRaw?.javaClass?.simpleName}")
+                        Log.d("FIRESTORE_EDICAO", "Processando ficha: $letra - $nome")
 
                         val exerciciosArray = document.get("exercicios") as? List<Map<String, Any>> ?: emptyList()
-                        Log.d("FIRESTORE_EDICAO", "Array de exercícios convertido - Tamanho: ${exerciciosArray.size}")
+                        Log.d("FIRESTORE_EDICAO", "Exercícios encontrados: ${exerciciosArray.size}")
 
                         val exerciciosList = mutableListOf<exercicioFun>()
 
-                        // Processamento dos exercícios
+                        // MODIFICADO: Processar cada exercício COM FRAME
                         exerciciosArray.forEachIndexed { exercicioIndex, exercicioMap ->
                             try {
-                                Log.d("FIRESTORE_EDICAO", "=== Processando exercício $exercicioIndex ===")
-                                Log.d("FIRESTORE_EDICAO", "Dados do exercício: $exercicioMap")
-
                                 val nomeExercicio = exercicioMap["nome"]?.toString() ?: ""
-                                Log.d("FIRESTORE_EDICAO", "Nome do exercício: $nomeExercicio")
 
-                                // Debug das séries
-                                val seriesRaw = exercicioMap["series"]
-                                Log.d("FIRESTORE_EDICAO", "Séries RAW: $seriesRaw")
-                                Log.d("FIRESTORE_EDICAO", "Tipo das séries: ${seriesRaw?.javaClass?.simpleName}")
+                                // NOVO: Incluir campo frame
+                                val frameExercicio = exercicioMap["frame"]?.toString() ?: ""
 
                                 val seriesArray = exercicioMap["series"] as? List<Map<String, Any>> ?: emptyList()
-                                Log.d("FIRESTORE_EDICAO", "Array de séries convertido - Tamanho: ${seriesArray.size}")
 
                                 val seriesList = seriesArray.mapIndexed { serieIndex, serieMap ->
-                                    Log.d("FIRESTORE_EDICAO", "   Série $serieIndex: $serieMap")
-
                                     serieFun(
                                         id = "${documentId}_ex${exercicioIndex}_serie${serieIndex}",
                                         numero = serieMap["ordem"]?.toString()?.toIntOrNull() ?: (serieIndex + 1),
@@ -558,73 +460,64 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                                 val exercicio = exercicioFun(
                                     id = "${documentId}_exercicio_$exercicioIndex",
                                     nome = nomeExercicio,
+                                    frame = frameExercicio, // NOVO: Incluir frame no objeto
                                     series = seriesList
                                 )
 
                                 exerciciosList.add(exercicio)
-                                Log.d("FIRESTORE_EDICAO", "Exercício adicionado: $nomeExercicio com ${seriesList.size} séries")
-                                Log.d("FIRESTORE_EDICAO", "Total de exercícios na lista agora: ${exerciciosList.size}")
+                                Log.d("FIRESTORE_EDICAO", "Exercício processado: $nomeExercicio (Frame: '$frameExercicio') (${seriesList.size} séries)")
 
                             } catch (e: Exception) {
                                 Log.e("FIRESTORE_EDICAO", "Erro ao processar exercício $exercicioIndex", e)
-                                e.printStackTrace()
                             }
                         }
 
-                        // Log final antes de criar a ficha
-                        Log.d("FIRESTORE_EDICAO", "RESUMO FINAL:")
-                        Log.d("FIRESTORE_EDICAO", "Total de exercícios processados: ${exerciciosList.size}")
-                        exerciciosList.forEachIndexed { index, exercicio ->
-                            Log.d("FIRESTORE_EDICAO", "Exercício $index: ${exercicio.nome} (${exercicio.series.size} séries)")
-                        }
-
+                        // Criar ficha com dados carregados
                         val ficha = fichaTreinoFun(
-                            id = documentId, // USAR DOCUMENT ID
+                            id = documentId,
                             letra = letra,
                             nome = nome,
                             exercicios = exerciciosList
                         )
 
+                        // IMPORTANTE: Limpar lista e adicionar nova ficha
+                        fichasList.clear()
                         fichasList.add(ficha)
+
                         Log.d("FIRESTORE_EDICAO", "Ficha carregada: $letra - $nome com ${exerciciosList.size} exercícios")
 
-                        // Atualizar UI
+                        // Atualizar UI na thread principal
                         runOnUiThread {
                             try {
                                 if (::fichaTreinoAdapter.isInitialized) {
-                                    Log.d("FIRESTORE_EDICAO", "Notificando adapter com ${fichasList.size} fichas")
-                                    if (fichasList.isNotEmpty()) {
-                                        Log.d("FIRESTORE_EDICAO", "Primeira ficha tem ${fichasList.first().exercicios.size} exercícios")
-                                    }
+                                    Log.d("FIRESTORE_EDICAO", "Atualizando RecyclerView com Glide...")
 
+                                    // Notificar que os dados mudaram
                                     fichaTreinoAdapter.notifyDataSetChanged()
 
-                                    // Verificação adicional após notificar
+                                    // Atualizar contadores após um pequeno delay
                                     recyclerViewFichas.post {
-                                        Log.d("FIRESTORE_EDICAO", "Após notifyDataSetChanged:")
-                                        Log.d("FIRESTORE_EDICAO", "Adapter item count: ${fichaTreinoAdapter.itemCount}")
-                                        Log.d("FIRESTORE_EDICAO", "RecyclerView child count: ${recyclerViewFichas.childCount}")
-
-                                        // Forçar atualização dos contadores
                                         fichaTreinoAdapter.atualizarContadores()
+
+                                        Log.d("FIRESTORE_EDICAO", "RecyclerView atualizado:")
+                                        Log.d("FIRESTORE_EDICAO", "- Adapter item count: ${fichaTreinoAdapter.itemCount}")
+                                        Log.d("FIRESTORE_EDICAO", "- Exercícios na ficha: ${ficha.exercicios.size}")
                                     }
                                 }
 
                                 Toast.makeText(
                                     this@TelaEdicaoFichaTreino_funcionario,
-                                    "Ficha $letra carregada com ${fichasList.firstOrNull()?.exercicios?.size ?: 0} exercícios",
+                                    "Ficha $letra carregada com ${exerciciosList.size} exercícios",
                                     Toast.LENGTH_SHORT
                                 ).show()
 
                             } catch (e: Exception) {
                                 Log.e("FIRESTORE_EDICAO", "Erro ao atualizar UI", e)
-                                e.printStackTrace()
                             }
                         }
 
                     } catch (e: Exception) {
-                        Log.e("FIRESTORE_EDICAO", "Erro geral ao processar ficha", e)
-                        e.printStackTrace()
+                        Log.e("FIRESTORE_EDICAO", "Erro ao processar documento", e)
                         runOnUiThread {
                             Toast.makeText(
                                 this@TelaEdicaoFichaTreino_funcionario,
@@ -634,8 +527,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.e("FIRESTORE_EDICAO", "Erro ao carregar ficha específica", exception)
-                    exception.printStackTrace()
+                    Log.e("FIRESTORE_EDICAO", "Erro ao carregar ficha", exception)
                     runOnUiThread {
                         Toast.makeText(
                             this@TelaEdicaoFichaTreino_funcionario,
@@ -646,8 +538,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                 }
 
         } catch (e: Exception) {
-            Log.e("FIRESTORE_EDICAO", "Erro ao iniciar carregamento da ficha", e)
-            e.printStackTrace()
+            Log.e("FIRESTORE_EDICAO", "Erro ao iniciar carregamento", e)
             Toast.makeText(this, "Erro ao carregar ficha: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
@@ -678,17 +569,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             btnSetaVoltar.setOnClickListener {
                 Log.d("LIFECYCLE", "Botão voltar pressionado - Salvando alterações")
                 salvarTodasAlteracoesPendentes()
-                finish() // Volta para a tela anterior
-            }
-
-            // MODIFICAÇÃO: Configurar botão adicionar exercício para navegar para TelaCriarFichaTreino_Funcionario
-            try {
-                btnAdicionarExercicio.setOnClickListener {
-                    Log.d("ADD_EXERCICIO_BTN", "Botão adicionar exercício clicado - navegando para TelaCriarFichaTreino_Funcionario")
-                    navegarParaTelaCriarExercicio()
-                }
-            } catch (e: Exception) {
-                Log.w("EDICAO_FICHA", "Botão adicionar exercício não encontrado no layout: ${e.message}")
+                finish()
             }
 
             Log.d("EDICAO_FICHA", "Eventos configurados com sucesso")
@@ -699,81 +580,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         }
     }
 
-    // NOVO MÉTODO: Navegar para TelaCriarFichaTreino_Funcionario
-    private fun navegarParaTelaCriarExercicio() {
-        if (fichasList.isEmpty()) {
-            Toast.makeText(this, "Nenhuma ficha carregada", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val ficha = fichasList.first()
-
-        Log.d("NAVEGAR_CRIAR_EXERCICIO", "=== NAVEGANDO PARA TELA CRIAR EXERCÍCIO ===")
-        Log.d("NAVEGAR_CRIAR_EXERCICIO", "Ficha: ${ficha.letra} - ${ficha.nome}")
-        Log.d("NAVEGAR_CRIAR_EXERCICIO", "Document ID: '$documentId'")
-        Log.d("NAVEGAR_CRIAR_EXERCICIO", "Aluno Doc ID: '$alunoDocId'")
-
-        // VALIDAÇÃO CRÍTICA
-        if (documentId.isEmpty()) {
-            Log.e("NAVEGAR_CRIAR_EXERCICIO", "❌ ERRO: Document ID está vazio!")
-            Toast.makeText(this, "ERRO: ID do documento não encontrado!", Toast.LENGTH_LONG).show()
-            return
-        }
-
-        // CRÍTICO: Se alunoDocId estiver vazio, tentar recuperar do SharedPreferences
-        var alunoIdFinal = alunoDocId
-        if (alunoIdFinal.isEmpty()) {
-            Log.w("NAVEGAR_CRIAR_EXERCICIO", "⚠️ AlunoDocId vazio, tentando recuperar do SharedPreferences...")
-            val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
-            alunoIdFinal = prefs.getString("alunoDocId", "") ?: ""
-            Log.d("NAVEGAR_CRIAR_EXERCICIO", "AlunoDocId recuperado: '$alunoIdFinal'")
-
-            if (alunoIdFinal.isEmpty()) {
-                Log.e("NAVEGAR_CRIAR_EXERCICIO", "❌ ERRO CRÍTICO: AlunoDocId não encontrado!")
-                Toast.makeText(this, "ERRO: ID do aluno não encontrado!\nNão será possível adicionar exercícios.", Toast.LENGTH_LONG).show()
-                return
-            }
-        }
-
-        try {
-            val intent = Intent(this, TelaCriarFichaTreino_Funcionario::class.java).apply {
-                // DADOS ESSENCIAIS - TODOS OS CAMPOS PREENCHIDOS
-                putExtra("documentId", documentId)
-                putExtra("alunoDocId", alunoIdFinal)  // Usar o ID validado
-                putExtra("ficha_letra", ficha.letra)
-                putExtra("ficha_nome", ficha.nome)
-                putExtra("ficha_descricao", fichaDescricao)
-                putExtra("modo_edicao", true)
-                putExtra("action", "add_exercicio")
-
-                Log.d("NAVEGAR_CRIAR_EXERCICIO", "✅ Intent criado com dados:")
-                Log.d("NAVEGAR_CRIAR_EXERCICIO", "  - documentId: '$documentId'")
-                Log.d("NAVEGAR_CRIAR_EXERCICIO", "  - alunoDocId: '$alunoIdFinal'")
-                Log.d("NAVEGAR_CRIAR_EXERCICIO", "  - ficha_letra: '${ficha.letra}'")
-                Log.d("NAVEGAR_CRIAR_EXERCICIO", "  - ficha_nome: '${ficha.nome}'")
-                Log.d("NAVEGAR_CRIAR_EXERCICIO", "  - modo_edicao: true")
-                Log.d("NAVEGAR_CRIAR_EXERCICIO", "  - action: 'add_exercicio'")
-            }
-
-            // Usar startActivityForResult para receber resultado
-            startActivityForResult(intent, REQUEST_CODE_ADD_EXERCICIO)
-            Log.d("NAVEGAR_CRIAR_EXERCICIO", "🚀 Navegação iniciada com sucesso")
-
-        } catch (e: Exception) {
-            Log.e("NAVEGAR_CRIAR_EXERCICIO", "❌ Erro ao navegar para TelaCriarFichaTreino_Funcionario", e)
-            Toast.makeText(
-                this,
-                "Erro ao abrir tela de criação: ${e.message}",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    // MÉTODO REMOVIDO: adicionarNovoExercicio (substituído pela navegação)
-
-    // MÉTODO REMOVIDO: adicionarExercicioAFicha (não será mais usado, exercícios serão adicionados via TelaCriarFichaTreino_Funcionario)
-
-    // Sobrescrever métodos do ciclo de vida para salvar alterações
+    // Métodos do ciclo de vida para salvar alterações
     override fun onPause() {
         super.onPause()
         Log.d("LIFECYCLE", "onPause - Salvando alterações pendentes")
@@ -787,87 +594,56 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        Log.d("LIFECYCLE", "onDestroy - Limpando recursos e salvando alterações")
-
-        // Cancelar timer
+        Log.d("LIFECYCLE", "onDestroy - Limpando recursos")
         saveDebounceTimer?.cancel()
-
-        // Salvar alterações pendentes
         salvarTodasAlteracoesPendentes()
-
         super.onDestroy()
     }
 
-    // Interceptar botão voltar do sistema
     override fun onBackPressed() {
-        Log.d("LIFECYCLE", "onBackPressed - Salvando alterações antes de voltar")
+        Log.d("LIFECYCLE", "onBackPressed - Salvando alterações")
         salvarTodasAlteracoesPendentes()
         super.onBackPressed()
     }
 
-    // Tratamento para quando o usuário minimiza o app
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        Log.d("LIFECYCLE", "onUserLeaveHint - App minimizado, salvando alterações")
+        Log.d("LIFECYCLE", "onUserLeaveHint - Salvando alterações")
         salvarTodasAlteracoesPendentes()
     }
 
-    // Método para salvar todas as alterações pendentes
     private fun salvarTodasAlteracoesPendentes() {
         try {
-            // Forçar salvamento de campos que podem estar sendo editados
             if (::fichaTreinoAdapter.isInitialized) {
                 fichaTreinoAdapter.salvarTodasAlteracoesPendentes()
             }
 
-            // Se há alterações pendentes, salvar tudo
             if (hasUnsavedChanges) {
-                Log.d("SAVE_PENDING", "Há alterações pendentes, salvando...")
+                Log.d("SAVE_PENDING", "Salvando alterações pendentes...")
                 salvarAlteracoesNoFirestore()
-            } else {
-                Log.d("SAVE_PENDING", "Nenhuma alteração pendente")
             }
         } catch (e: Exception) {
             Log.e("SAVE_PENDING_ERROR", "Erro ao salvar alterações pendentes", e)
         }
     }
 
-    // Método de salvamento existente
     private fun salvarAlteracoesNoFirestore() {
-        if (fichasList.isEmpty()) {
-            Log.d("FIRESTORE_SAVE", "Nenhuma ficha para salvar")
-            return
-        }
-
-        val ficha = fichasList.first()
-        Log.d("FIRESTORE_SAVE", "Salvando todas as alterações da ficha: ${ficha.letra}")
-
-        salvarFichaAlteradaNoFirestore(ficha)
-    }
-
-    // Método adicional para forçar atualização do contador
-    private fun atualizarContadorExercicios() {
         if (fichasList.isNotEmpty()) {
-            // Forçar atualização do primeiro item (única ficha)
-            fichaTreinoAdapter.notifyItemChanged(0)
-            fichaTreinoAdapter.atualizarContadores()
+            val ficha = fichasList.first()
+            salvarFichaAlteradaNoFirestore(ficha)
         }
     }
 
-    // Método público para forçar recarregamento se necessário
+    // MÉTODO PÚBLICO: Para forçar recarregamento quando necessário
     fun recarregarFicha() {
-        carregarFichaEspecificaDoFirestore()
+        Log.d("PUBLIC_RELOAD", "Método público de recarregamento chamado")
+        recarregarDadosDoFirestore()
     }
 
     companion object {
-        // Constante para identificar o request code
         private const val REQUEST_CODE_ADD_EXERCICIO = 1001
     }
 }
-
-
-
-
 
 
 
@@ -900,23 +676,21 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
 
     private lateinit var btnNavegacao: BottomNavigationView
     private lateinit var btnSetaVoltar: ImageButton
-    private lateinit var btnAdicionarExercicio: Button
     private lateinit var recyclerViewFichas: RecyclerView
     private lateinit var scrollView: ScrollView
 
     // Firestore
     private lateinit var db: FirebaseFirestore
     private var alunoDocId: String = ""
-    private var documentId: String = "" // NOVO: ID único do documento no Firestore
+    private var documentId: String = ""
     private var fichaLetra: String = ""
     private var fichaNome: String = ""
     private var fichaDescricao: String = ""
 
-    // DEPRECADO: fichaId será substituído por documentId
     @Deprecated("Use documentId instead")
     private var fichaId: String = ""
 
-    // Adapter - Uma única ficha será exibida, mas mantemos a estrutura de lista
+    // Adapter
     private lateinit var fichaTreinoAdapter: FichaTreinoFunAdapter
     private val fichasList = mutableListOf<fichaTreinoFun>()
 
@@ -936,8 +710,9 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
 
             // Recuperar dados da ficha específica
             if (!recuperarDadosIntent()) {
-                return // Se não conseguir recuperar dados, sai da activity
+                return
             }
+
 
             // Inicializar views
             initViews()
@@ -948,13 +723,10 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             // Configurar RecyclerView
             setupRecyclerView()
 
-            // Debug da estrutura do Firestore
-            debugFirestoreStructure()
-
             // Configurar eventos
             configurarEventos()
 
-            // Carregar APENAS a ficha específica do Firestore
+            // Carregar dados do Firestore
             carregarFichaEspecificaDoFirestore()
 
         } catch (e: Exception) {
@@ -964,17 +736,86 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         }
     }
 
-    // MÉTODO CORRIGIDO: Agora recupera o documentId
+    // NOVO: Método chamado quando a activity volta ao foco
+    override fun onResume() {
+        super.onResume()
+        Log.d("LIFECYCLE", "onResume - Recarregando dados do Firestore")
+
+        // Sempre recarregar dados quando voltar para a tela
+        recarregarDadosDoFirestore()
+    }
+
+    // NOVO: Método para recarregar dados do Firestore
+    private fun recarregarDadosDoFirestore() {
+        Log.d("RELOAD_DATA", "=== RECARREGANDO DADOS DO FIRESTORE ===")
+
+        // Limpar lista atual
+        fichasList.clear()
+
+        // Notificar adapter que os dados foram limpos
+        if (::fichaTreinoAdapter.isInitialized) {
+            fichaTreinoAdapter.notifyDataSetChanged()
+        }
+
+        // Carregar dados atualizados
+        carregarFichaEspecificaDoFirestore()
+    }
+
+    // Método para tratar retorno da TelaCriarFichaTreino_Funcionario
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        Log.d("ACTIVITY_RESULT", "=== ON ACTIVITY RESULT ===")
+        Log.d("ACTIVITY_RESULT", "Request Code: $requestCode")
+        Log.d("ACTIVITY_RESULT", "Result Code: $resultCode")
+
+        if (requestCode == REQUEST_CODE_ADD_EXERCICIO) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    Log.d("ACTIVITY_RESULT", "✅ Exercício adicionado com sucesso!")
+
+                    // Extrair dados do resultado
+                    data?.let { intent ->
+                        val exercicioAdicionado = intent.getStringExtra("exercicio_adicionado")
+                        val success = intent.getBooleanExtra("success", false)
+
+                        if (success && !exercicioAdicionado.isNullOrEmpty()) {
+                            Toast.makeText(
+                                this,
+                                "✅ '$exercicioAdicionado' foi adicionado à ficha!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    // IMPORTANTE: Recarregar dados do Firestore
+                    Log.d("ACTIVITY_RESULT", "🔄 Recarregando dados do Firestore...")
+
+                    // Delay para garantir que o Firestore foi atualizado
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        recarregarDadosDoFirestore()
+                    }, 500) // 500ms de delay
+                }
+
+                RESULT_CANCELED -> {
+                    Log.d("ACTIVITY_RESULT", "❌ Operação cancelada pelo usuário")
+                }
+
+                else -> {
+                    Log.w("ACTIVITY_RESULT", "⚠️ Resultado inesperado: $resultCode")
+                }
+            }
+        }
+    }
+
     private fun recuperarDadosIntent(): Boolean {
         return try {
-            // CRÍTICO: Recuperar o documentId passado da tela anterior
             documentId = intent.getStringExtra("documentId") ?: ""
             alunoDocId = intent.getStringExtra("alunoDocId") ?: ""
             fichaLetra = intent.getStringExtra("ficha_letra") ?: ""
             fichaNome = intent.getStringExtra("ficha_nome") ?: ""
             fichaDescricao = intent.getStringExtra("ficha_descricao") ?: ""
 
-            // Para compatibilidade com código antigo
             fichaId = documentId
 
             Log.d("EDICAO_FICHA", "=== DADOS RECUPERADOS ===")
@@ -991,24 +832,29 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             }
 
             // Verificações de segurança
-            if (documentId.isEmpty()) {
-                Toast.makeText(this, "ERRO: ID do documento não encontrado!", Toast.LENGTH_LONG).show()
-                Log.e("EDICAO_FICHA", "Document ID está vazio - não será possível salvar alterações!")
-                finish()
-                false
-            } else if (alunoDocId.isEmpty()) {
-                Toast.makeText(this, "ERRO: ID do aluno não encontrado!", Toast.LENGTH_LONG).show()
-                Log.e("EDICAO_FICHA", "Aluno ID está vazio!")
-                finish()
-                false
-            } else if (fichaLetra.isEmpty()) {
-                Toast.makeText(this, "ERRO: Letra da ficha não encontrada!", Toast.LENGTH_SHORT).show()
-                Log.e("EDICAO_FICHA", "Ficha letra está vazia!")
-                finish()
-                false
-            } else {
-                Log.d("EDICAO_FICHA", "✅ Todos os dados necessários foram recuperados com sucesso")
-                true
+            when {
+                documentId.isEmpty() -> {
+                    Toast.makeText(this, "ERRO: ID do documento não encontrado!", Toast.LENGTH_LONG).show()
+                    Log.e("EDICAO_FICHA", "Document ID está vazio!")
+                    finish()
+                    false
+                }
+                alunoDocId.isEmpty() -> {
+                    Toast.makeText(this, "ERRO: ID do aluno não encontrado!", Toast.LENGTH_LONG).show()
+                    Log.e("EDICAO_FICHA", "Aluno ID está vazio!")
+                    finish()
+                    false
+                }
+                fichaLetra.isEmpty() -> {
+                    Toast.makeText(this, "ERRO: Letra da ficha não encontrada!", Toast.LENGTH_SHORT).show()
+                    Log.e("EDICAO_FICHA", "Ficha letra está vazia!")
+                    finish()
+                    false
+                }
+                else -> {
+                    Log.d("EDICAO_FICHA", "✅ Todos os dados necessários foram recuperados com sucesso")
+                    true
+                }
             }
         } catch (e: Exception) {
             Log.e("EDICAO_FICHA_ERROR", "Erro ao recuperar dados do intent", e)
@@ -1022,7 +868,6 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         try {
             btnNavegacao = findViewById(R.id.bottom_navigation)
             btnSetaVoltar = findViewById(R.id.SetaVoltarTelaEdicaoFicha)
-            btnAdicionarExercicio = findViewById(R.id.btnAdicionar)
             recyclerViewFichas = findViewById(R.id.recyclerViewFichas)
             scrollView = findViewById(R.id.scrollView)
 
@@ -1042,23 +887,12 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         fichaTreinoAdapter = FichaTreinoFunAdapter(
             fichas = fichasList,
             onExcluirFicha = { fichaIdCallback: String, position: Int ->
-                // Callback para excluir ficha completa
                 excluirFichaCompleta(fichaIdCallback, position)
             },
             onFichaAlterada = { fichaAlterada: fichaTreinoFun, position: Int ->
-                // CALLBACK PRINCIPAL: Quando qualquer coisa na ficha for alterada
                 Log.d("FICHA_ALTERADA", "Ficha alterada: ${fichaAlterada.letra} - ${fichaAlterada.nome}")
                 Log.d("FICHA_ALTERADA", "Total de exercícios: ${fichaAlterada.exercicios.size}")
 
-                // Listar exercícios e suas séries para debug
-                fichaAlterada.exercicios.forEachIndexed { exIndex, exercicio ->
-                    Log.d("FICHA_ALTERADA", "  Exercício $exIndex: ${exercicio.nome} (${exercicio.series.size} séries)")
-                    exercicio.series.forEachIndexed { serieIndex, serie ->
-                        Log.d("FICHA_ALTERADA", "    Série ${serie.numero}: ${serie.repeticoes} reps, ${serie.peso}, ${serie.tempo}s")
-                    }
-                }
-
-                // Chamar o método que já existe para alterações
                 onFichaAlterada(fichaAlterada, position)
             }
         )
@@ -1066,88 +900,18 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         recyclerViewFichas.apply {
             layoutManager = LinearLayoutManager(this@TelaEdicaoFichaTreino_funcionario)
             adapter = fichaTreinoAdapter
-
-            // Configurações otimizadas
             isNestedScrollingEnabled = false
-            setHasFixedSize(false) // Permitir altura variável
-            itemAnimator = null // Remover animações para melhor performance
+            setHasFixedSize(false)
+            itemAnimator = null
         }
 
-        // Debug do RecyclerView
-        recyclerViewFichas.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            Log.d("RECYCLERVIEW_DEBUG", "=== LAYOUT CHANGE ===")
-            Log.d("RECYCLERVIEW_DEBUG", "Altura do RecyclerView: ${recyclerViewFichas.height}")
-            Log.d("RECYCLERVIEW_DEBUG", "Itens visíveis: ${recyclerViewFichas.childCount}")
-            Log.d("RECYCLERVIEW_DEBUG", "Adapter count: ${fichaTreinoAdapter.itemCount}")
-
-            // Verificar altura de cada item
-            for (i in 0 until recyclerViewFichas.childCount) {
-                val child = recyclerViewFichas.getChildAt(i)
-                Log.d("RECYCLERVIEW_DEBUG", "Item $i altura: ${child.height}px")
-            }
-            Log.d("RECYCLERVIEW_DEBUG", "========================")
-        }
-    }
-
-    // MÉTODO CORRIGIDO: Agora usa o documentId diretamente
-    private fun debugFirestoreStructure() {
-        Log.d("DEBUG_FIRESTORE", "=== INICIANDO DEBUG DA ESTRUTURA ESPECÍFICA ===")
-        Log.d("DEBUG_FIRESTORE", "Document ID: $documentId")
-        Log.d("DEBUG_FIRESTORE", "Aluno ID: $alunoDocId")
-
-        db.collection("alunos")
-            .document(alunoDocId)
-            .collection("treino")
-            .document(documentId) // USAR DOCUMENT ID ESPECÍFICO
-            .get()
-            .addOnSuccessListener { document ->
-                Log.d("DEBUG_FIRESTORE", "Documento encontrado: ${document.exists()}")
-
-                if (document.exists()) {
-                    Log.d("DEBUG_FIRESTORE", "=== Dados do Documento ===")
-                    Log.d("DEBUG_FIRESTORE", "ID: ${document.id}")
-                    Log.d("DEBUG_FIRESTORE", "Letra: ${document.getString("letra")}")
-                    Log.d("DEBUG_FIRESTORE", "Nome: ${document.getString("nome")}")
-
-                    // Debug específico dos exercícios
-                    val exercicios = document.get("exercicios")
-                    Log.d("DEBUG_FIRESTORE", "Exercícios (objeto completo): $exercicios")
-                    Log.d("DEBUG_FIRESTORE", "Tipo dos exercícios: ${exercicios?.javaClass?.simpleName}")
-
-                    if (exercicios is List<*>) {
-                        Log.d("DEBUG_FIRESTORE", "Exercícios é uma lista com ${exercicios.size} itens")
-                        exercicios.forEachIndexed { exIndex, exercicio ->
-                            Log.d("DEBUG_FIRESTORE", "  Exercício $exIndex: $exercicio")
-                            if (exercicio is Map<*, *>) {
-                                val nome = exercicio["nome"]
-                                val series = exercicio["series"]
-                                Log.d("DEBUG_FIRESTORE", "    Nome: $nome")
-                                Log.d("DEBUG_FIRESTORE", "    Séries: $series")
-                                if (series is List<*>) {
-                                    Log.d("DEBUG_FIRESTORE", "    Número de séries: ${series.size}")
-                                }
-                            }
-                        }
-                    } else {
-                        Log.w("DEBUG_FIRESTORE", "Exercícios NÃO é uma lista! Tipo: ${exercicios?.javaClass}")
-                    }
-                } else {
-                    Log.w("DEBUG_FIRESTORE", "Documento não existe!")
-                }
-
-                Log.d("DEBUG_FIRESTORE", "=== FIM DO DEBUG ===")
-            }
-            .addOnFailureListener { e ->
-                Log.e("DEBUG_FIRESTORE", "Erro no debug", e)
-                e.printStackTrace()
-            }
+        Log.d("EDICAO_FICHA", "RecyclerView configurado com sucesso")
     }
 
     // Método chamado quando uma ficha é alterada
     private fun onFichaAlterada(fichaAlterada: fichaTreinoFun, position: Int) {
         Log.d("FICHA_ALTERADA", "Ficha alterada: ${fichaAlterada.letra} - ${fichaAlterada.nome}")
 
-        // Marcar que há alterações pendentes
         hasUnsavedChanges = true
 
         // Cancelar timer anterior
@@ -1162,10 +926,9 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                     salvarFichaAlteradaNoFirestore(fichaAlterada)
                 }
             }
-        }, 1000) // Aguarda 1 segundo após a última alteração
+        }, 1000)
     }
 
-    // MÉTODO CORRIGIDO: Agora usa documentId para salvar
     private fun salvarFichaAlteradaNoFirestore(ficha: fichaTreinoFun) {
         Log.d("FIRESTORE_SAVE_IMMEDIATE", "=== SALVANDO ALTERAÇÕES ===")
         Log.d("FIRESTORE_SAVE_IMMEDIATE", "Document ID: $documentId")
@@ -1176,11 +939,8 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             return
         }
 
-        // CRÍTICO: Usar valores atuais do objeto ficha (que já foi atualizado pelo adapter)
         val letraAtualizada = ficha.letra
         val nomeAtualizado = ficha.nome
-
-        Log.d("FIRESTORE_SAVE_IMMEDIATE", "Valores a salvar - Letra: '$letraAtualizada', Nome: '$nomeAtualizado'")
 
         // Converter exercícios para o formato do Firestore
         val exerciciosArray = ficha.exercicios.map { exercicio ->
@@ -1208,8 +968,6 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             "dataModificacao" to com.google.firebase.Timestamp.now()
         )
 
-        Log.d("FIRESTORE_SAVE_IMMEDIATE", "Caminho: alunos/$alunoDocId/treino/$documentId")
-
         db.collection("alunos")
             .document(alunoDocId)
             .collection("treino")
@@ -1219,11 +977,8 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                 Log.d("FIRESTORE_SAVE_IMMEDIATE", "✅ Ficha '$letraAtualizada' salva com sucesso!")
                 hasUnsavedChanges = false
 
-                // Atualizar variáveis locais para sincronia
                 fichaLetra = letraAtualizada
                 fichaNome = nomeAtualizado
-
-                Log.d("FIRESTORE_SAVE_IMMEDIATE", "Variáveis locais atualizadas")
             }
             .addOnFailureListener { e ->
                 Log.e("FIRESTORE_SAVE_IMMEDIATE", "❌ Erro ao salvar ficha", e)
@@ -1247,11 +1002,9 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
     private fun excluirFichaCompleta(fichaIdCallback: String, position: Int) {
         Log.d("EXCLUIR_FICHA", "Iniciando exclusão da ficha ID: $fichaIdCallback, posição: $position")
 
-        // 1. Excluir do Firestore primeiro
         excluirFichaDoFirestore(fichaIdCallback) { sucesso ->
             runOnUiThread {
                 if (sucesso) {
-                    // 2. Se excluiu do Firestore com sucesso, remover da tela
                     fichaTreinoAdapter.removeFicha(position)
 
                     Toast.makeText(
@@ -1260,20 +1013,14 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    Log.d("EXCLUIR_FICHA", "Ficha excluída com sucesso")
-
-                    // 3. Se era a única ficha, voltar para tela anterior
                     if (fichasList.isEmpty()) {
                         Toast.makeText(
                             this@TelaEdicaoFichaTreino_funcionario,
                             "Não há mais fichas para editar",
                             Toast.LENGTH_SHORT
                         ).show()
-
-                        // Voltar para tela anterior
                         finish()
                     }
-
                 } else {
                     Toast.makeText(
                         this@TelaEdicaoFichaTreino_funcionario,
@@ -1303,20 +1050,20 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             }
     }
 
-    // MÉTODO CORRIGIDO: Agora carrega usando documentId diretamente
+    // MÉTODO PRINCIPAL: Carrega dados do Firestore e atualiza RecyclerView
     private fun carregarFichaEspecificaDoFirestore() {
         try {
-            fichasList.clear()
-
             Log.d("FIRESTORE_EDICAO", "=== CARREGANDO FICHA ESPECÍFICA ===")
             Log.d("FIRESTORE_EDICAO", "Document ID: $documentId")
             Log.d("FIRESTORE_EDICAO", "Aluno ID: $alunoDocId")
 
-            // BUSCAR DIRETAMENTE PELO DOCUMENT ID (MAIS EFICIENTE)
+            // Mostrar loading se necessário
+            // progressBar?.visibility = View.VISIBLE
+
             db.collection("alunos")
                 .document(alunoDocId)
                 .collection("treino")
-                .document(documentId) // USAR DOCUMENT ID ESPECÍFICO
+                .document(documentId)
                 .get()
                 .addOnSuccessListener { document ->
                     try {
@@ -1329,47 +1076,29 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                                     this@TelaEdicaoFichaTreino_funcionario,
                                     "Ficha não encontrada", Toast.LENGTH_SHORT
                                 ).show()
-                                finish() // Voltar se não encontrar
+                                finish()
                             }
                             return@addOnSuccessListener
                         }
 
-                        // Processar o documento
+                        // Processar dados do documento
                         val letra = document.getString("letra") ?: ""
                         val nome = document.getString("nome") ?: ""
 
-                        Log.d("FIRESTORE_EDICAO", "Processando ficha: $documentId - Letra: $letra - Nome: $nome")
-
-                        // Debug dos exercícios
-                        val exerciciosRaw = document.get("exercicios")
-                        Log.d("FIRESTORE_EDICAO", "Exercícios RAW do Firestore: $exerciciosRaw")
-                        Log.d("FIRESTORE_EDICAO", "Tipo dos exercícios: ${exerciciosRaw?.javaClass?.simpleName}")
+                        Log.d("FIRESTORE_EDICAO", "Processando ficha: $letra - $nome")
 
                         val exerciciosArray = document.get("exercicios") as? List<Map<String, Any>> ?: emptyList()
-                        Log.d("FIRESTORE_EDICAO", "Array de exercícios convertido - Tamanho: ${exerciciosArray.size}")
+                        Log.d("FIRESTORE_EDICAO", "Exercícios encontrados: ${exerciciosArray.size}")
 
                         val exerciciosList = mutableListOf<exercicioFun>()
 
-                        // Processamento dos exercícios
+                        // Processar cada exercício
                         exerciciosArray.forEachIndexed { exercicioIndex, exercicioMap ->
                             try {
-                                Log.d("FIRESTORE_EDICAO", "=== Processando exercício $exercicioIndex ===")
-                                Log.d("FIRESTORE_EDICAO", "Dados do exercício: $exercicioMap")
-
                                 val nomeExercicio = exercicioMap["nome"]?.toString() ?: ""
-                                Log.d("FIRESTORE_EDICAO", "Nome do exercício: $nomeExercicio")
-
-                                // Debug das séries
-                                val seriesRaw = exercicioMap["series"]
-                                Log.d("FIRESTORE_EDICAO", "Séries RAW: $seriesRaw")
-                                Log.d("FIRESTORE_EDICAO", "Tipo das séries: ${seriesRaw?.javaClass?.simpleName}")
-
                                 val seriesArray = exercicioMap["series"] as? List<Map<String, Any>> ?: emptyList()
-                                Log.d("FIRESTORE_EDICAO", "Array de séries convertido - Tamanho: ${seriesArray.size}")
 
                                 val seriesList = seriesArray.mapIndexed { serieIndex, serieMap ->
-                                    Log.d("FIRESTORE_EDICAO", "   Série $serieIndex: $serieMap")
-
                                     serieFun(
                                         id = "${documentId}_ex${exercicioIndex}_serie${serieIndex}",
                                         numero = serieMap["ordem"]?.toString()?.toIntOrNull() ?: (serieIndex + 1),
@@ -1386,69 +1115,62 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                                 )
 
                                 exerciciosList.add(exercicio)
-                                Log.d("FIRESTORE_EDICAO", "Exercício adicionado: $nomeExercicio com ${seriesList.size} séries")
-                                Log.d("FIRESTORE_EDICAO", "Total de exercícios na lista agora: ${exerciciosList.size}")
+                                Log.d("FIRESTORE_EDICAO", "Exercício processado: $nomeExercicio (${seriesList.size} séries)")
 
                             } catch (e: Exception) {
                                 Log.e("FIRESTORE_EDICAO", "Erro ao processar exercício $exercicioIndex", e)
-                                e.printStackTrace()
                             }
                         }
 
-                        // Log final antes de criar a ficha
-                        Log.d("FIRESTORE_EDICAO", "RESUMO FINAL:")
-                        Log.d("FIRESTORE_EDICAO", "Total de exercícios processados: ${exerciciosList.size}")
-                        exerciciosList.forEachIndexed { index, exercicio ->
-                            Log.d("FIRESTORE_EDICAO", "Exercício $index: ${exercicio.nome} (${exercicio.series.size} séries)")
-                        }
-
+                        // Criar ficha com dados carregados
                         val ficha = fichaTreinoFun(
-                            id = documentId, // USAR DOCUMENT ID
+                            id = documentId,
                             letra = letra,
                             nome = nome,
                             exercicios = exerciciosList
                         )
 
+                        // IMPORTANTE: Limpar lista e adicionar nova ficha
+                        fichasList.clear()
                         fichasList.add(ficha)
+
                         Log.d("FIRESTORE_EDICAO", "Ficha carregada: $letra - $nome com ${exerciciosList.size} exercícios")
 
-                        // Atualizar UI
+                        // Atualizar UI na thread principal
                         runOnUiThread {
                             try {
-                                if (::fichaTreinoAdapter.isInitialized) {
-                                    Log.d("FIRESTORE_EDICAO", "Notificando adapter com ${fichasList.size} fichas")
-                                    if (fichasList.isNotEmpty()) {
-                                        Log.d("FIRESTORE_EDICAO", "Primeira ficha tem ${fichasList.first().exercicios.size} exercícios")
-                                    }
+                                // Ocultar loading
+                                // progressBar?.visibility = View.GONE
 
+                                if (::fichaTreinoAdapter.isInitialized) {
+                                    Log.d("FIRESTORE_EDICAO", "Atualizando RecyclerView...")
+
+                                    // Notificar que os dados mudaram
                                     fichaTreinoAdapter.notifyDataSetChanged()
 
-                                    // Verificação adicional após notificar
+                                    // Atualizar contadores após um pequeno delay
                                     recyclerViewFichas.post {
-                                        Log.d("FIRESTORE_EDICAO", "Após notifyDataSetChanged:")
-                                        Log.d("FIRESTORE_EDICAO", "Adapter item count: ${fichaTreinoAdapter.itemCount}")
-                                        Log.d("FIRESTORE_EDICAO", "RecyclerView child count: ${recyclerViewFichas.childCount}")
-
-                                        // Forçar atualização dos contadores
                                         fichaTreinoAdapter.atualizarContadores()
+
+                                        Log.d("FIRESTORE_EDICAO", "RecyclerView atualizado:")
+                                        Log.d("FIRESTORE_EDICAO", "- Adapter item count: ${fichaTreinoAdapter.itemCount}")
+                                        Log.d("FIRESTORE_EDICAO", "- Exercícios na ficha: ${ficha.exercicios.size}")
                                     }
                                 }
 
                                 Toast.makeText(
                                     this@TelaEdicaoFichaTreino_funcionario,
-                                    "Ficha $letra carregada com ${fichasList.firstOrNull()?.exercicios?.size ?: 0} exercícios",
+                                    "Ficha $letra carregada com ${exerciciosList.size} exercícios",
                                     Toast.LENGTH_SHORT
                                 ).show()
 
                             } catch (e: Exception) {
                                 Log.e("FIRESTORE_EDICAO", "Erro ao atualizar UI", e)
-                                e.printStackTrace()
                             }
                         }
 
                     } catch (e: Exception) {
-                        Log.e("FIRESTORE_EDICAO", "Erro geral ao processar ficha", e)
-                        e.printStackTrace()
+                        Log.e("FIRESTORE_EDICAO", "Erro ao processar documento", e)
                         runOnUiThread {
                             Toast.makeText(
                                 this@TelaEdicaoFichaTreino_funcionario,
@@ -1458,9 +1180,9 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.e("FIRESTORE_EDICAO", "Erro ao carregar ficha específica", exception)
-                    exception.printStackTrace()
+                    Log.e("FIRESTORE_EDICAO", "Erro ao carregar ficha", exception)
                     runOnUiThread {
+                        // progressBar?.visibility = View.GONE
                         Toast.makeText(
                             this@TelaEdicaoFichaTreino_funcionario,
                             "Erro ao carregar ficha: ${exception.localizedMessage}",
@@ -1470,8 +1192,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                 }
 
         } catch (e: Exception) {
-            Log.e("FIRESTORE_EDICAO", "Erro ao iniciar carregamento da ficha", e)
-            e.printStackTrace()
+            Log.e("FIRESTORE_EDICAO", "Erro ao iniciar carregamento", e)
             Toast.makeText(this, "Erro ao carregar ficha: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
@@ -1502,17 +1223,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
             btnSetaVoltar.setOnClickListener {
                 Log.d("LIFECYCLE", "Botão voltar pressionado - Salvando alterações")
                 salvarTodasAlteracoesPendentes()
-                finish() // Volta para a tela anterior
-            }
-
-            // Configurar botão adicionar exercício
-            try {
-                btnAdicionarExercicio.setOnClickListener {
-                    Log.d("ADD_EXERCICIO_BTN", "Botão adicionar exercício clicado")
-                    adicionarNovoExercicio()
-                }
-            } catch (e: Exception) {
-                Log.w("EDICAO_FICHA", "Botão adicionar exercício não encontrado no layout: ${e.message}")
+                finish()
             }
 
             Log.d("EDICAO_FICHA", "Eventos configurados com sucesso")
@@ -1523,72 +1234,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
         }
     }
 
-    // Método para adicionar novo exercício à ficha atual
-    private fun adicionarNovoExercicio() {
-        if (fichasList.isEmpty()) {
-            Toast.makeText(this, "Nenhuma ficha carregada", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Mostrar diálogo para inserir nome do exercício
-        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
-        val input = android.widget.EditText(this).apply {
-            hint = "Nome do exercício"
-            setPadding(32, 32, 32, 32)
-        }
-
-        builder.setTitle("Adicionar Exercício")
-            .setView(input)
-            .setPositiveButton("Adicionar") { _, _ ->
-                val nomeExercicio = input.text.toString().trim()
-                if (nomeExercicio.isNotEmpty()) {
-                    adicionarExercicioAFicha(nomeExercicio)
-                } else {
-                    Toast.makeText(this, "Digite o nome do exercício", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
-    }
-
-    // MÉTODO CORRIGIDO: Usar documentId para criar IDs únicos
-    private fun adicionarExercicioAFicha(nomeExercicio: String) {
-        val ficha = fichasList.first() // Temos apenas uma ficha
-
-        // Criar novo exercício com uma série padrão
-        val novoExercicio = exercicioFun(
-            id = "${documentId}_exercicio_${ficha.exercicios.size}", // USAR DOCUMENT ID
-            nome = nomeExercicio,
-            series = mutableListOf(
-                serieFun(
-                    id = "${documentId}_ex${ficha.exercicios.size}_serie0", // USAR DOCUMENT ID
-                    numero = 1,
-                    repeticoes = 12,
-                    peso = "",
-                    tempo = "60"
-                )
-            )
-        )
-
-        // Adicionar à ficha
-        ficha.exercicios.add(novoExercicio)
-
-        Log.d("ADD_EXERCICIO_MAIN", "Exercício '$nomeExercicio' adicionado à ficha ${ficha.letra}")
-        Log.d("ADD_EXERCICIO_MAIN", "Total de exercícios agora: ${ficha.exercicios.size}")
-
-        // Notificar que a ficha foi alterada (isso salvará automaticamente)
-        onFichaAlterada(ficha, 0)
-
-        // Atualizar o adapter (isso atualizará o contador automaticamente)
-        fichaTreinoAdapter.notifyItemChanged(0)
-
-        // Forçar atualização do contador
-        fichaTreinoAdapter.atualizarContadores()
-
-        Toast.makeText(this, "Exercício '$nomeExercicio' adicionado!", Toast.LENGTH_SHORT).show()
-    }
-
-    // Sobrescrever métodos do ciclo de vida para salvar alterações
+    // Métodos do ciclo de vida para salvar alterações
     override fun onPause() {
         super.onPause()
         Log.d("LIFECYCLE", "onPause - Salvando alterações pendentes")
@@ -1602,75 +1248,59 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        Log.d("LIFECYCLE", "onDestroy - Limpando recursos e salvando alterações")
-
-        // Cancelar timer
+        Log.d("LIFECYCLE", "onDestroy - Limpando recursos")
         saveDebounceTimer?.cancel()
-
-        // Salvar alterações pendentes
         salvarTodasAlteracoesPendentes()
-
         super.onDestroy()
     }
 
-    // Interceptar botão voltar do sistema
     override fun onBackPressed() {
-        Log.d("LIFECYCLE", "onBackPressed - Salvando alterações antes de voltar")
+        Log.d("LIFECYCLE", "onBackPressed - Salvando alterações")
         salvarTodasAlteracoesPendentes()
         super.onBackPressed()
     }
 
-    // Tratamento para quando o usuário minimiza o app
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        Log.d("LIFECYCLE", "onUserLeaveHint - App minimizado, salvando alterações")
+        Log.d("LIFECYCLE", "onUserLeaveHint - Salvando alterações")
         salvarTodasAlteracoesPendentes()
     }
 
-    // Método para salvar todas as alterações pendentes
     private fun salvarTodasAlteracoesPendentes() {
         try {
-            // Forçar salvamento de campos que podem estar sendo editados
             if (::fichaTreinoAdapter.isInitialized) {
                 fichaTreinoAdapter.salvarTodasAlteracoesPendentes()
             }
 
-            // Se há alterações pendentes, salvar tudo
             if (hasUnsavedChanges) {
-                Log.d("SAVE_PENDING", "Há alterações pendentes, salvando...")
+                Log.d("SAVE_PENDING", "Salvando alterações pendentes...")
                 salvarAlteracoesNoFirestore()
-            } else {
-                Log.d("SAVE_PENDING", "Nenhuma alteração pendente")
             }
         } catch (e: Exception) {
             Log.e("SAVE_PENDING_ERROR", "Erro ao salvar alterações pendentes", e)
         }
     }
 
-    // Método de salvamento existente
     private fun salvarAlteracoesNoFirestore() {
-        if (fichasList.isEmpty()) {
-            Log.d("FIRESTORE_SAVE", "Nenhuma ficha para salvar")
-            return
-        }
-
-        val ficha = fichasList.first()
-        Log.d("FIRESTORE_SAVE", "Salvando todas as alterações da ficha: ${ficha.letra}")
-
-        salvarFichaAlteradaNoFirestore(ficha)
-    }
-
-    // Método adicional para forçar atualização do contador
-    private fun atualizarContadorExercicios() {
         if (fichasList.isNotEmpty()) {
-            // Forçar atualização do primeiro item (única ficha)
-            fichaTreinoAdapter.notifyItemChanged(0)
-            fichaTreinoAdapter.atualizarContadores()
+            val ficha = fichasList.first()
+            salvarFichaAlteradaNoFirestore(ficha)
         }
     }
 
-    // Método público para forçar recarregamento se necessário
+    // MÉTODO PÚBLICO: Para forçar recarregamento quando necessário
     fun recarregarFicha() {
-        carregarFichaEspecificaDoFirestore()
+        Log.d("PUBLIC_RELOAD", "Método público de recarregamento chamado")
+        recarregarDadosDoFirestore()
     }
-}*/
+
+    companion object {
+        private const val REQUEST_CODE_ADD_EXERCICIO = 1001
+    }
+}
+
+
+
+
+
+*/ //51651651

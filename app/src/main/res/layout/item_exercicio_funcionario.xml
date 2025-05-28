@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- item_exercicio.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,7 +7,6 @@
 
     <!-- Cabeçalho do exercício -->
     <LinearLayout
-        android:id="@+id/layoutExercicio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
@@ -16,11 +14,15 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
+        <!-- NOVO: ImageView para imagem do exercício -->
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/imgExercicio"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/icon_rectangle" />
+            android:src="@drawable/icon_rectangle"
+            android:scaleType="centerCrop"
+            android:contentDescription="Imagem do exercício" />
 
         <TextView
             android:id="@+id/tvNomeExercicio"
@@ -49,14 +51,13 @@
 
     </LinearLayout>
 
-    <!-- Linha separadora -->
+    <!-- Resto do layout... -->
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="5dp"
         android:background="@android:color/darker_gray" />
 
-    <!-- RecyclerView para séries -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSeries"
         android:layout_width="match_parent"
@@ -65,7 +66,6 @@
         android:nestedScrollingEnabled="false"
         android:overScrollMode="never" />
 
-    <!-- Linha separadora final -->
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"

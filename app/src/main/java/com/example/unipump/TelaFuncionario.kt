@@ -329,6 +329,37 @@ class TelaFuncionario : AppCompatActivity() {
     }
 
     private fun handleAlunoClick(aluno: Aluno) {
+        Log.d("ALUNO_CLICK", "=== ALUNO SELECIONADO ===")
+        Log.d("ALUNO_CLICK", "Nome: ${aluno.nome}")
+        Log.d("ALUNO_CLICK", "Document ID: ${aluno.documentId}")
+
+        // SEMPRE ir para a mesma tela - SIMPLES E EFICIENTE!
+        val intent = Intent(this, GerenciamentoDoAluno_Funcionario::class.java)
+
+        // Salvar TODOS os dados no SharedPreferences (mesmo os vazios)
+        val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+        val edit = prefs.edit()
+
+        edit.putString("alunoDocId", aluno.documentId)
+        edit.putString("nome", aluno.nome)
+        edit.putString("sobrenome", aluno.sobrenome)
+        edit.putString("email", aluno.email)
+        edit.putString("telefone", aluno.telefone)
+        edit.putString("idade", aluno.idade)
+        edit.putString("genero", aluno.genero)
+        edit.putString("endereco", aluno.endereco)
+        edit.putString("altura", aluno.altura.toString())
+        edit.putString("peso", aluno.peso.toString())
+        edit.putString("contusao", aluno.contusao)
+        edit.apply()
+
+        Log.d("ALUNO_CLICK", "Dados salvos no SharedPreferences")
+        Log.d("ALUNO_CLICK", "Navegando para GerenciamentoDoAluno_Funcionario")
+
+        startActivity(intent)
+    }
+
+    /*private fun handleAlunoClick(aluno: Aluno) {
         // Verificar se o aluno tem dados completos (além do nome básico)
         val temDadosCompletos = aluno.email.isNotBlank() ||
                 aluno.telefone.isNotBlank() ||
@@ -366,7 +397,7 @@ class TelaFuncionario : AppCompatActivity() {
             intent.putExtra("nome_aluno", aluno.nome) // Nome básico já cadastrado
             startActivity(intent)
         }
-    }
+    }*/
 
     private fun configurarEventos() {
         btnNotificacao.setOnClickListener {

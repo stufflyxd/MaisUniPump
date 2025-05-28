@@ -18,6 +18,7 @@
     <color name="azul_claro_2">#98c9f4</color>
     <color name="branco_fantasma">#f8f8ff</color>
     <color name="field_background">#202020</color>
+    <color name="green">#4CAF50</color>
 
     <color name="azul">#FF0000FF</color> <!-- Substitua pelo seu azul -->
     <color name="branco">#FFFFFFFF</color>
