@@ -1,138 +1,203 @@
 package com.example.unipump
 
-import android.app.Activity
-import android.content.Context
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-
+import com.google.firebase.firestore.FirebaseFirestore
+import java.io.File
+import java.io.FileOutputStream
+import java.util.*
 
 class TelaConfig : AppCompatActivity() {
+    private lateinit var profileImage: ImageView
+    private lateinit var perfilNome: TextView
+    private lateinit var personalInfo: TextView
+    private lateinit var trainingData: TextView
+    private lateinit var preferences: TextView
+    private lateinit var support: TextView
+    private lateinit var logoutButton: TextView
+    private lateinit var bottomNavigationView: BottomNavigationView
+
+    private val auth = FirebaseAuth.getInstance()
+    private val db   = FirebaseFirestore.getInstance()
+
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? -> uri?.let { onImagePicked(it) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_config)
 
-        val profileImage: ImageView = findViewById(R.id.profile_image)
-//        val editProfile: ImageView = findViewById(R.id.edit_profile)
-        val personalInfo: TextView = findViewById(R.id.personal_info)
-        val trainingData: TextView = findViewById(R.id.training_data)
-        val preferences: TextView = findViewById(R.id.preferences)
-        val support: TextView = findViewById(R.id.support)
-        val logoutButton: TextView = findViewById(R.id.deslogar)
+        profileImage         = findViewById(R.id.profile_image)
+        perfilNome           = findViewById(R.id.perfil_nome)
+        personalInfo         = findViewById(R.id.personal_info)
+        trainingData         = findViewById(R.id.training_data)
+        preferences          = findViewById(R.id.preferences)
+        support              = findViewById(R.id.support)
+        logoutButton         = findViewById(R.id.deslogar)
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val user = auth.currentUser
+        if (user == null) {
+            Toast.makeText(this, "Usuário não autenticado", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
+        carregarDadosUsuario()
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 100)
+        }
+
+        profileImage.setOnClickListener { pickImageLauncher.launch("image/*") }
 
         personalInfo.setOnClickListener {
-            // abrir tela de informações pessoais
-            val intent = Intent(this, TelaInformacoesPessoaisAluno::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, TelaInformacoesPessoaisAluno::class.java))
         }
-
         trainingData.setOnClickListener {
-            // tela dados de treino
-            val intent = Intent(this, TelaDadosDeTreino::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, TelaDadosDeTreino::class.java))
         }
-
         preferences.setOnClickListener {
-            // tela preferencias
-            val intent = Intent(this, TelaPref::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, TelaPref::class.java))
         }
-
         support.setOnClickListener {
-            // tela chat de suporte
-            val intent = Intent(this, TelaChat::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, TelaChat::class.java))
         }
-
         logoutButton.setOnClickListener {
-            mostrarDialogLogout(this)
+            mostrarDialogLogout()
         }
-
-//        logoutButton.setOnClickListener {
-//            Toast.makeText(this, "Você foi deslogado", Toast.LENGTH_SHORT).show()
-//            val intent = Intent(this, TelaInicial::class.java)
-//            startActivity(intent)
-//            // adicionar lógica para voltar para a tela de login
-//        }
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_inicio -> {
-                    val intent = Intent(this, TelaPrincipalAluno::class.java)
-                    startActivity(intent)
+                R.id.nav_inicio  -> {
+                    startActivity(Intent(this, TelaPrincipalAluno::class.java))
                     true
                 }
-
                 R.id.nav_treinos -> {
-                    val intent = Intent(this, TelaTreinoAluno::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, TelaTreinoAluno::class.java))
                     true
                 }
-
-                R.id.nav_config -> {
+                R.id.nav_chat    -> {
+                    startActivity(Intent(this, TelaChat::class.java))
                     true
                 }
-
-                R.id.nav_chat -> {
-                    // val intent = Intent(this, )
-                    true
-                }
-
-                else -> false
+                R.id.nav_config  -> true
+                else             -> false
             }
         }
     }
 
-    private fun mostrarDialogLogout(context: Context) {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_quit_layout, null)
+    private fun carregarDadosUsuario() {
+        val alunoDocId = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+            .getString("alunoDocId", null) ?: return
 
-        val dialog = AlertDialog.Builder(context)
-            .setView(dialogView)
-            .create()
+        db.collection("alunos").document(alunoDocId)
+            .get()
+            .addOnSuccessListener { doc ->
+                perfilNome.text = doc.getString("nome") ?: "Usuário"
+                val path = doc.getString("uri_foto")
+                if (!path.isNullOrBlank()) {
+                    val file = File(path)
+                    if (file.exists()) {
+                        Glide.with(this)
+                            .load(file)
+                            .circleCrop()
+                            .skipMemoryCache(true)
+                            .into(profileImage)
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Erro ao carregar perfil", Toast.LENGTH_SHORT).show()
+            }
+    }
 
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.show()
+    private fun onImagePicked(uri: Uri) {
+        val alunoDocId = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+            .getString("alunoDocId", null) ?: return
 
-        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
-        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
+        val destFile = File(filesDir, "profile_${UUID.randomUUID()}_$alunoDocId.jpg")
 
-        btnCancelar.setOnClickListener {
-            dialog.dismiss()
+        contentResolver.openInputStream(uri)?.use { input ->
+            FileOutputStream(destFile).use { output ->
+                input.copyTo(output)
+            }
         }
 
-        btnConfirmar.setOnClickListener {
-            // 1. Fecha o diálogo
-            dialog.dismiss()
+        Glide.with(this)
+            .load(destFile)
+            .circleCrop()
+            .skipMemoryCache(true)
+            .into(profileImage)
 
-            // 2. Limpa SharedPreferences
-            getSharedPreferences("alunoPrefs", MODE_PRIVATE)
-                .edit()
-                .clear()
-                .apply()
+        // Apaga arquivo antigo se existir
+        db.collection("alunos").document(alunoDocId)
+            .get()
+            .addOnSuccessListener { doc ->
+                val oldPath = doc.getString("uri_foto")
+                oldPath?.let {
+                    val oldFile = File(it)
+                    if (oldFile.exists()) oldFile.delete()
+                }
 
-            // 3. Desloga do Firebase
-            FirebaseAuth.getInstance().signOut()
-
-            // 4. Limpa toda a pilha e abre TelaLogin
-            val intent = Intent(this, TelaLogin::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                putExtra("tipo", "aluno")
+                db.collection("alunos").document(alunoDocId)
+                    .update("uri_foto", destFile.absolutePath)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Foto salva no perfil", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { ex ->
+                        Toast.makeText(this, "Erro ao salvar perfil: ${ex.message}", Toast.LENGTH_LONG).show()
+                    }
             }
-            startActivity(intent)
-            // 5. Finaliza esta Activity e todas as anteriores
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 100 && grantResults.isNotEmpty() &&
+            grantResults[0] != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toast.makeText(this, "Permissão de fotos negada", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun mostrarDialogLogout() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_quit_layout, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create().apply { show() }
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialogView.findViewById<Button>(R.id.btnCancelar).setOnClickListener { dialog.dismiss() }
+        dialogView.findViewById<Button>(R.id.btnConfirmar).setOnClickListener {
+            dialog.dismiss()
+            auth.signOut()
+            startActivity(
+                Intent(this, TelaLogin::class.java)
+                    .apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+            )
             finishAffinity()
         }
-
     }
-
 }

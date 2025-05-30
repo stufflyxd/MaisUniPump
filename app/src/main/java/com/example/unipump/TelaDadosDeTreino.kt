@@ -10,7 +10,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class TelaDadosDeTreino : AppCompatActivity() {
+class
+TelaDadosDeTreino : AppCompatActivity() {
 
     private lateinit var linkRelatorio: TextView
     private lateinit var btnVoltar: ImageView

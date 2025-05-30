@@ -18,15 +18,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 class TelaFichaTreinoAluno : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
-
-    // Estes valores serão definidos em onCreate()
     private lateinit var alunoDocId: String
     private val nomeSubColecao = "treino"
-
-    // Guarda o ID do documento de treino selecionado
     private var docIdTreino: String? = null
 
-    // Lista mutável de exercícios (cada ExercicioAluno contém sua lista de Séries)
     private val listaExercicioAlunos = mutableListOf<ExercicioAluno>()
     private lateinit var exercAdapter: ExerciciosAdapterAluno
 
@@ -34,33 +29,28 @@ class TelaFichaTreinoAluno : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_ficha_treino)
 
-        // 0) Lê e exibe o título que veio na Intent
+        // Título
         val tvTitulo = findViewById<TextView>(R.id.Titulo_exercicio)
         val titulo   = intent.getStringExtra("titulo") ?: ""
         tvTitulo.text = titulo
 
-        // 1) Carrega o alunoDocId dos SharedPreferences
+        // Lê alunoDocId
         val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
-        val maybeId = prefs.getString("alunoDocId", null)
-        if (maybeId.isNullOrBlank()) {
-            Toast.makeText(
-                this,
-                "Identificador do aluno não encontrado. Faça login novamente.",
-                Toast.LENGTH_LONG
-            ).show()
-            finish()
-            return
-        }
-        alunoDocId = maybeId
+        alunoDocId = prefs.getString("alunoDocId", null)
+            ?: run {
+                Toast.makeText(this, "Faça login novamente.", Toast.LENGTH_LONG).show()
+                finish()
+                return
+            }
 
-        // 2) Configura RecyclerView + Adapter
+        // Configura RecyclerView
         val rv = findViewById<RecyclerView>(R.id.rvExercicios).apply {
             layoutManager = LinearLayoutManager(this@TelaFichaTreinoAluno)
         }
         exercAdapter = ExerciciosAdapterAluno(listaExercicioAlunos)
         rv.adapter = exercAdapter
 
-        // 3) Botão Voltar: salva e fecha
+        // Botão Voltar (salva e fecha)
         findViewById<ImageView>(R.id.btn_back).setOnClickListener {
             salvarTreino { sucesso ->
                 if (sucesso) finish()
@@ -68,39 +58,34 @@ class TelaFichaTreinoAluno : AppCompatActivity() {
             }
         }
 
-        // 4) Botão Iniciar: salva e abre feedback
+        // Botão Iniciar (salva e abre Feedback)
         findViewById<Button>(R.id.buttonStart).setOnClickListener {
             salvarTreino { sucesso ->
-                if (sucesso) {
-                    startActivity(Intent(this, TelaExercicioFinalizadoAluno::class.java))
+                if (sucesso && !docIdTreino.isNullOrEmpty()) {
+                    val intent = Intent(this, TelaExercicioFinalizadoAluno::class.java).apply {
+                        putExtra("TREINO_ID", docIdTreino)
+                        putExtra("titulo", titulo)
+                    }
+                    startActivity(intent)
                 } else {
                     Toast.makeText(this, "Falha ao salvar treino", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        // 5) Bottom Navigation
+        // Navegação inferior
         findViewById<BottomNavigationView>(R.id.bottom_navigation)
             .setOnItemSelectedListener { item ->
                 when (item.itemId) {
-                    R.id.nav_inicio  -> true
-                    R.id.nav_treinos -> {
-                        startActivity(Intent(this, TelaTreinoAluno::class.java))
-                        true
-                    }
-                    R.id.nav_chat    -> {
-                        startActivity(Intent(this, TelaChat::class.java))
-                        true
-                    }
-                    R.id.nav_config  -> {
-                        startActivity(Intent(this, TelaConfig::class.java))
-                        true
-                    }
+                    R.id.nav_inicio  -> { startActivity(Intent(this, TelaPrincipalAluno::class.java)); true }
+                    R.id.nav_treinos -> { startActivity(Intent(this, TelaTreinoAluno::class.java)); true }
+                    R.id.nav_chat    -> { startActivity(Intent(this, TelaChat::class.java));      true }
+                    R.id.nav_config  -> { startActivity(Intent(this, TelaConfig::class.java));    true }
                     else             -> false
                 }
             }
 
-        // 6) Recupera a 'letra' que veio na Intent
+        // Lê letra do treino
         val letraTreino = intent.getStringExtra("letra") ?: ""
         if (letraTreino.isBlank()) {
             Toast.makeText(this, "Letra do treino não informada", Toast.LENGTH_LONG).show()
@@ -108,7 +93,7 @@ class TelaFichaTreinoAluno : AppCompatActivity() {
             return
         }
 
-        // 7) Query no Firestore filtrando pela letra
+        // Busca o documento de treino filtrando pela letra
         db.collection("alunos")
             .document(alunoDocId)
             .collection(nomeSubColecao)
@@ -117,22 +102,14 @@ class TelaFichaTreinoAluno : AppCompatActivity() {
             .addOnSuccessListener { snaps ->
                 val doc = snaps.documents.firstOrNull()
                 if (doc == null) {
-                    Toast.makeText(
-                        this,
-                        "Nenhum treino “$letraTreino” encontrado",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this, "Treino “$letraTreino” não encontrado", Toast.LENGTH_LONG).show()
                     return@addOnSuccessListener
                 }
-
-                // Guarda para usar no update
                 docIdTreino = doc.id
 
-                // Extrai lista bruta de exercícios
                 val rawList = doc.get("exercicios") as? List<Map<String,Any>> ?: emptyList()
-
-                // Constrói lista de ExercicioAluno + Series
-                val exercList = rawList.map { m ->
+                listaExercicioAlunos.clear()
+                listaExercicioAlunos.addAll(rawList.map { m ->
                     val seriesRaw = m["series"] as? List<Map<String,Any>> ?: emptyList()
                     val series = seriesRaw.map { s ->
                         val feitoBool = when (val feitoRaw = s["feito"]) {
@@ -156,30 +133,19 @@ class TelaFichaTreinoAluno : AppCompatActivity() {
                         nome     = m["nome"]?.toString().orEmpty(),
                         series   = series
                     )
-                }
-
-                // Atualiza adapter
-                listaExercicioAlunos.clear()
-                listaExercicioAlunos.addAll(exercList)
+                })
                 exercAdapter.notifyDataSetChanged()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(
-                    this,
-                    "Erro ao carregar treino: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this, "Erro ao carregar treino: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
 
     private fun salvarTreino(onResult: (Boolean) -> Unit) {
         val docId = docIdTreino
         if (docId.isNullOrEmpty()) {
-            onResult(false)
-            return
+            onResult(false); return
         }
-
-        // Reconstrói o payload com os valores editados
         val payload = listaExercicioAlunos.map { ex ->
             mapOf(
                 "frame"    to ex.frame,
@@ -190,12 +156,13 @@ class TelaFichaTreinoAluno : AppCompatActivity() {
                         "ordem"    to s.ordem,
                         "reps"     to s.reps,
                         "peso"     to s.peso,
-                        "descanso" to s.descanso
+                        "descanso" to s.descanso,
+                        "feito"    to s.feito,
+                        "duracao"  to s.duracao
                     )
                 }
             )
         }
-
         db.collection("alunos")
             .document(alunoDocId)
             .collection(nomeSubColecao)
