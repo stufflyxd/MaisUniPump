@@ -13,7 +13,6 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/seta_voltar"
         android:src="@drawable/ic_arrow_back"
-        android:tint="@color/white"
         android:background="?attr/selectableItemBackgroundBorderless" />
 
     <!-- Título -->
@@ -159,16 +158,13 @@
         android:textSize="14sp" />
 
     <!-- Calendário -->
-    <CalendarView
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/text_historico"
         android:layout_margin="16dp"
-        android:background="@drawable/bg_card"
-        android:calendarTextColor="@android:color/white"
-        android:dateTextAppearance="@style/CalendarDateText"
-        android:weekDayTextAppearance="@style/CalendarWeekDayText" />
+        app:mcv_showOtherDates="all" />
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

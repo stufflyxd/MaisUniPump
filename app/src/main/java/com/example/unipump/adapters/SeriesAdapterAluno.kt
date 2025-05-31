@@ -1,3 +1,4 @@
+// caminho: app/src/main/java/com/example/unipump/adapters/SeriesAdapter.kt
 package com.example.unipump.adapters
 
 import android.text.Editable
@@ -11,75 +12,80 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.unipump.R
 import com.example.unipump.models.SerieAluno
 
+/**
+ * Adapter que exibe cada linha de 'item_serie.xml' (uma única Série).
+ * A cada vez que o usuário edita e sai de foco de um EditText,
+ * chamamos onSerieFieldChanged(indexDaSerie, novaSerie).
+ *
+ * Note que recebemos: `initialList: List<SerieAluno>` (imutável).
+ * Internamente, guardamos uma cópia mutável para controlar as mudanças.
+ */
 class SeriesAdapterAluno(
-    private val listaSeries: List<SerieAluno>
-) : RecyclerView.Adapter<SeriesAdapterAluno.SerieVH>() {
+    initialList: List<SerieAluno>,
+    private val onSerieFieldChanged: (indiceSerie: Int, serieAtualizada: SerieAluno) -> Unit
+) : RecyclerView.Adapter<SeriesAdapterAluno.SerieViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SerieVH {
-        val view = LayoutInflater.from(parent.context)
+    // Cópia mutável das séries: ao editar, atualizamos aqui.
+    private val seriesList = initialList.toMutableList()
+
+    inner class SerieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val tvOrdem: TextView       = view.findViewById(R.id.tvOrdem)
+        val tvPeso: EditText        = view.findViewById(R.id.tvPeso)
+        val tvReps: EditText        = view.findViewById(R.id.tvReps)
+        val tvDescanso: EditText    = view.findViewById(R.id.tvDescanso)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SerieViewHolder {
+        val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_serie, parent, false)
-        return SerieVH(view)
+        return SerieViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: SerieVH, position: Int) {
-        holder.bind(listaSeries[position])
-    }
+    override fun getItemCount(): Int = seriesList.size
 
-    override fun getItemCount(): Int = listaSeries.size
+    override fun onBindViewHolder(holder: SerieViewHolder, position: Int) {
+        val serie = seriesList[position]
 
-    inner class SerieVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvOrdem = itemView.findViewById<TextView>(R.id.tvOrdem)
-        private val etReps = itemView.findViewById<EditText>(R.id.tvReps)
-        private val etPeso = itemView.findViewById<EditText>(R.id.tvPeso)
-        private val etDescanso = itemView.findViewById<EditText>(R.id.tvDescanso)
+        // Preenche com os valores atuais
+        holder.tvOrdem.text = serie.ordem
+        holder.tvPeso.setText(serie.peso)
+        holder.tvReps.setText(serie.reps)
+        holder.tvDescanso.setText(serie.descanso)
 
-
-        private var repsWatcher: TextWatcher? = null
-        private var pesoWatcher: TextWatcher? = null
-        private var descansoWatcher: TextWatcher? = null
-
-        fun bind(serieAluno: SerieAluno) {
-            tvOrdem.text = serieAluno.ordem
-
-            // Remove watchers antigos
-            repsWatcher?.let { etReps.removeTextChangedListener(it) }
-            pesoWatcher?.let { etPeso.removeTextChangedListener(it) }
-            descansoWatcher?.let { etDescanso.removeTextChangedListener(it) }
-
-            // Popula campos
-            etReps.setText(serieAluno.reps)
-            etPeso.setText(serieAluno.peso)
-            etDescanso.setText(serieAluno.descanso)
-
-            // Cria e atribui watcher de reps
-            repsWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    serieAluno.reps = s.toString()
+        // Definimos listeners de FocusChange em cada EditText. Quando o usuário sai do campo,
+        // capturamos o novo texto e, se diferente, criamos uma cópia de SerieAluno com o campo alterado,
+        // armazenamos em seriesList e disparamos onSerieFieldChanged.
+        holder.tvPeso.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val novoPeso = holder.tvPeso.text.toString()
+                if (serie.peso != novoPeso) {
+                    val updated = serie.copy(peso = novoPeso)
+                    seriesList[position] = updated
+                    onSerieFieldChanged(position, updated)
                 }
             }
-            etReps.addTextChangedListener(repsWatcher)
+        }
 
-            // Cria e atribui watcher de peso
-            pesoWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    serieAluno.peso = s.toString()
+        holder.tvReps.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val novasReps = holder.tvReps.text.toString()
+                if (serie.reps != novasReps) {
+                    val updated = serie.copy(reps = novasReps)
+                    seriesList[position] = updated
+                    onSerieFieldChanged(position, updated)
                 }
             }
-            etPeso.addTextChangedListener(pesoWatcher)
+        }
 
-            // Cria e atribui watcher de descanso
-            descansoWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    serieAluno.descanso = s.toString()
+        holder.tvDescanso.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val novoDescanso = holder.tvDescanso.text.toString()
+                if (serie.descanso != novoDescanso) {
+                    val updated = serie.copy(descanso = novoDescanso)
+                    seriesList[position] = updated
+                    onSerieFieldChanged(position, updated)
                 }
             }
-            etDescanso.addTextChangedListener(descansoWatcher)
         }
     }
 }

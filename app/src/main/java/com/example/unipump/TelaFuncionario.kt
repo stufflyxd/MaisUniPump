@@ -1,24 +1,29 @@
 package com.example.unipump
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.unipump.models.Aluno
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.File
 
 class TelaFuncionario : AppCompatActivity() {
 
+    private lateinit var profileImage: ImageView
     private lateinit var btnNavegacao: BottomNavigationView
     private lateinit var btnNotificacao: ImageButton
     private lateinit var nomeUser: TextView
@@ -46,12 +51,75 @@ class TelaFuncionario : AppCompatActivity() {
     }
 
     private fun inicializarViews() {
+        profileImage = findViewById(R.id.profileImage)
         btnNavegacao = findViewById(R.id.bottom_navigation)
         btnNotificacao = findViewById(R.id.btn_notificacao)
         nomeUser = findViewById(R.id.nomeUser)
         rvListaAlunos = findViewById(R.id.rvListaAlunos)
         editTextSearch = findViewById(R.id.search_edit_text)
     }
+
+
+    private fun configurarDadosUsuario() {
+        val db = FirebaseFirestore.getInstance()
+        val prefs = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
+
+        // Carregar nome
+        val nome = prefs.getString("nome_usuario", "Usuário")
+        nomeUser.text = "Bem Vindo, \n $nome!"
+
+        // CORREÇÃO: Buscar a chave correta do funcionário
+        val funcionarioDocId = prefs.getString("funcionarioDocId", null)
+            ?: prefs.getString("alunoDocId", null)  // Fallback caso esteja salvo como alunoDocId
+
+        if (funcionarioDocId == null) {
+            Log.e("FUNCIONARIO_CONFIG", "ID do funcionário não encontrado")
+            profileImage.setImageResource(R.drawable.ic_person)
+            return
+        }
+
+        Log.d("FUNCIONARIO_CONFIG", "Carregando dados do funcionário: $funcionarioDocId")
+
+        db.collection("funcionarios").document(funcionarioDocId)
+            .get()
+            .addOnSuccessListener { doc ->
+                Log.d("FUNCIONARIO_CONFIG", "Documento encontrado: ${doc.exists()}")
+
+                if (doc.exists()) {
+                    // Tentar carregar foto local
+                    val path = doc.getString("uri_foto")
+                    Log.d("FUNCIONARIO_CONFIG", "Caminho da foto: $path")
+
+                    if (!path.isNullOrBlank()) {
+                        val file = File(path)
+                        Log.d("FUNCIONARIO_CONFIG", "Arquivo existe: ${file.exists()}")
+
+                        if (file.exists()) {
+                            Glide.with(this)
+                                .load(file)
+                                .circleCrop()
+                                .skipMemoryCache(true)
+                                .into(profileImage)
+                            Log.d("FUNCIONARIO_CONFIG", "Foto carregada com sucesso")
+                        } else {
+                            profileImage.setImageResource(R.drawable.ic_person)
+                            Log.w("FUNCIONARIO_CONFIG", "Arquivo não encontrado: $path")
+                        }
+                    } else {
+                        profileImage.setImageResource(R.drawable.ic_person)
+                        Log.d("FUNCIONARIO_CONFIG", "Nenhuma foto salva")
+                    }
+                } else {
+                    profileImage.setImageResource(R.drawable.ic_person)
+                    Log.w("FUNCIONARIO_CONFIG", "Documento não encontrado no Firestore")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("FUNCIONARIO_CONFIG", "Erro ao carregar perfil", exception)
+                profileImage.setImageResource(R.drawable.ic_person)
+            }
+    }
+
 
     private fun configurarRecyclerView() {
         // Configurar adapter primeiro (lista vazia inicialmente)
@@ -290,12 +358,7 @@ class TelaFuncionario : AppCompatActivity() {
         carregarAlunosFromFirestore()
     }
 
-    private fun configurarDadosUsuario() {
-        // Recuperar os dados do usuário
-        val prefs = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
-        val nome = prefs.getString("nome_usuario", "Usuário")
-        nomeUser.text = "Bem Vindo, \n $nome!"
-    }
+
 
     private fun configurarBusca() {
         editTextSearch.addTextChangedListener(object : TextWatcher {

@@ -29,7 +29,7 @@ class SeriesAdapterFinalizadoAluno(
         private val tvOrdem     = itemView.findViewById<TextView>(R.id.tvNumSerie)
         private val tvPeso      = itemView.findViewById<TextView>(R.id.tvPeso)
         private val tvReps      = itemView.findViewById<TextView>(R.id.tvReps)
-        private val tvDuracao   = itemView.findViewById<TextView>(R.id.tvDuracao)
+        private val tvDescanso  = itemView.findViewById<TextView>(R.id.tvDescanso)
         private val cbFeito     = itemView.findViewById<CheckBox>(R.id.cbFeito)
 
         fun bind(serie: SerieFinalizadoAluno) {
@@ -37,7 +37,7 @@ class SeriesAdapterFinalizadoAluno(
             tvOrdem.text   = serie.ordem
             tvPeso.text    = serie.peso
             tvReps.text    = serie.reps
-            tvDuracao.text = serie.duracao
+            tvDescanso.text = serie.descanso
 
             // Marca/desmarca o checkbox
             cbFeito.isChecked = serie.feito

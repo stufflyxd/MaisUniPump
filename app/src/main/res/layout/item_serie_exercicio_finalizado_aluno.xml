@@ -53,7 +53,7 @@
 
     <!-- Duração: largura fixa -->
     <TextView
-        android:id="@+id/tvDuracao"
+        android:id="@+id/tvDescanso"
         android:layout_width="60dp"
         android:layout_height="48dp"
         android:layout_marginEnd="8dp"

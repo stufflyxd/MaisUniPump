@@ -6,23 +6,27 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.unipump.adapters.FichaTreinoFunAdapter
 import com.example.unipump.models.exercicioFun
 import com.example.unipump.models.fichaTreinoFun
 import com.example.unipump.models.serieFun
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.File
 import java.util.Timer
 import java.util.TimerTask
 
 class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
 
+    private lateinit var profileImage: ImageView
     private lateinit var btnNavegacao: BottomNavigationView
     private lateinit var btnSetaVoltar: ImageButton
     private lateinit var recyclerViewFichas: RecyclerView
@@ -76,6 +80,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
 
             // Carregar dados do Firestore
             carregarFichaEspecificaDoFirestore()
+            configurarDadosUsuario()
 
         } catch (e: Exception) {
             Log.e("EDICAO_FICHA_ERROR", "Erro no onCreate", e)
@@ -91,6 +96,68 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
 
         // Sempre recarregar dados quando voltar para a tela
         recarregarDadosDoFirestore()
+    }
+
+    private fun configurarDadosUsuario() {
+        val db = FirebaseFirestore.getInstance()
+
+        val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+        /* val nome = prefs.getString("nome", "")
+         val sobrenome = prefs.getString("sobrenome", "")*/
+
+        /*titulo.text = "Sobre $nome"
+        tvNome.text = "$nome"
+        tvSobrenome.text = "$sobrenome"*/
+
+
+        val alunoDocId = prefs.getString("alunoDocId", null)
+
+        if (alunoDocId == null) {
+            Log.e("FUNCIONARIO_CONFIG", "ID do funcionário não encontrado")
+            profileImage.setImageResource(R.drawable.ic_person)
+            return
+        }
+
+        Log.d("FUNCIONARIO_CONFIG", "Carregando dados do funcionário: $alunoDocId")
+
+        db.collection("alunos").document(alunoDocId)
+            .get()
+            .addOnSuccessListener { doc ->
+                Log.d("FUNCIONARIO_CONFIG", "Documento encontrado: ${doc.exists()}")
+
+                if (doc.exists()) {
+                    // Tentar carregar foto local
+                    val path = doc.getString("uri_foto")
+                    Log.d("FUNCIONARIO_CONFIG", "Caminho da foto: $path")
+
+                    if (!path.isNullOrBlank()) {
+                        val file = File(path)
+                        Log.d("FUNCIONARIO_CONFIG", "Arquivo existe: ${file.exists()}")
+
+                        if (file.exists()) {
+                            Glide.with(this)
+                                .load(file)
+                                .circleCrop()
+                                .skipMemoryCache(true)
+                                .into(profileImage)
+                            Log.d("FUNCIONARIO_CONFIG", "Foto carregada com sucesso")
+                        } else {
+                            profileImage.setImageResource(R.drawable.ic_person)
+                            Log.w("FUNCIONARIO_CONFIG", "Arquivo não encontrado: $path")
+                        }
+                    } else {
+                        profileImage.setImageResource(R.drawable.ic_person)
+                        Log.d("FUNCIONARIO_CONFIG", "Nenhuma foto salva")
+                    }
+                } else {
+                    profileImage.setImageResource(R.drawable.ic_person)
+                    Log.w("FUNCIONARIO_CONFIG", "Documento não encontrado no Firestore")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("FUNCIONARIO_CONFIG", "Erro ao carregar perfil", exception)
+                profileImage.setImageResource(R.drawable.ic_person)
+            }
     }
 
     // Método para recarregar dados do Firestore
@@ -214,6 +281,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
 
     private fun initViews() {
         try {
+            profileImage = findViewById(R.id.profileImage)
             btnNavegacao = findViewById(R.id.bottom_navigation)
             btnSetaVoltar = findViewById(R.id.SetaVoltarTelaEdicaoFicha)
             recyclerViewFichas = findViewById(R.id.recyclerViewFichas)
@@ -458,7 +526,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                                 }.toMutableList()
 
                                 val exercicio = exercicioFun(
-                                    id = "${documentId}_exercicio_$exercicioIndex",
+                                    id = "${documentId}exercicio$exercicioIndex",
                                     nome = nomeExercicio,
                                     frame = frameExercicio, // NOVO: Incluir frame no objeto
                                     series = seriesList
@@ -1109,7 +1177,7 @@ class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
                                 }.toMutableList()
 
                                 val exercicio = exercicioFun(
-                                    id = "${documentId}_exercicio_$exercicioIndex",
+                                    id = "${documentId}exercicio$exercicioIndex",
                                     nome = nomeExercicio,
                                     series = seriesList
                                 )

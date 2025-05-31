@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide
 import com.example.unipump.adapters.FichaAdapterAluno
 import com.example.unipump.models.FichaTreinoAluno
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -38,11 +37,10 @@ class TelaTreinoAluno : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_treino_aluno)
 
-        // 1) Header: avatar, nome e notificações
-        imgAvatar       = findViewById(R.id.imgAvatar)
-        nomeUser        = findViewById(R.id.nomeUser)
-        btnNotificacao  = findViewById(R.id.btn_notificacao)
-
+        // 1) Header: avatar, nome e notificação
+        imgAvatar      = findViewById(R.id.imgAvatar)
+        nomeUser       = findViewById(R.id.nomeUser)
+        btnNotificacao = findViewById(R.id.btn_notificacao)
         btnNotificacao.setOnClickListener {
             startActivity(Intent(this, TelaNotificacao_funcionario::class.java))
         }
@@ -51,6 +49,7 @@ class TelaTreinoAluno : AppCompatActivity() {
         rvFichas = findViewById(R.id.rvFichas)
         rvFichas.layoutManager = LinearLayoutManager(this)
         adapter = FichaAdapterAluno(fichas) { ficha ->
+            // Ao clicar em uma ficha, abre TelaFichaTreinoAluno passando dados
             Intent(this, TelaFichaTreinoAluno::class.java).apply {
                 putExtra("letra", ficha.letra)
                 putExtra("titulo", ficha.titulo)
@@ -75,7 +74,7 @@ class TelaTreinoAluno : AppCompatActivity() {
             }
         }
 
-        // 4) Carrega os dados
+        // 4) Carrega dados iniciais
         carregarPerfil()
         carregarFichas()
     }
@@ -98,6 +97,7 @@ class TelaTreinoAluno : AppCompatActivity() {
             .addOnSuccessListener { doc ->
                 val path = doc.getString("uri_foto")
                 if (!path.isNullOrBlank()) {
+                    // Carrega foto via Glide com circleCrop
                     Glide.with(this)
                         .load(Uri.parse(path))
                         .circleCrop()
@@ -108,11 +108,11 @@ class TelaTreinoAluno : AppCompatActivity() {
                 }
             }
             .addOnFailureListener {
-                Log.e("TelaTreinoAluno", "erro ao carregar perfil", it)
+                Log.e("TelaTreinoAluno", "Erro ao carregar perfil", it)
             }
     }
 
-    /** Busca todas as fichas na subcoleção treino */
+    /** Busca todas as fichas na subcoleção "treino" e ordena alfabeticamente por letra */
     private fun carregarFichas() {
         val user = auth.currentUser
         if (user == null) {
@@ -131,15 +131,23 @@ class TelaTreinoAluno : AppCompatActivity() {
             .collection("treino")
             .get()
             .addOnSuccessListener { snapshot ->
+                // Limpa lista atual
                 fichas.clear()
+
+                // Converte cada documento em FichaTreinoAluno
                 snapshot.documents.forEach { doc ->
-                    val letra = doc.getString("letra") ?: return@forEach
+                    val letra  = doc.getString("letra") ?: return@forEach
                     val titulo = doc.getString("nome") ?: ""
-                    val qtd = doc.getLong("quantidadeExercicios")?.toInt()
+                    val qtd    = doc.getLong("quantidadeExercicios")?.toInt()
                         ?: doc.getString("quantidadeExercicios")?.toIntOrNull()
                         ?: 0
                     fichas.add(FichaTreinoAluno(letra, titulo, qtd))
                 }
+
+                // Ordena alfabeticamente pelo campo 'letra' (ignorando maiúsculas/minúsculas)
+                fichas.sortBy { it.letra.uppercase(Locale.getDefault()) }
+
+                // Notifica o adapter para atualizar a RecyclerView
                 adapter.notifyDataSetChanged()
             }
             .addOnFailureListener { e ->

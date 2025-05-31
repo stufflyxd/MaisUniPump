@@ -4,9 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    app:cardBackgroundColor="#1E1E1E"
     app:cardCornerRadius="16dp"
-    app:cardBackgroundColor="#1A1A1A">
+    app:cardElevation="6dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,52 +17,75 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-
-        <!-- Título e tempo -->
-        <TextView
-            android:id="@+id/tvTituloExercicio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Exercício"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-
+        <!-- ===== Linha superior: [Frame] + [Execução / Nome] + [Ícone relógio] ===== -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
 
-            <TextView
-                android:id="@+id/tvLabelTempoExecucao"
+            <!-- 1) Imagem do exercício (frame) -->
+            <ImageView
+                android:id="@+id/imgExercicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="#CCCCCC"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp" />
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/icon_rectangle"
+                android:contentDescription="Ícone do exercício" />
 
-            <TextView
-                android:id="@+id/tvTempoExercicio"
-                android:layout_width="wrap_content"
+            <!-- 2) Coluna vertical com Execução + Nome -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="#CCCCCC"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp" />
+                android:layout_weight="2"
+                android:orientation="vertical">
 
+                <!-- Texto “Execução” (ex.: “Execução normal”) -->
+                <TextView
+                    android:id="@+id/tvExecucao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Execução normal"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+                <!-- Texto “Nome do exercício” (ex.: “Rosca direta com barra”) -->
+                <TextView
+                    android:id="@+id/tvNome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Nome do exercício"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 3) Ícone de relógio, ao final da linha -->
+            <ImageView
+                android:id="@+id/ivClock"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/clock"
+                android:contentDescription="Ícone de relógio"
+                android:scaleType="centerInside"
+                android:layout_weight="1" />
         </LinearLayout>
 
+        <!-- ===== Separador Horizontal ===== -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@android:color/white" />
 
-        <!-- RecyclerView de séries -->
+        <!-- ===== RecyclerView interno para listar cada série ===== -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSeries"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            android:layout_marginTop="16dp" />
-
+            android:nestedScrollingEnabled="false"/>
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

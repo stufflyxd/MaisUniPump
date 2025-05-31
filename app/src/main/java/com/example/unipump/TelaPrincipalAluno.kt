@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.unipump.models.FichaTreinoAluno
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -62,13 +63,14 @@ class TelaPrincipalAluno : AppCompatActivity() {
         carregarPerfil()
 
         // --- Botões ---
-        btnVisualizar.setOnClickListener { abrirFicha() }
+        btnVisualizar.setOnClickListener { abrirFichaSugerida() }
         linkRelatorio.setOnClickListener {
             startActivity(Intent(this, TelaRelatorioSemanal::class.java))
         }
         btnNotificacao.setOnClickListener {
             startActivity(Intent(this, TelaNotificacao_funcionario::class.java))
         }
+
         findViewById<BottomNavigationView>(R.id.bottom_navigation)
             .setOnItemSelectedListener { item ->
                 when (item.itemId) {
@@ -87,7 +89,7 @@ class TelaPrincipalAluno : AppCompatActivity() {
 
         // --- Inicialização dos dados ---
         carregarSequencia()
-        loadPrimeiraFicha()
+        loadFichaSugerida()
         carregarPresencaSemanal()
     }
 
@@ -95,7 +97,7 @@ class TelaPrincipalAluno : AppCompatActivity() {
         super.onResume()
         carregarPerfil()
         carregarSequencia()
-        loadPrimeiraFicha()
+        loadFichaSugerida()
         carregarPresencaSemanal()
     }
 
@@ -127,52 +129,80 @@ class TelaPrincipalAluno : AppCompatActivity() {
             }
     }
 
-    private fun loadPrimeiraFicha() {
-        val user = auth.currentUser ?: run {
-            tvFichaCard.text = "Faça login"
-            return
-        }
-        val uid = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
-            .getString("alunoDocId", null) ?: run {
+    /** Carrega a ficha sugerida com base em suggestionIndex */
+    private fun loadFichaSugerida() {
+        val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+        val uid = prefs.getString("alunoDocId", null) ?: run {
             tvFichaCard.text = "Aluno não encontrado"
             return
         }
+        val alunoRef = db.collection("alunos").document(uid)
 
-        db.collection("alunos").document(uid)
-            .collection("treino")
-            .get()
-            .addOnSuccessListener { snaps ->
-                val doc = snaps.documents.firstOrNull()
-                tvFichaCard.text = if (doc == null) {
-                    "Nenhuma ficha"
-                } else {
-                    val letra  = doc.getString("letra").orEmpty()
+        // 1) Lê suggestionIndex no documento do aluno
+        alunoRef.get().addOnSuccessListener { alunoSnap ->
+            val idx = (alunoSnap.getLong("suggestionIndex") ?: 0L).toInt()
+
+            // 2) Busca e ordena todas as fichas (coleção "treino")
+            db.collection("alunos").document(uid)
+                .collection("treino")
+                .get()
+                .addOnSuccessListener { snaps ->
+                    val docsOrdenados = snaps.documents
+                        .sortedBy { it.getString("letra")?.uppercase(Locale.getDefault()) }
+
+                    if (docsOrdenados.isEmpty()) {
+                        tvFichaCard.text = "Nenhuma ficha"
+                        return@addOnSuccessListener
+                    }
+
+                    // 3) Ajusta índice seguro
+                    val safeIdx = idx.coerceIn(0, docsOrdenados.lastIndex)
+                    val doc = docsOrdenados[safeIdx]
+                    val letra = doc.getString("letra").orEmpty()
                     val titulo = doc.getString("nome").orEmpty()
-                    "Ficha $letra\n$titulo"
+                    tvFichaCard.text = "Sugestão:\nFicha $letra: $titulo"
                 }
-            }
-            .addOnFailureListener {
-                Log.e("TelaPrincipalAluno", "erro ao carregar ficha", it)
-                tvFichaCard.text = "Erro ao carregar"
-            }
+                .addOnFailureListener { e ->
+                    Log.e("TelaPrincipalAluno", "Erro ao carregar fichas", e)
+                    tvFichaCard.text = "Erro ao carregar sugestão"
+                }
+        }.addOnFailureListener { e ->
+            Log.e("TelaPrincipalAluno", "Erro ao ler suggestionIndex", e)
+            tvFichaCard.text = "Erro ao carregar sugestão"
+        }
     }
 
-    private fun abrirFicha() {
+    /** Abre a ficha que está sugerida (com base em suggestionIndex) */
+    private fun abrirFichaSugerida() {
         val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
         val uid = prefs.getString("alunoDocId", null)
         if (uid.isNullOrBlank()) {
             Toast.makeText(this, "Usuário não encontrado.", Toast.LENGTH_LONG).show()
             return
         }
+        val alunoRef = db.collection("alunos").document(uid)
 
-        db.collection("alunos").document(uid)
-            .collection("treino")
-            .get()
-            .addOnSuccessListener { snaps ->
-                val doc = snaps.documents.firstOrNull()
-                if (doc == null) {
-                    Toast.makeText(this, "Nenhuma ficha encontrada", Toast.LENGTH_LONG).show()
-                } else {
+        // 1) Lê suggestionIndex
+        alunoRef.get().addOnSuccessListener { alunoSnap ->
+            val idx = (alunoSnap.getLong("suggestionIndex") ?: 0L).toInt()
+
+            // 2) Busca fichas e ordena
+            db.collection("alunos").document(uid)
+                .collection("treino")
+                .get()
+                .addOnSuccessListener { snaps ->
+                    val docsOrdenados = snaps.documents
+                        .sortedBy { it.getString("letra")?.uppercase(Locale.getDefault()) }
+
+                    if (docsOrdenados.isEmpty()) {
+                        Toast.makeText(this, "Nenhuma ficha disponível", Toast.LENGTH_SHORT).show()
+                        return@addOnSuccessListener
+                    }
+
+                    val safeIdx = idx.coerceIn(0, docsOrdenados.lastIndex)
+                    val doc = docsOrdenados[safeIdx]
+
+                    // 3) Abre TelaFichaTreinoAluno com docId / letra / título
                     Intent(this, TelaFichaTreinoAluno::class.java).apply {
                         putExtra("docIdTreino", doc.id)
                         putExtra("letra", doc.getString("letra").orEmpty())
@@ -180,15 +210,20 @@ class TelaPrincipalAluno : AppCompatActivity() {
                         startActivity(this)
                     }
                 }
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Falha ao carregar ficha", Toast.LENGTH_LONG).show()
-            }
+                .addOnFailureListener { e ->
+                    Log.e("TelaPrincipalAluno", "Erro ao buscar fichas", e)
+                    Toast.makeText(this, "Erro ao carregar ficha", Toast.LENGTH_SHORT).show()
+                }
+        }.addOnFailureListener { e ->
+            Log.e("TelaPrincipalAluno", "Erro ao ler suggestionIndex", e)
+            Toast.makeText(this, "Erro ao carregar sugestão", Toast.LENGTH_SHORT).show()
+        }
     }
 
+    /** Carrega sequência e recorde do aluno */
     private fun carregarSequencia() {
-        val uid = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
-            .getString("alunoDocId", null) ?: return
+        val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+        val uid = prefs.getString("alunoDocId", null) ?: return
 
         db.collection("alunos").document(uid)
             .get()
@@ -205,38 +240,56 @@ class TelaPrincipalAluno : AppCompatActivity() {
             }
     }
 
+    /**
+     * Marca cada dia da semana verde/vermelho com base em datasSemana.
+     * Usa comparação de semana do ano para garantir sexta não vire sábado.
+     */
     private fun carregarPresencaSemanal() {
-        val uid = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
-            .getString("alunoDocId", null) ?: return
+        val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+        val uid = prefs.getString("alunoDocId", null) ?: return
+        val alunoRef = db.collection("alunos").document(uid)
 
-        val inicioCal = Calendar.getInstance().apply {
-            set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-        val fimCal = Calendar.getInstance().apply {
-            time = inicioCal.time
-            add(Calendar.DAY_OF_YEAR, 7)
-        }
+        alunoRef.get()
+            .addOnSuccessListener { doc ->
+                // 1) Cria "hoje" usando explicitamente o fuso do Brasil (Fortaleza)
+                val tzBR = TimeZone.getTimeZone("America/Fortaleza")
+                val hojeCal = Calendar.getInstance(tzBR).apply {
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
+                val semanaHoje = hojeCal.get(Calendar.WEEK_OF_YEAR)
+                val anoHoje = hojeCal.get(Calendar.YEAR)
 
-        db.collection("alunos").document(uid)
-            .collection("presenca")
-            .whereGreaterThanOrEqualTo("data", Timestamp(inicioCal.time))
-            .whereLessThan("data", Timestamp(fimCal.time))
-            .get()
-            .addOnSuccessListener { snaps ->
-                val feitos = snaps.documents.mapNotNull { d ->
-                    d.getTimestamp("data")?.toDate()?.let { dt ->
-                        Calendar.getInstance().apply { time = dt }
-                            .get(Calendar.DAY_OF_WEEK)
+                // 2) Lê lista de timestamps
+                val rawList = doc.get("datasSemana") as? List<*>
+                val timestamps = rawList
+                    ?.filterIsInstance<Timestamp>()
+                    ?: emptyList()
+
+                // 3) Para cada timestamp, converte no fuso certo e valida semana/ano e pega dia da semana
+                val feitos = timestamps.mapNotNull { ts ->
+                    val d = ts.toDate()  // Date com instante UTC, mas abaixo converto para fuso BR
+                    val calTs = Calendar.getInstance(tzBR).apply {
+                        time = d
+                        set(Calendar.HOUR_OF_DAY, 0)
+                        set(Calendar.MINUTE, 0)
+                        set(Calendar.SECOND, 0)
+                        set(Calendar.MILLISECOND, 0)
                     }
+                    val semanaTs = calTs.get(Calendar.WEEK_OF_YEAR)
+                    val anoTs = calTs.get(Calendar.YEAR)
+                    if (semanaTs == semanaHoje && anoTs == anoHoje) {
+                        calTs.get(Calendar.DAY_OF_WEEK) // 1=domingo,...7=sábado
+                    } else null
                 }.toSet()
 
+                // 4) Pinta cada TextView: índice 0->domingo (Calendar.SUNDAY), ..., índice6->sábado
                 diasSemana.forEachIndexed { idx, tv ->
-                    val diaCal = Calendar.SUNDAY + idx
-                    val corRes = if (feitos.contains(diaCal)) R.color.green else R.color.red
+                    val diaCal = Calendar.SUNDAY + idx // 1..7
+                    val corRes = if (feitos.contains(diaCal))
+                        R.color.green else R.color.red
                     tv.setTextColor(resources.getColor(corRes, null))
                 }
             }

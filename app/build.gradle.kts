@@ -62,11 +62,13 @@ dependencies {
     // Outros
     implementation(libs.firebase.common.ktx)
     implementation(libs.generativeai)
+    implementation("com.prolificinteractive:material-calendarview:1.4.3")
 
     // Testes
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
 }
 
 // Aplica o plugin do Google Services para que o Gradle processe o google-services.json

@@ -187,16 +187,37 @@ class TelaConfig : AppCompatActivity() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_quit_layout, null)
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
-            .create().apply { show() }
+            .create()
+
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialogView.findViewById<Button>(R.id.btnCancelar).setOnClickListener { dialog.dismiss() }
-        dialogView.findViewById<Button>(R.id.btnConfirmar).setOnClickListener {
+        dialog.show()
+
+        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
+        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
+
+        btnCancelar.setOnClickListener {
             dialog.dismiss()
+        }
+
+        btnConfirmar.setOnClickListener {
+            dialog.dismiss()
+
+            // Logout do Firebase
             auth.signOut()
-            startActivity(
-                Intent(this, TelaLogin::class.java)
-                    .apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
-            )
+
+            // Limpar apenas dados sensíveis (opcional - pode comentar se não quiser limpar)
+            val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+            prefs.edit()
+                .remove("uid")
+                .remove("alunoDocId")
+                .apply()
+
+            // Navegar corretamente para TelaLogin
+            val intent = Intent(this@TelaConfig, TelaLogin::class.java).apply {
+                putExtra("tipo", "aluno")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
             finishAffinity()
         }
     }

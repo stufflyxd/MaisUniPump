@@ -10,7 +10,7 @@
 
     <ImageView
         android:id="@+id/imgAluno"
-        android:layout_width="60dp"
+        android:layout_width="65dp"
         android:layout_height="60dp"
         android:layout_margin="2dp"
         android:background="@drawable/circular_background"

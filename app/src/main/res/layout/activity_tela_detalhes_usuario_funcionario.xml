@@ -24,10 +24,13 @@
             android:paddingBottom="16dp">
 
             <LinearLayout
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:id="@+id/text_info_pessoais_aluno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:orientation="horizontal">
 
                 <ImageButton
@@ -42,10 +45,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Detlhes Aluno"
+                    android:layout_weight="1"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:layout_marginTop="10dp"
                     />
+
+                <ImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/circular_background"
+                    android:backgroundTint="@color/blue"
+                    android:contentDescription="@string/perfil_usuario"
+                    android:src="@drawable/ic_person"
+                    android:layout_gravity="end"/>
 
             </LinearLayout>
 

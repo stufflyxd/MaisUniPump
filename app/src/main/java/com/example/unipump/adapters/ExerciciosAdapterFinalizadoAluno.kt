@@ -1,19 +1,31 @@
+// app/src/main/java/com/example/unipump/adapters/ExerciciosAdapterFinalizadoAluno.kt
+
 package com.example.unipump.adapters
 
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.unipump.R
 import com.example.unipump.TelaDetalheExercicio
 import com.example.unipump.models.ExercicioFinalizadoAluno
 
+/**
+ * Adapter de exercícios finalizados.
+ *
+ * Agora o onExercicioClick recebe:
+ *  - posicao: Int (para sabermos qual item da lista foi clicado)
+ *  - exercicio: ExercicioFinalizadoAluno (o próprio objeto, que é Parcelable)
+ */
 class ExerciciosAdapterFinalizadoAluno(
     private val listaExercicios: List<ExercicioFinalizadoAluno>,
-    private val onExercicioClick: (ExercicioFinalizadoAluno) -> Unit
+    private val onExercicioClick: (posicao: Int, exercicio: ExercicioFinalizadoAluno) -> Unit
 ) : RecyclerView.Adapter<ExerciciosAdapterFinalizadoAluno.ExercicioVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExercicioVH {
@@ -29,36 +41,55 @@ class ExerciciosAdapterFinalizadoAluno(
     override fun getItemCount(): Int = listaExercicios.size
 
     inner class ExercicioVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvTituloExercicio = itemView.findViewById<TextView>(R.id.tvTituloExercicio)
-        private val tvTempoExercicio  = itemView.findViewById<TextView>(R.id.tvTempoExercicio)
-        private val rvSeries          = itemView.findViewById<RecyclerView>(R.id.rvSeries)
+        // IDs que existem em item_exercicio_finalizado_aluno.xml
+        private val imgExercicio       = itemView.findViewById<ImageView>(R.id.imgExercicio)
+        private val tvExecucao         = itemView.findViewById<TextView>(R.id.tvExecucao)
+        private val tvNome             = itemView.findViewById<TextView>(R.id.tvNome)
+        private val ivClock            = itemView.findViewById<ImageView>(R.id.ivClock)
+        private val rvSeries           = itemView.findViewById<RecyclerView>(R.id.rvSeries)
 
         fun bind(exercicio: ExercicioFinalizadoAluno) {
-            tvTituloExercicio.text = exercicio.nome
-            tvTempoExercicio.text  = "Tempo de execução ${exercicio.execucao}"
+            // 1) Carregar frame (imagem), se existir
+            if (exercicio.frame.isNotEmpty()) {
+                val requestOptions = RequestOptions()
+                    .placeholder(R.drawable.icon_rectangle)
+                    .error(R.drawable.icon_rectangle)
+                    .circleCrop()
 
-            // 1) garante que o SeriesAdapterAluno seja recriado para cada bind
-            val seriesAdapter = SeriesAdapterFinalizadoAluno(exercicio.series)
-
-            // 2) configura o RecyclerView de séries
-            // dentro de bind(exercicio: ExercicioAluno) { … }
-            rvSeries.apply {
-                layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)
-                adapter       = seriesAdapter
-                isNestedScrollingEnabled = false
+                Glide.with(itemView.context)
+                    .load(exercicio.frame)
+                    .apply(requestOptions)
+                    .into(imgExercicio)
+            } else {
+                imgExercicio.setImageResource(R.drawable.icon_rectangle)
             }
 
+            // 2) Preencher os TextViews com execução e nome
+            tvExecucao.text = exercicio.execucao
+            tvNome.text     = exercicio.nome
 
-            // 3) força atualização (às vezes necessária dentro de outro RecyclerView)
+            // 3) ivClock permanece apenas como ícone. Não precisa mudar seu conteúdo aqui.
+
+            // 4) Configurar RecyclerView interno (lista de séries)
+            val seriesAdapter = SeriesAdapterFinalizadoAluno(exercicio.series)
+            rvSeries.apply {
+                layoutManager = LinearLayoutManager(
+                    itemView.context,
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+                adapter = seriesAdapter
+                isNestedScrollingEnabled = false
+            }
             seriesAdapter.notifyDataSetChanged()
 
-            // click no card, se precisar
+            // 5) Clique no item passa a posição e o objeto para a Activity pai
             itemView.setOnClickListener {
-                val intent = Intent(itemView.context, TelaDetalheExercicio::class.java)
-                    .putExtra("EXERCICIO_DETALHE", exercicio)     // <<< passa o ExercicioAluno todo
-                itemView.context.startActivity(intent)
+                val posicao = adapterPosition
+                if (posicao != RecyclerView.NO_POSITION) {
+                    onExercicioClick(posicao, exercicio)
+                }
             }
         }
     }
-
 }

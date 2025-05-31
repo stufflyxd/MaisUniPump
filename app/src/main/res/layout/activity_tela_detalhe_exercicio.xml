@@ -100,7 +100,7 @@
                     android:id="@+id/tvLabelTempoExecucao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Execução normal"
+                    android:text="Tipo de execução: "
                     android:textColor="#CCCCCC"
                     android:textSize="14sp"/>
 
