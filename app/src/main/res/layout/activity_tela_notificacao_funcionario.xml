@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TelaNotificacao_funcionario"
-    android:background="@color/black">
+    style="@style/BACKGROUND">
 
 
     <LinearLayout
@@ -27,7 +27,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_arrow_back"
-            android:backgroundTint="@color/black"
+            style="@style/ICON"
             android:contentDescription="Botao voltar"
 
             />
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Notificação"
-            android:textColor="@color/white"
+            style="@style/TEXTCOLOR"
             android:textSize="28sp"
             android:layout_marginStart="70dp"
             />
@@ -51,6 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="Nenhuma notificação no momento"
+        style="@style/TEXTCOLORSECONDARY"
         android:textSize="28sp"
         android:gravity="center"
 

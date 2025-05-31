@@ -6,7 +6,7 @@
     android:id="@+id/tela_principal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    style="@style/BACKGROUND"
     tools:context=".TelaPrincipalAluno">
 
     <!-- Seção do perfil -->
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Olá\nNome"
-            android:textColor="@color/white"
+            style="@style/TEXTCOLOR"
             android:textSize="16sp"
             android:layout_marginStart="8dp"/>
 
@@ -79,23 +79,24 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#66000000"/>
+                android:background="@color/cinza"/>
 
             <TextView
                 android:id="@+id/text_treino_dia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Treino do dia"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                style="@style/TEXTCOLOR"
+                android:textSize="30dp"
+                android:textStyle="normal|bold|italic"
                 android:layout_margin="8dp"/>
 
             <TextView
                 android:id="@+id/text_ficha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ficha A\nFeito pelo grupo XX"
-                android:textColor="@color/white"
+                android:text="Ficha A\nGrupo muscular XX"
+                style="@style/TEXTCOLOR"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="16dp"/>
@@ -109,7 +110,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_margin="16dp"
                 android:backgroundTint="@color/blue"
-                android:textColor="@color/white"/>
+                style="@style/TEXTCOLOR"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
@@ -119,7 +120,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Presença semanal"
-        android:textColor="@color/white"
+        style="@style/TEXTCOLOR"
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_marginTop="8dp"
@@ -138,7 +139,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:cardCornerRadius="12dp"
         app:cardElevation="6dp"
-        app:cardBackgroundColor="@color/dark_gray">
+        style="@style/CARDBACKGROUND">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -166,14 +167,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Dom"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                     <TextView
                         android:id="@+id/tvDia1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                 </LinearLayout>
 
@@ -187,14 +188,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Seg"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                     <TextView
                         android:id="@+id/tvDia2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                 </LinearLayout>
 
@@ -208,14 +209,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ter"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                     <TextView
                         android:id="@+id/tvDia3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                 </LinearLayout>
 
@@ -229,14 +230,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Qua"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                     <TextView
                         android:id="@+id/tvDia4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                 </LinearLayout>
 
@@ -250,14 +251,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Qui"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                     <TextView
                         android:id="@+id/tvDia5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                 </LinearLayout>
 
@@ -271,14 +272,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sex"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                     <TextView
                         android:id="@+id/tvDia6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="6"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                 </LinearLayout>
 
@@ -292,14 +293,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sab"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                     <TextView
                         android:id="@+id/tvDia7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="7"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textAlignment="center"/>
                 </LinearLayout>
             </LinearLayout>
@@ -328,13 +329,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sequência de dias"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
                     <TextView
                         android:id="@+id/tvSequencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0 🔥"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -347,13 +348,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Recorde pessoal"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
                     <TextView
                         android:id="@+id/Recorde"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0 dias"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -363,7 +364,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Relatório"
-                android:textColor="@color/azul_link"
+                style="@style/TEXTCOLORLINK"
                 android:layout_gravity="end"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -373,11 +374,10 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/black"
+
         app:menu="@menu/menu_bottom_nav"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        style="@style/ICON"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

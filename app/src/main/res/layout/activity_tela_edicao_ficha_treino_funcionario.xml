@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TelaEdicaoFichaTreino_funcionario"
-    android:background="@color/black">
+    style="@style/BACKGROUND">
 
     <!-- ScrollView para tornar o conteúdo rolável -->
     <ScrollView
@@ -41,14 +41,14 @@
                     android:layout_height="48sp"
                     android:contentDescription="@string/seta_voltar"
                     android:src="@drawable/ic_arrow_back"
-                    android:backgroundTint="@color/black"/>
+                    style="@style/ICON"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Ficha do Aluno"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="23sp" />
 
                 <ImageView
@@ -95,7 +95,7 @@
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/blue"
         android:text="Adicionar"
-        android:textColor="@color/white"
+        style="@style/TEXTCOLOR"
         android:textSize="18sp"
         android:textAllCaps="false"
         android:paddingStart="24dp"
@@ -109,9 +109,8 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#202020"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        style="@style/ICON"
+
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

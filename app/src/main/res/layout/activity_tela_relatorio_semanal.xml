@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#000000"
+    style="@style/BACKGROUND"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,7 +13,7 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/seta_voltar"
         android:src="@drawable/ic_arrow_back"
-        android:background="?attr/selectableItemBackgroundBorderless" />
+        style="@style/ICON" />
 
     <!-- Título -->
     <TextView
@@ -24,7 +24,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
         android:text="Relatório da semana"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
         android:layout_below="@id/txtTitulo"
         android:layout_margin="16dp"
         android:orientation="horizontal"
-        android:background="@color/cardview_dark_background"
+        style="@style/CONTEINERBACKGROUND"
         android:gravity="center"
         android:padding="16dp">
 
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="#FFFFFF"
+                style="@style/TEXTCOLOR"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="treinos"
-                android:textColor="#FFFFFF"
+                style="@style/TEXTCOLOR"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="#FFFFFF"
+                style="@style/TEXTCOLOR"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="kcal"
-                android:textColor="#FFFFFF"
+                style="@style/TEXTCOLOR"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="#FFFFFF"
+                style="@style/TEXTCOLOR"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tempo total"
-                android:textColor="#FFFFFF"
+                style="@style/TEXTCOLOR"
                 android:textSize="12sp"/>
         </LinearLayout>
 
@@ -141,7 +141,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Histórico"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -154,7 +154,7 @@
         android:layout_alignBaseline="@id/text_historico"
         android:layout_marginEnd="16dp"
         android:text="Todos os registros"
-        android:textColor="#00BFFF"
+        style="@style/TEXTCOLORLINK"
         android:textSize="14sp" />
 
     <!-- Calendário -->
@@ -164,18 +164,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text_historico"
         android:layout_margin="16dp"
-        app:mcv_showOtherDates="all" />
+        app:mcv_showOtherDates="all"
+        style="@style/CONTEINERBACKGROUND"/>
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"
+        style="@style/ICON"
         app:menu="@menu/menu_bottom_nav"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
         android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

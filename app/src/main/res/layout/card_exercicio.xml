@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="#1E1E1E"
+    style="@style/CARDBACKGROUND"
     app:cardCornerRadius="16dp"
     app:cardElevation="6dp"
     android:layout_marginStart="16dp"
@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Execução normal"
-                    android:textColor="@android:color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="14sp" />
 
                 <TextView
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Puxada alta aberta"
-                    android:textColor="@android:color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginTop="4dp"/>
@@ -71,7 +71,8 @@
                 android:src="@drawable/clock"
                 android:contentDescription="Ícone de relógio"
                 android:scaleType="centerInside"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                style="@style/ICON"/>
         </LinearLayout>
 
         <!-- Separador -->
@@ -80,7 +81,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@android:color/white" />
+            android:background="@color/cinza_medio" />
 
         <!-- Lista de séries dentro do card -->
         <androidx.recyclerview.widget.RecyclerView

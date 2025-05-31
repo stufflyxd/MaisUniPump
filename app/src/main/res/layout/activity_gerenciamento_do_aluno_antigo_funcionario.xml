@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    style="@style/BACKGROUND"
     tools:context=".GerenciamentoDoAluno_Funcionario">
 
     <!-- ScrollView para permitir rolagem -->
@@ -41,7 +41,7 @@
                     android:layout_height="48sp"
                     android:contentDescription="@string/seta_voltar"
                     android:src="@drawable/ic_arrow_back"
-                    android:backgroundTint="@color/black"/>
+                    style="@style/ICON"/>
 
                 <TextView
                     android:id="@+id/titulo"
@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/sobre_o_aluno"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="23sp" />
 
                 <ImageView
@@ -72,6 +72,7 @@
                 android:orientation="vertical"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/conteiner_funcionario"
+                style="@style/CONTEINERBACKGROUND"
                 app:layout_constraintTop_toBottomOf="@+id/SobreOAluno"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -88,7 +89,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/dados_do_aluno"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textSize="20sp"
                         android:layout_weight="1"/>
 
@@ -97,7 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/mais_detalhes"
-                        android:textColor="@color/azul_link"
+                        style="@style/TEXTCOLORLINK"
                         android:layout_gravity="center_vertical" />
                 </LinearLayout>
 
@@ -121,7 +122,7 @@
                         android:layout_marginStart="23dp"
                         android:layout_marginTop="15dp"
                         android:text="Nome"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textSize="17sp" />
 
                     <TextView
@@ -129,12 +130,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:background="@drawable/rounded_edittext"
-                        android:backgroundTint="@color/black"
+                        style="@style/BACKGROUNDTINT"
                         android:layout_marginTop="5dp"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
                         android:text="Nome do Aluno"
-                        android:textColor="@color/gray_line"
                         android:textSize="20sp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
@@ -144,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sobrenome"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:layout_marginStart="23dp"
                         android:layout_marginTop="15dp"
                         android:textSize="17sp"/>
@@ -154,12 +154,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:background="@drawable/rounded_edittext"
-                        android:backgroundTint="@color/black"
+                        style="@style/BACKGROUNDTINT"
                         android:layout_marginTop="5dp"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
                         android:text="Sobrenome do Aluno"
-                        android:textColor="@color/gray_line"
                         android:textSize="20sp"
                         android:gravity="center_vertical"
                         android:paddingStart="20dp"
@@ -176,6 +175,7 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/conteiner_funcionario"
+                style="@style/CONTEINERBACKGROUND"
                 app:layout_constraintTop_toBottomOf="@+id/DadosAluno"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -194,7 +194,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="Fichas de Treinos"
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
                         android:textSize="20sp"
                         android:layout_weight="1"/>
 
@@ -204,7 +204,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Adicionar +"
-                        android:textColor="@color/azul_link"
+                        style="@style/TEXTCOLORLINK"
                         android:textSize="16sp"
                         android:background="?attr/selectableItemBackground"
                         android:padding="8dp"/>
@@ -240,9 +240,7 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#202020"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        style="@style/ICON"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

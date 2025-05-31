@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TelaChat"
-    android:background="@color/black">
+    style="@style/BACKGROUND">
 
     <!-- Cabeçalho -->
     <LinearLayout
@@ -28,7 +28,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/seta_voltar"
             android:src="@drawable/ic_arrow_back"
-            android:backgroundTint="@color/black"
+            style="@style/ICON"
             android:background="@null" />
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Chat de suporte com robô"
-            android:textColor="@color/white"
+            style="@style/TEXTCOLOR"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -74,11 +74,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:background="@drawable/rounded_edittext"
-            android:backgroundTint="#202020"
+            style="@style/BACKGROUNDTINT"
             android:hint="Digite aqui..."
-            android:padding="16dp"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white" />
+            android:padding="16dp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnEnviarMsg"

@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:gravity="start|center_vertical"
     android:background="@drawable/rounded_edittext"
-    android:backgroundTint="@color/black"
+    style="@style/BACKGROUNDTINT"
     android:layout_marginBottom="8dp"
     android:clickable="true"
     android:focusable="true"
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="A"
         android:textStyle="bold"
-        android:textColor="@color/blue"
+        style="@style/TEXTCOLORBLUE"
         android:textSize="45sp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Costas e bíceps"
-            android:textColor="@color/white"
+            style="@style/TEXTCOLOR"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -58,11 +58,11 @@
 
 
 
-<!--<ImageView
-        android:id="@+id/ivSetaFicha"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_arrow_forward"
-        android:contentDescription="Ver detalhes da ficha"
-        android:layout_marginEnd="20dp"
-        android:alpha="0.7" />-->
+    <!--<ImageView
+            android:id="@+id/ivSetaFicha"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_forward"
+            android:contentDescription="Ver detalhes da ficha"
+            android:layout_marginEnd="20dp"
+            android:alpha="0.7" />-->

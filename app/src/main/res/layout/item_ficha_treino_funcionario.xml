@@ -6,7 +6,7 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="#333333">
+    style="@style/CARDBACKGROUND">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:color/transparent"
-                android:textColor="@color/blue"
+                style="@style/TEXTCOLORBLUE"
                 android:gravity="center"
                 android:textSize="45sp"
                 android:textStyle="bold"
@@ -49,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:hint="Nome da Ficha"
@@ -100,183 +100,183 @@
 
 
 
-            <!-- CRÍTICO: RecyclerView com altura limitada -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewExercicios"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
-                android:maxHeight="240dp"
-                android:scrollbars="vertical" />
-
-
-
-    </LinearLayout>
-
-</androidx.cardview.widget.CardView>
-
-
-<!--
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/dark_gray">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        &lt;!&ndash; Cabeçalho da Ficha &ndash;&gt;
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
-
-            <EditText
-                android:id="@+id/etLetraFicha"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@android:color/transparent"
-                android:inputType="textCapCharacters"
-                android:maxLength="1"
-                android:text="A"
-                android:textColor="@color/blue"
-                android:textSize="45sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/etNomeFicha"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
-                android:background="@android:color/transparent"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:hint="Nome da Ficha"
-                android:textColorHint="@color/white" />
-
-
-            <ImageButton
-                android:id="@+id/btnAddExercicio"
-                android:layout_width="40dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Adicionar exercício"
-                android:src="@drawable/plus_circle"
-                app:tint="@color/blue"
-                android:scaleType="center" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:background="@android:color/darker_gray" />
-
-        &lt;!&ndash; CORREÇÃO CRÍTICA: RecyclerView dos exercícios com altura limitada &ndash;&gt;
+        <!-- CRÍTICO: RecyclerView com altura limitada -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewExercicios"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never"
-            android:maxHeight="300dp" />
+            android:maxHeight="240dp"
+            android:scrollbars="vertical" />
+
+
 
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
 
 
-
-&lt;!&ndash;
+    <!--
     <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_marginStart="16dp"
-android:layout_marginTop="16dp"
-android:layout_marginEnd="16dp"
-android:layout_marginBottom="8dp"
-android:background="@drawable/conteiner_funcionario"
-android:orientation="vertical"
-android:padding="16dp">
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/dark_gray">
 
-&lt;!&ndash; Cabeçalho da Ficha &ndash;&gt;
-<LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            &lt;!&ndash; Cabeçalho da Ficha &ndash;&gt;
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <EditText
+                    android:id="@+id/etLetraFicha"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:inputType="textCapCharacters"
+                    android:maxLength="1"
+                    android:text="A"
+                    style="@style/TEXTCOLORBLUE"
+                    android:textSize="45sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etNomeFicha"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@android:color/transparent"
+                    style="@style/TEXTCOLOR"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:hint="Nome da Ficha"
+                    android:textColorHint="@color/white" />
+
+
+                <ImageButton
+                    android:id="@+id/btnAddExercicio"
+                    android:layout_width="40dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Adicionar exercício"
+                    android:src="@drawable/plus_circle"
+                    app:tint="@color/blue"
+                    android:scaleType="center" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@android:color/darker_gray" />
+
+            &lt;!&ndash; CORREÇÃO CRÍTICA: RecyclerView dos exercícios com altura limitada &ndash;&gt;
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewExercicios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:maxHeight="300dp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+    &lt;!&ndash;
+        <?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/conteiner_funcionario"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etLetraFicha"
-        android:layout_width="wrap_content"
+    &lt;!&ndash; Cabeçalho da Ficha &ndash;&gt;
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent"
-        android:inputType="text"
-        android:maxLength="1"
-        android:text="A"
-        android:textColor="@color/blue"
-        android:textSize="45sp"
-        android:textStyle="bold" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/etNomeFicha"
-        android:layout_width="0dp"
+        <EditText
+            android:id="@+id/etLetraFicha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:inputType="text"
+            android:maxLength="1"
+            android:text="A"
+            style="@style/TEXTCOLORBLUE"
+            android:textSize="45sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etNomeFicha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:hint="Nome da Ficha"
+            android:inputType="text"
+            android:text="Costas e Bíceps"
+            style="@style/TEXTCOLOR"
+            android:textColorHint="@color/gray"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/btnAddExercicio"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Adicionar exercício"
+            android:src="@drawable/plus_circle"
+            app:tint="@color/blue" />
+
+    </LinearLayout>
+
+    &lt;!&ndash; Linha divisória &ndash;&gt;
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@android:color/darker_gray" />
+
+    &lt;!&ndash; RecyclerView para os exercícios &ndash;&gt;
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewExercicios"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:hint="Nome da Ficha"
-        android:inputType="text"
-        android:text="Costas e Bíceps"
-        android:textColor="@color/white"
-        android:textColorHint="@color/gray"
-        android:textSize="20sp" />
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="never" />
 
-    <ImageButton
-        android:id="@+id/btnAddExercicio"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Adicionar exercício"
-        android:src="@drawable/plus_circle"
-        app:tint="@color/blue" />
-
-</LinearLayout>
-
-&lt;!&ndash; Linha divisória &ndash;&gt;
-<View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_marginTop="12dp"
-    android:layout_marginBottom="12dp"
-    android:background="@android:color/darker_gray" />
-
-&lt;!&ndash; RecyclerView para os exercícios &ndash;&gt;
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerViewExercicios"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:nestedScrollingEnabled="false"
-    android:overScrollMode="never" />
-
-</LinearLayout>&ndash;&gt;
--->
+    </LinearLayout>&ndash;&gt;
+    -->

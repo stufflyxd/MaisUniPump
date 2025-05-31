@@ -5,21 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212">
+    style="@style/BACKGROUND">
 
 
-        <!-- Botão voltar no topo -->
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/back_button"
-            android:contentDescription="Voltar"
-            android:layout_margin="16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+    <!-- Botão voltar no topo -->
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/back_button"
+        style="@style/ICON"
+        android:contentDescription="Voltar"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-        <!-- Título da ficha -->
+    <!-- Título da ficha -->
     <TextView
         android:id="@+id/Titulo_exercicio"
         android:layout_width="0dp"
@@ -27,52 +28,50 @@
         android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="Peito e tríceps"
-        android:textColor="@android:color/white"
+        style="@style/TEXTCOLOR"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- RecyclerView para os cards de exercício -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvExercicios"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clipToPadding="false"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            app:layout_constraintTop_toBottomOf="@id/Titulo_exercicio"
-            app:layout_constraintBottom_toTopOf="@id/buttonStart"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+    <!-- RecyclerView para os cards de exercício -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvExercicios"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/Titulo_exercicio"
+        app:layout_constraintBottom_toTopOf="@id/buttonStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!-- Botão iniciar ao final da lista -->
-        <Button
-            android:id="@+id/buttonStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Iniciar"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#2979FF"
-            android:background="@drawable/rounded_button"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="250dp"/>
+    <!-- Botão iniciar ao final da lista -->
+    <Button
+        android:id="@+id/buttonStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Iniciar"
+        android:textAllCaps="false"
+        style="@style/TEXTCOLOR"
+        android:backgroundTint="#2979FF"
+        android:background="@drawable/rounded_button"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="250dp"/>
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/black"
         app:menu="@menu/menu_bottom_nav"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        style="@style/ICON"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

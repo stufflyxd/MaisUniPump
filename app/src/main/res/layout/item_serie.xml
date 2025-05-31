@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@drawable/fundo_preto_rounded"
+    style="@style/BACKGROUNDTINT"
     android:padding="12dp"
     android:layout_marginBottom="8dp">
 
@@ -15,7 +16,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="1"
-        android:textColor="@android:color/white"
+        style="@style/TEXTCOLOR"
         android:textSize="14sp"/>
 
 
@@ -27,10 +28,9 @@
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_edittext"
-            android:backgroundTint="#202020"
             android:padding="8dp"
             android:text="0"
-            android:textColor="#FFFFFF"
+            style="@style/TEXTBOX"
             android:textSize="16sp"
             android:gravity="center" />
 
@@ -41,13 +41,11 @@
         android:layout_marginEnd="8dp"
         android:layout_weight="1"
         android:background="@drawable/rounded_edittext"
-        android:backgroundTint="#202020"
         android:drawableLeft="@drawable/icon_repeticao"
         android:drawablePadding="8dp"
-        android:drawableTint="#FFFFFF"
         android:padding="8dp"
         android:text="0"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTBOX"
         android:textSize="16sp"
         android:gravity="center"/>
 
@@ -80,13 +78,11 @@
         android:layout_weight="1"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_edittext"
-        android:backgroundTint="#202020"
         android:drawableLeft="@drawable/icon_relogio"
         android:drawablePadding="8dp"
-        android:drawableTint="#FFFFFF"
         android:padding="8dp"
         android:text="0"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTBOX"
         android:textSize="16sp"
         android:gravity="center"/>
 

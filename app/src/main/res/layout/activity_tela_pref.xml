@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black">
+        style="@style/BACKGROUND">
 
         <!-- Back Button -->
         <ImageButton
@@ -16,7 +16,7 @@
             android:layout_margin="16dp"
             android:contentDescription="@string/seta_voltar"
             android:src="@drawable/ic_arrow_back"
-            android:backgroundTint="@color/black"/>
+            style="@style/ICON"/>
 
         <!-- Title -->
         <TextView
@@ -26,7 +26,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:text="Minhas preferências"
-            android:textColor="@color/white"
+            style="@style/TEXTCOLOR"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Idioma"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="16sp" />
 
                 <TextView
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(Português - BR)"
-                    android:textColor="@color/gray_line"
+                    style="@style/TEXTCOLORSECONDARY"
                     android:textSize="16sp" />
 
                 <ImageButton
@@ -69,8 +69,7 @@
                     android:contentDescription="Abrir opções de idioma"
                     android:rotation="180"
                     android:src="@drawable/ic_arrow_back"
-                    android:background="@color/black"
-                    app:tint="@color/dark_gray" />
+                    style="@style/ICON" />
             </LinearLayout>
 
             <!-- Theme Toggle -->
@@ -87,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Tema do aplicativo"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="16sp" />
 
                 <TextView
@@ -95,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(Tema Escuro)"
-                    android:textColor="@color/gray_line"
+                    style="@style/TEXTCOLORSECONDARY"
                     android:textSize="16sp" />
 
                 <Switch
@@ -119,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Sobre"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="16sp" />
 
                 <ImageButton
@@ -128,8 +127,7 @@
                     android:rotation="180"
                     android:src="@drawable/ic_arrow_back"
                     android:contentDescription="Abrir sobre"
-                    android:background="@color/black"
-                    app:tint="@color/dark_gray" />
+                    style="@style/ICON" />
             </LinearLayout>
 
             <!-- Clear Cache Option -->
@@ -146,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Limpar cache"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="16sp" />
 
                 <ImageButton
@@ -155,8 +153,7 @@
                     android:rotation="180"
                     android:src="@drawable/ic_arrow_back"
                     android:contentDescription="Abrir limpar cache"
-                    android:background="@color/black"
-                    app:tint="@color/dark_gray" />
+                    style="@style/ICON" />
             </LinearLayout>
 
         </LinearLayout>

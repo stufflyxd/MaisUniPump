@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    style="@style/BACKGROUND">
 
     <!-- Conteudo Scrollavel -->
     <ScrollView
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Peito e tríceps"
-                android:textColor="#FFFFFF"
+                style="@style/TEXTCOLOR"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                app:cardBackgroundColor="#1A1A1A"
+                style="@style/CARDBACKGROUND"
                 app:cardCornerRadius="12dp">
 
                 <LinearLayout
@@ -69,7 +69,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Execução normal"
-                            android:textColor="#80FFFFFF"
+                            style="@style/TEXTCOLORSECONDARY"
                             android:textSize="16sp"
                             android:layout_gravity="start"
                             android:layout_marginBottom="8dp"/>
@@ -79,7 +79,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Remada baixa"
-                            android:textColor="#FFFFFF"
+                            style="@style/TEXTCOLOR"
                             android:textSize="16sp"
                             android:layout_gravity="center"
                             android:layout_marginBottom="8dp"/>
@@ -90,7 +90,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/white"
+                        android:background="@color/gray_line"
                         android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"/>
 
@@ -108,13 +108,14 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
                             android:background="@drawable/fundo_preto_rounded"
+                            style="@style/BACKGROUNDTINT"
                             android:padding="8dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1"
-                                android:textColor="#FFFFFF"
+                                style="@style/TEXTCOLOR"
                                 android:textSize="20sp"
                                 android:layout_marginEnd="8dp"
                                 android:layout_weight="1"/>
@@ -124,11 +125,10 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
+                                style="@style/TEXTBOX"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="8 Kg"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <EditText
@@ -136,14 +136,11 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
-                                android:drawableLeft="@drawable/icon_repeticao"
+                                style="@style/TEXTBOX"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
                                 android:inputType="number"
                                 android:padding="8dp"
                                 android:text="10"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <EditText
@@ -151,14 +148,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
+                                style="@style/TEXTBOX"
                                 android:drawableLeft="@drawable/icon_relogio"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="30"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <CheckBox
@@ -175,6 +170,7 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
                             android:background="@drawable/fundo_preto_rounded"
+                            style="@style/BACKGROUNDTINT"
                             android:padding="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp">
@@ -183,7 +179,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="2"
-                                android:textColor="#FFFFFF"
+                                style="@style/TEXTCOLOR"
                                 android:textSize="20sp"
                                 android:layout_marginEnd="8dp"
                                 android:layout_weight="1"/>
@@ -193,11 +189,10 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
+                                style="@style/TEXTBOX"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="8 Kg"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <EditText
@@ -205,14 +200,11 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
-                                android:drawableLeft="@drawable/icon_repeticao"
+                                style="@style/TEXTBOX"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
                                 android:inputType="number"
                                 android:padding="8dp"
                                 android:text="12"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <EditText
@@ -220,14 +212,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
+                                style="@style/TEXTBOX"
                                 android:drawableLeft="@drawable/icon_relogio"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="30"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <CheckBox
@@ -243,13 +233,14 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
                             android:background="@drawable/fundo_preto_rounded"
+                            style="@style/BACKGROUNDTINT"
                             android:padding="8dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="3"
-                                android:textColor="#FFFFFF"
+                                style="@style/TEXTCOLOR"
                                 android:textSize="20sp"
                                 android:layout_marginEnd="8dp"
                                 android:layout_weight="1"/>
@@ -259,11 +250,10 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
+                                style="@style/TEXTBOX"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="10 Kg"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <EditText
@@ -271,14 +261,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
+                                style="@style/TEXTBOX"
                                 android:drawableLeft="@drawable/icon_repeticao"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
                                 android:inputType="number"
                                 android:padding="8dp"
                                 android:text="10"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <EditText
@@ -286,14 +274,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
+                                style="@style/TEXTBOX"
                                 android:drawableLeft="@drawable/icon_relogio"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="30"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <CheckBox
@@ -319,7 +305,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Voltar"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:backgroundTint="#0066FF"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"

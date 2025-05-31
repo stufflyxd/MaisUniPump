@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TelaCriarFichaTreino_Funcionario"
-    android:background="@color/black">
+    style="@style/BACKGROUND">
 
     <!-- ScrollView para tornar o conteúdo rolável -->
     <ScrollView
@@ -43,13 +43,13 @@
                     android:layout_height="48sp"
                     android:contentDescription="@string/seta_voltar"
                     android:src="@drawable/ic_arrow_back"
-                    android:backgroundTint="@color/black"/>
+                    style="@style/ICON"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="23sp" />
 
                 <LinearLayout
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:text="A"
-                        android:textColor="@color/blue"
+                        style="@style/TEXTCOLORBLUE"
                         android:textSize="50sp"
                         android:textStyle="bold" />
                     <TextView
@@ -72,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(nome da ficha)   "
-                        android:textColor="@color/white" />
+                        style="@style/TEXTCOLOR" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -88,6 +88,7 @@
                 android:layout_marginEnd="20dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="20dp"
+                style="@style/CONTEINERBACKGROUND"
                 android:background="@drawable/conteiner_funcionario"
                 android:orientation="vertical">
 
@@ -95,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Adição de exercício"
-                    android:textColor="@color/blue"
+                    style="@style/TEXTCOLORBLUE"
                     android:textStyle="bold"
                     android:textSize="24sp"
                     android:layout_gravity="center"
@@ -105,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Grupo Muscular:"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="16sp"
                     android:layout_marginTop="13dp"
                     android:layout_marginStart="32dp" />
@@ -117,7 +118,8 @@
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/rounded_edittext" />
+                    android:background="@drawable/rounded_edittext"
+                    style="@style/BACKGROUNDTINT"/>
 
                 <!-- TextView para mostrar loading ou mensagens -->
                 <TextView
@@ -127,7 +129,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:text="Selecione um grupo muscular"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="14sp"
                     android:visibility="visible" />
 
@@ -152,9 +154,8 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#202020"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+
+        style="@style/ICON"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

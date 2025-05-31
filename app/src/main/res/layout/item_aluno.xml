@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/conteiner_funcionario"
+    style="@style/CONTEINERBACKGROUND"
     android:padding="6dp"
     android:layout_margin="10dp">
 
@@ -23,6 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Usuario"
-        android:textColor="@color/white"
+        style="@style/TEXTCOLOR"
         android:gravity="center"/>
 </LinearLayout>

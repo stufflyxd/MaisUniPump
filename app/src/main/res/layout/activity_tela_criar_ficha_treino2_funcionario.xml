@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TelaCriarFichaTreino2_Funcionario"
-    android:background="@color/black">
+    style="@style/BACKGROUND">
 
     <!-- ScrollView para tornar o conteúdo rolável -->
     <ScrollView
@@ -44,13 +44,13 @@
                     android:layout_height="48sp"
                     android:contentDescription="@string/seta_voltar"
                     android:src="@drawable/ic_arrow_back"
-                    android:backgroundTint="@color/black"/>
+                    style="@style/ICON"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="23sp" />
 
                 <LinearLayout
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:text="A"
-                        android:textColor="@color/blue"
+                        style="@style/TEXTCOLORBLUE"
                         android:textSize="50sp"
                         android:textStyle="bold" />
                     <TextView
@@ -73,7 +73,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(nome da ficha)   "
-                        android:textColor="@color/white"
+                        style="@style/TEXTCOLOR"
 
                         />
                 </LinearLayout>
@@ -91,13 +91,14 @@
                 android:paddingBottom="20dp"
                 android:paddingTop="10dp"
                 android:background="@drawable/conteiner_funcionario"
+                style="@style/CONTEINERBACKGROUND"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Configuração das series"
-                    android:textColor="@color/blue"
+                    style="@style/TEXTCOLORBLUE"
                     android:textStyle="bold"
                     android:textSize="24sp"
                     android:layout_gravity="center"
@@ -141,7 +142,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Puxada alta Aberta"
-                            android:textColor="@color/white" />
+                            style="@style/TEXTCOLOR" />
 
                         <ImageButton
                             android:id="@+id/btnAddExercio_telaCriar2"
@@ -180,7 +181,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="15dp"
                             android:background="@drawable/rounded_edittext"
-                            android:backgroundTint="@color/black"
+                            style="@style/BACKGROUNDTINT"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:padding="10dp"
@@ -192,7 +193,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="15dp"
                                 android:text="1"
-                                android:textColor="@color/white"
+                                style="@style/TEXTCOLOR"
                                 android:textSize="28sp" />
 
                             <!-- Campo para repetições -->
@@ -202,14 +203,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
                                 android:drawableLeft="@drawable/icon_repeticao"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
+                                style="@style/TEXTBOX"
                                 android:inputType="number"
                                 android:padding="8dp"
                                 android:text="10"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <!-- Campo para peso -->
@@ -219,11 +218,10 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="10 Kg"
-                                android:textColor="@color/white"
+                                style="@style/TEXTBOX"
                                 android:textSize="16sp" />
 
                             <!-- Campo para tempo -->
@@ -233,14 +231,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
                                 android:drawableLeft="@drawable/icon_relogio"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
+                                style="@style/TEXTBOX"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="10"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <!-- Botão de excluir série -->
@@ -249,7 +245,7 @@
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:layout_marginStart="20dp"
-                                android:backgroundTint="@color/black"
+                                style="@style/BACKGROUNDTINT"
                                 android:contentDescription="Botão de excluir série"
                                 android:src="@drawable/icon_lixeiro" />
 
@@ -265,7 +261,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="15dp"
                             android:background="@drawable/rounded_edittext"
-                            android:backgroundTint="@color/black"
+                            style="@style/BACKGROUNDTINT"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:padding="10dp"
@@ -277,7 +273,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="15dp"
                                 android:text="2"
-                                android:textColor="@color/white"
+                                style="@style/TEXTCOLOR"
                                 android:textSize="28sp" />
 
                             <!-- Campo para repetições -->
@@ -287,14 +283,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
                                 android:drawableLeft="@drawable/icon_repeticao"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
+                                style="@style/TEXTBOX"
                                 android:inputType="number"
                                 android:padding="8dp"
                                 android:text="10"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <!-- Campo para peso -->
@@ -304,11 +298,10 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="10 Kg"
-                                android:textColor="@color/white"
+                                style="@style/TEXTBOX"
                                 android:textSize="16sp" />
 
                             <!-- Campo para tempo -->
@@ -318,14 +311,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
                                 android:drawableLeft="@drawable/icon_relogio"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
+                                style="@style/TEXTBOX"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="10"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <!-- Botão de excluir série -->
@@ -334,7 +325,7 @@
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:layout_marginStart="20dp"
-                                android:backgroundTint="@color/black"
+                                style="@style/BACKGROUNDTINT"
                                 android:contentDescription="Botão de excluir série"
                                 android:src="@drawable/icon_lixeiro" />
 
@@ -350,7 +341,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="15dp"
                             android:background="@drawable/rounded_edittext"
-                            android:backgroundTint="@color/black"
+                            style="@style/BACKGROUNDTINT"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:padding="10dp"
@@ -362,7 +353,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="15dp"
                                 android:text="3"
-                                android:textColor="@color/white"
+                                style="@style/TEXTCOLOR"
                                 android:textSize="28sp" />
 
                             <!-- Campo para repetições -->
@@ -372,14 +363,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
                                 android:drawableLeft="@drawable/icon_repeticao"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
+                                style="@style/TEXTBOX"
                                 android:inputType="number"
                                 android:padding="8dp"
                                 android:text="10"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <!-- Campo para peso -->
@@ -389,11 +378,10 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="10dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="10 Kg"
-                                android:textColor="@color/white"
+                                style="@style/TEXTBOX"
                                 android:textSize="16sp" />
 
                             <!-- Campo para tempo -->
@@ -403,14 +391,12 @@
                                 android:layout_height="48dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="@drawable/rounded_edittext"
-                                android:backgroundTint="#202020"
                                 android:drawableLeft="@drawable/icon_relogio"
                                 android:drawablePadding="8dp"
-                                android:drawableTint="@color/white"
+                                style="@style/TEXTBOX"
                                 android:inputType="none"
                                 android:padding="8dp"
                                 android:text="10"
-                                android:textColor="@color/white"
                                 android:textSize="16sp" />
 
                             <!-- Botão de excluir série -->
@@ -419,7 +405,7 @@
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:layout_marginStart="20dp"
-                                android:backgroundTint="@color/black"
+                                style="@style/BACKGROUNDTINT"
                                 android:contentDescription="Botão de excluir série"
                                 android:src="@drawable/icon_lixeiro" />
                         </LinearLayout>
@@ -439,7 +425,7 @@
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/blue"
         android:text="Adicionar"
-        android:textColor="@color/white"
+        style="@style/TEXTCOLOR"
         android:textSize="18sp"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
@@ -451,9 +437,8 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#202020"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+
+        style="@style/ICON"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

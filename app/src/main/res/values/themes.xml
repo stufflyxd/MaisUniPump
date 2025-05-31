@@ -2,8 +2,82 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.UniPump" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+
+        <item name="colorSecondary">@color/blue</item>
+        <item name="colorSecondaryVariant">@color/red</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+
     </style>
 
-    <style name="Theme.UniPump" parent="Base.Theme.UniPump" />
+    <style name="BACKGROUND">
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorOnBackground">#FFFFFF</item>
+
+        <item name="android:background">#EFEFFA</item>
+    </style>
+
+    <style name="BACKGROUNDTINT">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/cinza_medio</item>
+        <item name="android:textColorHint">@color/black</item>
+    </style>
+
+    <style name="TEXTCOLOR">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TEXTCOLORSECONDARY">
+        <item name="android:textColor">@color/cinza_medio</item>
+    </style>
+
+    <style name="TEXTCOLORLINK">
+        <item name="android:textColor">@color/azul</item>
+    </style>
+
+    <style name="TEXTCOLORBLUE">
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
+    <style name="CARDBACKGROUND">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="CONTEINERBACKGROUND">
+        <item name="android:backgroundTint">@color/azul_arroxeado</item>
+        <item name="android:calendarTextColor">@color/black</item>
+
+        <item name="android:background">@color/azul_arroxeado</item>
+    </style>
+
+    <style name="TEXTBOX">
+        <item name="android:backgroundTint">@color/cinza</item>
+
+        <item name="android:textColor">@color/black</item>
+        <item name="itemIconTint">@color/black</item>
+        <item name="itemTextColor">@color/black</item>
+        <item name="android:tint">@color/black</item>
+        <item name="android:drawableTint">@color/black</item>
+    </style>
+
+    <style name="BOTAO">
+        <item name="backgroundTint">@color/blue</item>
+    </style>
+
+    <style name="ICON">
+        <item name="itemIconTint">@color/black</item>
+        <item name="itemTextColor">@color/black</item>
+        <item name="android:tint">@color/black</item>
+        <item name="android:drawableTint">@color/black</item>
+        <item name="android:background">@color/invisivel</item>
+    </style>
 </resources>

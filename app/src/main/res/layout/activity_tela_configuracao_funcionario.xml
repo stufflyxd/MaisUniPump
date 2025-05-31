@@ -7,11 +7,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TelaConfiguracao_Funcionario"
-    android:backgroundTint="@color/black">
+    style="@style/BACKGROUNDTINT">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
+        style="@style/BACKGROUND"
         tools:context=".SettingsActivity"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-43dp">
@@ -33,7 +33,8 @@
                 android:background="@drawable/ic_person"
                 android:contentDescription="Profile picture"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_person" />
+                android:src="@drawable/ic_person"
+                style="@style/ICON"/>
 
             <!-- Profile Name -->
 
@@ -49,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nome Usuário"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -82,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="Informações pessoais"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -97,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="Preferências"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -112,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="Suporte"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -141,7 +142,7 @@
             <!--                android:layout_height="wrap_content"-->
             <!--                android:padding="16dp"-->
             <!--                android:text="Dados para treino"-->
-            <!--                android:textColor="@color/white"-->
+            <!--                style="@style/TEXTCOLOR"-->
             <!--                android:textSize="16sp" />-->
 
             <!--            <TextView-->
@@ -150,7 +151,7 @@
             <!--                android:layout_height="wrap_content"-->
             <!--                android:padding="16dp"-->
             <!--                android:text="Preferências"-->
-            <!--                android:textColor="@color/white"-->
+            <!--                style="@style/TEXTCOLOR"-->
             <!--                android:textSize="16sp" />-->
 
             <!--            <TextView-->
@@ -159,7 +160,7 @@
             <!--                android:layout_height="wrap_content"-->
             <!--                android:padding="16dp"-->
             <!--                android:text="Suporte"-->
-            <!--                android:textColor="@color/white"-->
+            <!--                style="@style/TEXTCOLOR"-->
             <!--                android:textSize="16sp" />-->
 
             <!--            &lt;!&ndash; Logout Button &ndash;&gt;-->
@@ -183,12 +184,10 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/black"
         app:menu="@menu/menu_bottom_nav_funcionario"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        style="@style/ICON"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@android:color/black"
+        style="@style/BACKGROUND"
         android:padding="16dp">
 
         <ImageButton
@@ -17,14 +17,14 @@
             android:layout_height="48dp"
             android:src="@drawable/ic_arrow_back"
             android:contentDescription="Voltar"
-            android:background="@color/black"
+            style="@style/ICON"
             app:tint="@android:color/white" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Idioma do conteúdo"
-            android:textColor="@android:color/white"
+            style="@style/TEXTCOLOR"
             android:textSize="20sp"
             android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-medium" />
@@ -37,7 +37,7 @@
             android:divider="@android:color/darker_gray"
             android:dividerHeight="1dp"
             android:scrollbars="none"
-            android:textColor="@color/branco" />
+            style="@style/TEXTCOLOR" />
 
 
 

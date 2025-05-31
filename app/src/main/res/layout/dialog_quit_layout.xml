@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_dialog"
+    style="@style/CONTEINERBACKGROUND"
     android:gravity="center">
 
     <ImageView
@@ -19,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Deseja Deslogar?"
-        android:textColor="#0000EE"
+        style="@style/TEXTCOLORBLUE"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginTop="16dp"/>
@@ -28,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ao deslogar, o histórico de execuções e as cargas serão zeradas e é necessário estar conectado à internet para logar novamente. Deseja sair mesmo assim?"
-        android:textColor="#000000"
+        style="@style/TEXTCOLOR"
         android:textSize="16sp"
         android:layout_marginTop="8dp"
         android:textAlignment="center"/>
@@ -47,7 +48,7 @@
             android:backgroundTint="@color/white"
             android:text="Cancelar"
             android:layout_weight="1"
-            android:textColor="@color/black"
+            style="@style/TEXTCOLOR"
             android:textSize="16sp"/>
 
         <Button

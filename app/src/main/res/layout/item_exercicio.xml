@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Nome do Exercício"
-            android:textColor="@color/white"
+            style="@style/TEXTCOLOR"
             android:textSize="16sp"
             android:paddingEnd="8dp" />
 
@@ -33,7 +33,7 @@
             android:id="@+id/btnAddExercicio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#202020"
+            style="@style/BOTAO"
             android:contentDescription="Botão de adicionar exercício"
             android:src="@drawable/plus_circle"
             android:padding="8dp" />
@@ -44,7 +44,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
+        android:background="@color/cinza_medio"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
 

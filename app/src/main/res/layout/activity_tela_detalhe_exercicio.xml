@@ -4,7 +4,7 @@
     xmlns:app   ="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    style="@style/BACKGROUND">
 
     <!-- 1) Botão de Voltar no topo -->
     <ImageView
@@ -13,6 +13,7 @@
         android:layout_height="24dp"
         android:src="@drawable/back_button"
         android:contentDescription="Voltar"
+        style="@style/ICON"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="32dp"
@@ -24,7 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Exercício"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -69,7 +70,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="16dp"
-        app:cardBackgroundColor="#1A1A1A"
+        style="@style/CARDBACKGROUND"
         app:layout_constraintTop_toBottomOf="@id/mediaContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -86,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-- dinâmico --"
-                android:textColor="#FFFFFF"
+                style="@style/TEXTCOLOR"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
@@ -101,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tipo de execução: "
-                    android:textColor="#CCCCCC"
+                    style="@style/TEXTCOLORSECONDARY"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -109,7 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="-- dinâmico --"
-                    android:textColor="#CCCCCC"
+                    style="@style/TEXTCOLORSECONDARY"
                     android:textSize="14sp"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
@@ -132,7 +133,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Voltar"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:backgroundTint="#0066FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

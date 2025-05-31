@@ -6,6 +6,7 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:background="@drawable/fundo_preto_rounded"
+    style="@style/BACKGROUNDTINT"
     android:padding="12dp"
     android:layout_marginBottom="8dp">
 
@@ -16,7 +17,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="1"
-        android:textColor="@android:color/white"
+        style="@style/TEXTCOLOR"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -28,13 +29,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_edittext"
-        android:backgroundTint="#202020"
         android:drawableStart="@drawable/icon_repeticao"
         android:drawablePadding="6dp"
-        android:drawableTint="#FFFFFF"
         android:padding="8dp"
         android:text="10"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTBOX"
         android:textSize="14sp"
         android:gravity="center"
         android:inputType="number"
@@ -49,10 +48,9 @@
         android:layout_height="48dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_edittext"
-        android:backgroundTint="#202020"
         android:padding="5dp"
         android:text="8 Kg"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTBOX"
         android:textSize="14sp"
         android:gravity="center"
         android:inputType="numberDecimal"
@@ -67,13 +65,11 @@
         android:layout_height="48dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_edittext"
-        android:backgroundTint="#202020"
         android:drawableStart="@drawable/icon_relogio"
         android:drawablePadding="6dp"
-        android:drawableTint="#FFFFFF"
         android:padding="8dp"
         android:text="30"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTBOX"
         android:textSize="14sp"
         android:gravity="center"
         android:inputType="number"
@@ -88,7 +84,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:backgroundTint="@color/black"
         android:contentDescription="Botão de excluir exercício"
         android:src="@drawable/icon_lixeiro" />
 
@@ -130,7 +125,7 @@
         android:drawableTint="#FFFFFF"
         android:padding="8dp"
         android:text="10"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:textSize="16sp"
         android:gravity="center"/>
 
@@ -153,7 +148,7 @@
         android:backgroundTint="#202020"
         android:padding="8dp"
         android:text="8 Kg"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:textSize="16sp"
         android:gravity="center"/>
 
@@ -176,7 +171,7 @@
         android:drawableTint="#FFFFFF"
         android:padding="8dp"
         android:text="30"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:textSize="16sp"
         android:gravity="center"/>
 
@@ -192,7 +187,7 @@
         android:id="@+id/btnExcluirSerie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
+        style="@style/ICON"
         android:contentDescription="Botão de excluir exercício"
         android:src="@drawable/icon_lixeiro" />
 
@@ -218,7 +213,7 @@ android:layout_marginBottom="8dp">
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:text="1"
-    android:textColor="#FFFFFF"
+    style="@style/TEXTCOLOR"
     android:textSize="20sp"
     android:gravity="center" />
 
@@ -233,7 +228,7 @@ android:layout_marginBottom="8dp">
     android:backgroundTint="#202020"
     android:padding="8dp"
     android:text="8 Kg"
-    android:textColor="#FFFFFF"
+    style="@style/TEXTCOLOR"
     android:textSize="16sp"
     android:gravity="center" />
 
@@ -250,7 +245,7 @@ android:layout_marginBottom="8dp">
     android:drawableTint="#FFFFFF"
     android:padding="8dp"
     android:text="10"
-    android:textColor="#FFFFFF"
+    style="@style/TEXTCOLOR"
     android:textSize="16sp"
     android:gravity="center" />
 
@@ -267,7 +262,7 @@ android:layout_marginBottom="8dp">
     android:drawableTint="#FFFFFF"
     android:padding="8dp"
     android:text="30"
-    android:textColor="#FFFFFF"
+    style="@style/TEXTCOLOR"
     android:textSize="16sp"
     android:gravity="center"/>
 

@@ -29,13 +29,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/white" />
+            style="@style/TEXTCOLOR" />
 
         <ImageButton
             android:id="@+id/btnExcluirExercicio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/gray"
+            android:backgroundTint="@color/invisivel"
             android:contentDescription="Botão de excluir exercício"
             android:src="@drawable/icon_lixeiro" />
 
@@ -44,7 +44,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/circular_background"
-            android:backgroundTint="@color/gray"
+            android:backgroundTint="@color/invisivel"
             android:src="@drawable/plus_circle"
             android:contentDescription="Adicionar Serie"
             android:scaleType="center" />
@@ -56,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@color/cinza_medio" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSeries"
@@ -70,6 +70,6 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="10dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@color/cinza_medio" />
 
 </LinearLayout>

@@ -5,7 +5,7 @@
     android:id="@+id/layoutRelatorioTreino"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    style="@style/BACKGROUND">
 
     <!-- Botão de Voltar -->
     <ImageView
@@ -13,6 +13,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/back_button"
+        style="@style/ICON"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="32dp"
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Peito e tríceps"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Finalizar"
-        android:textColor="#FFFFFF"
+        style="@style/TEXTCOLOR"
         android:backgroundTint="#0066FF"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"

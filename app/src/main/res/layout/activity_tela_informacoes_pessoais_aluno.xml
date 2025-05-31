@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    style="@style/BACKGROUND"
     tools:context=".TelaInformacoesPessoaisAluno">
 
     <ScrollView
@@ -23,30 +23,30 @@
             android:paddingBottom="16dp">
 
             <LinearLayout
-            android:layout_marginTop="15dp"
-            android:id="@+id/text_info_pessoais_aluno"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/SetaVoltarTelaGerenciamentoAluno"
-                android:layout_width="48sp"
-                android:layout_height="48sp"
-                android:contentDescription="@string/seta_voltar"
-                android:src="@drawable/ic_arrow_back"
-                android:backgroundTint="@color/black"/>
-
-            <TextView
+                android:layout_marginTop="15dp"
+                android:id="@+id/text_info_pessoais_aluno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Informações pessoais"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:layout_marginTop="10dp"
-                />
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/SetaVoltarTelaGerenciamentoAluno"
+                    android:layout_width="48sp"
+                    android:layout_height="48sp"
+                    android:contentDescription="@string/seta_voltar"
+                    android:src="@drawable/ic_arrow_back"
+                    style="@style/ICON"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Informações pessoais"
+                    style="@style/TEXTCOLOR"
+                    android:textSize="24sp"
+                    android:layout_marginTop="10dp"
+                    />
+
+            </LinearLayout>
 
 
             <LinearLayout
@@ -59,6 +59,7 @@
                 app:layout_constraintTop_toBottomOf="@id/text_info_pessoais_aluno"
                 android:layout_margin="20dp"
                 android:background="@drawable/funda_cinza_rounded"
+                style="@style/CONTEINERBACKGROUND"
                 android:padding="10dp">
 
                 <LinearLayout
@@ -72,12 +73,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nome de usuário"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <EditText
@@ -86,12 +88,13 @@
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:text=""
-                            android:textColor="@color/white" />
+                            style="@style/TEXTCOLOR" />
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_pencil"
+                            style="@style/ICON"
                             android:layout_gravity="center"
                             android:layout_weight="1" />
                     </LinearLayout>
@@ -108,12 +111,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Endereço"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <EditText
@@ -123,12 +127,13 @@
                             android:autofillHints=""
                             android:inputType="text"
                             android:text=""
-                            android:textColor="@color/white"/>
+                            style="@style/TEXTCOLOR"/>
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_pencil"
+                            style="@style/ICON"
                             android:layout_gravity="center"
                             android:layout_weight="1" />
                     </LinearLayout>
@@ -145,12 +150,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Gênero"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <EditText
@@ -160,12 +166,13 @@
                             android:autofillHints=""
                             android:inputType="text"
                             android:text=""
-                            android:textColor="@color/white"/>
+                            style="@style/TEXTCOLOR"/>
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_pencil"
+                            style="@style/ICON"
                             android:layout_gravity="center"
                             android:layout_weight="1" />
                     </LinearLayout>
@@ -182,12 +189,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Numero de contato"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <EditText
@@ -197,12 +205,13 @@
                             android:autofillHints=""
                             android:inputType="text"
                             android:text=""
-                            android:textColor="@color/white" />
+                            style="@style/TEXTCOLOR" />
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_pencil"
+                            style="@style/ICON"
                             android:layout_gravity="center"
                             android:layout_weight="1" />
                     </LinearLayout>
@@ -220,12 +229,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nome"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <TextView
@@ -235,7 +245,7 @@
                             android:autofillHints=""
                             android:inputType="text"
                             android:text=""
-                            android:textColor="@color/gray_line"
+                            style="@style/TEXTCOLORSECONDARY"
                             android:textSize="20sp"/>
 
                     </LinearLayout>
@@ -252,12 +262,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sobrenome"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <TextView
@@ -267,7 +278,7 @@
                             android:autofillHints=""
                             android:inputType="text"
                             android:text=""
-                            android:textColor="@color/gray_line"
+                            style="@style/TEXTCOLORSECONDARY"
                             android:textSize="20sp"/>
 
                     </LinearLayout>
@@ -284,12 +295,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Idade"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <TextView
@@ -299,7 +311,7 @@
                             android:autofillHints=""
                             android:inputType="text"
                             android:text=""
-                            android:textColor="@color/gray_line"
+                            style="@style/TEXTCOLORSECONDARY"
                             android:textSize="20sp"/>
 
                     </LinearLayout>
@@ -312,26 +324,24 @@
         </LinearLayout>
     </ScrollView>
 
-<!--    <Button-->
-<!--        android:id="@+id/btn_salvar"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Salvar"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginBottom="15dp"/>-->
+    <!--    <Button-->
+    <!--        android:id="@+id/btn_salvar"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Salvar"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginBottom="15dp"/>-->
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/black"
         app:menu="@menu/menu_bottom_nav"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        style="@style/ICON"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

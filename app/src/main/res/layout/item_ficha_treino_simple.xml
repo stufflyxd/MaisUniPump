@@ -6,7 +6,7 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="#333333">
+    style="@style/CARDBACKGROUND">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:background="@drawable/circular_background"
             android:backgroundTint="@color/blue"
             android:gravity="center"
-            android:textColor="@color/white"
+            style="@style/TEXTCOLOR"
             android:textSize="24sp"
             android:textStyle="bold"
             android:maxLength="1"
@@ -36,7 +36,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:background="@android:color/transparent"
-            android:textColor="@color/white"
+            style="@style/TEXTCOLOR"
             android:textSize="18sp"
             android:textStyle="bold"
             android:hint="Nome da Ficha"

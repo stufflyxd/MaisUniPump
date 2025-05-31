@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    style="@style/BACKGROUND"
     tools:context=".TelaInformacaoPessoal_funcionario">
 
     <ScrollView
@@ -35,13 +35,13 @@
                     android:layout_height="48sp"
                     android:contentDescription="@string/seta_voltar"
                     android:src="@drawable/ic_arrow_back"
-                    android:backgroundTint="@color/black"/>
+                    style="@style/ICON"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Informações pessoais"
-                    android:textColor="@color/white"
+                    style="@style/TEXTCOLOR"
                     android:textSize="24sp"
                     android:layout_marginTop="10dp"
                     />
@@ -63,6 +63,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/funda_cinza_rounded"
+                style="@style/CONTEINERBACKGROUND"
                 android:padding="10dp">
 
                 <LinearLayout
@@ -76,12 +77,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nome de usuário"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <EditText
@@ -90,12 +92,13 @@
                             android:layout_height="45dp"
                             android:inputType="text"
                             android:text="Bolofofo"
-                            android:textColor="@color/white" />
+                            style="@style/TEXTCOLOR" />
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_pencil"
+                            style="@style/ICON"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:contentDescription="@string/imagem_pincel"/>
@@ -113,12 +116,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Endereço"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <EditText
@@ -128,12 +132,13 @@
                             android:autofillHints=""
                             android:inputType="text"
                             android:text="AV. Washington Soarez"
-                            android:textColor="@color/white"/>
+                            style="@style/TEXTCOLOR"/>
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_pencil"
+                            style="@style/ICON"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:contentDescription="@string/imagem_pincel"/>
@@ -151,12 +156,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Gênero"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <EditText
@@ -166,12 +172,13 @@
                             android:autofillHints=""
                             android:inputType="text"
                             android:text="Masculino"
-                            android:textColor="@color/white"/>
+                            style="@style/TEXTCOLOR"/>
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_pencil"
+                            style="@style/ICON"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:contentDescription="@string/imagem_pincel"/>
@@ -189,12 +196,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Numero de contato"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <EditText
@@ -204,12 +212,13 @@
                             android:autofillHints=""
                             android:inputType="text"
                             android:text="+55 (85) 940028922"
-                            android:textColor="@color/white" />
+                            style="@style/TEXTCOLOR" />
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_pencil"
+                            style="@style/ICON"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:contentDescription="@string/imagem_pincel"/>
@@ -228,12 +237,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nome"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <TextView
@@ -244,7 +254,7 @@
                             android:inputType="text"
                             android:gravity="center_vertical"
                             android:text="Pedro"
-                            android:textColor="@color/gray_line"
+                            style="@style/TEXTCOLORSECONDARY"
                             android:textSize="20sp"/>
 
                     </LinearLayout>
@@ -261,12 +271,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sobrenome"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <TextView
@@ -277,7 +288,7 @@
                             android:inputType="text"
                             android:gravity="center_vertical"
                             android:text="Augusto"
-                            android:textColor="@color/gray_line"
+                            style="@style/TEXTCOLORSECONDARY"
                             android:textSize="20sp"/>
 
                     </LinearLayout>
@@ -294,12 +305,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Idade"
-                        android:textColor="@color/white"/>
+                        style="@style/TEXTCOLOR"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fundo_preto_rounded"
+                        style="@style/BACKGROUNDTINT"
                         android:padding="10dp">
 
                         <TextView
@@ -310,7 +322,7 @@
                             android:inputType="text"
                             android:gravity="center_vertical"
                             android:text="21"
-                            android:textColor="@color/gray_line"
+                            style="@style/TEXTCOLORSECONDARY"
                             android:textSize="20sp"/>
 
                     </LinearLayout>
@@ -329,9 +341,7 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#202020"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        style="@style/ICON"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
