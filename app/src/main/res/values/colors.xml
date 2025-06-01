@@ -27,6 +27,23 @@
     <color name="field_background">#202020</color>
     <color name="invisivel">#00929292</color>
 
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="accent_color">#FF5722</color>
+
+    <!-- Cores básicas do sistema -->
+    <color name="gray">#757575</color>
+    <color name="light_gray">#E0E0E0</color>
+
+    <!-- Cores de fundo -->
+    <color name="background_color">#FAFAFA</color>
+    <color name="surface_color">#FFFFFF</color>
+
+    <!-- Cores de texto -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="primary_color">#2196F3</color>
+
     <color name="azul">#FF0000FF</color> <!-- Substitua pelo seu azul -->
     <color name="branco">#FFFFFFFF</color>
     <color name="cinza_escuro">#FF202020</color>

@@ -205,7 +205,7 @@ class TelaLogin : AppCompatActivity() {
                             .addOnSuccessListener { documents ->
                                 if (!documents.isEmpty) {
                                     val dadosUsuario = documents.documents[0]
-                                    val alunoDocId = dadosUsuario.id
+                                    val docId = dadosUsuario.id
 
                                     // Usar apenas uma SharedPreference baseada no tipo
                                     val prefsName = if (tipo == "aluno") "alunoPrefs" else "funcionarioPrefs"
@@ -215,17 +215,46 @@ class TelaLogin : AppCompatActivity() {
                                     // Salva dados do usuário
                                     editor.putString("uid", uid)
                                     editor.putString("tipo", tipo)
-                                    editor.putString("alunoDocId", alunoDocId)
-                                    editor.putString("nome_usuario", dadosUsuario.getString("nome_usuario"))
-                                    editor.putString("nome", dadosUsuario.getString("nome"))
-                                    editor.putString("sobrenome", dadosUsuario.getString("sobrenome"))
-                                    editor.putString("idade", dadosUsuario.getString("idade"))
-                                    editor.putString("genero", dadosUsuario.getString("genero"))
-                                    editor.putString("endereco", dadosUsuario.getString("endereco"))
-                                    editor.putString("telefone", dadosUsuario.getString("telefone"))
-                                    editor.putString("email", email)
+
+                                    if (tipo == "aluno") {
+                                        // Dados específicos do aluno
+                                        editor.putString("alunoDocId", docId)
+                                        editor.putString("nome_usuario", dadosUsuario.getString("nome_usuario"))
+                                        editor.putString("nome", dadosUsuario.getString("nome"))
+                                        editor.putString("sobrenome", dadosUsuario.getString("sobrenome"))
+                                        editor.putString("idade", dadosUsuario.getString("idade"))
+                                        editor.putString("genero", dadosUsuario.getString("genero"))
+                                        editor.putString("endereco", dadosUsuario.getString("endereco"))
+                                        editor.putString("telefone", dadosUsuario.getString("telefone"))
+                                        editor.putString("email", email)
+                                    } else {
+                                        // Dados específicos do funcionário
+                                        editor.putString("funcionarioDocId", docId)
+                                        editor.putString("nome", dadosUsuario.getString("nome"))
+                                        editor.putString("email", email)
+                                        editor.putString("especialidade", dadosUsuario.getString("especialidade"))
+                                        editor.putString("telefone", dadosUsuario.getString("telefone"))
+
+                                        // Log para debug
+                                        Log.d("TelaLogin", "Funcionário logado: ${dadosUsuario.getString("nome")}, ID: $docId")
+                                    }
+
                                     editor.apply()
 
+                                    /* // Salva dados do usuário
+                                     editor.putString("uid", uid)
+                                     editor.putString("tipo", tipo)
+                                     editor.putString("alunoDocId", alunoDocId)
+                                     editor.putString("nome_usuario", dadosUsuario.getString("nome_usuario"))
+                                     editor.putString("nome", dadosUsuario.getString("nome"))
+                                     editor.putString("sobrenome", dadosUsuario.getString("sobrenome"))
+                                     editor.putString("idade", dadosUsuario.getString("idade"))
+                                     editor.putString("genero", dadosUsuario.getString("genero"))
+                                     editor.putString("endereco", dadosUsuario.getString("endereco"))
+                                     editor.putString("telefone", dadosUsuario.getString("telefone"))
+                                     editor.putString("email", email)
+                                     editor.apply()
+ */
                                     // Vai para a tela principal
                                     val intent = if (tipo == "aluno") {
                                         Intent(this, TelaPrincipalAluno::class.java)

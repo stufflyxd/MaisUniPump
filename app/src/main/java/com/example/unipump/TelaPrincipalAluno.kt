@@ -68,7 +68,7 @@ class TelaPrincipalAluno : AppCompatActivity() {
             startActivity(Intent(this, TelaRelatorioSemanal::class.java))
         }
         btnNotificacao.setOnClickListener {
-            startActivity(Intent(this, TelaNotificacao_funcionario::class.java))
+            startActivity(Intent(this, TelaNotificacaoAluno::class.java))
         }
 
         findViewById<BottomNavigationView>(R.id.bottom_navigation)

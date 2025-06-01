@@ -26,8 +26,9 @@ class TelaConfig : AppCompatActivity() {
     private lateinit var profileImage: ImageView
     private lateinit var perfilNome: TextView
     private lateinit var personalInfo: TextView
-    private lateinit var trainingData: TextView
+    private lateinit var solicitarFicha: TextView // Mudança aqui
     private lateinit var preferences: TextView
+    private lateinit var acessibilidade: TextView
     private lateinit var support: TextView
     private lateinit var logoutButton: TextView
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -46,8 +47,9 @@ class TelaConfig : AppCompatActivity() {
         profileImage         = findViewById(R.id.profile_image)
         perfilNome           = findViewById(R.id.perfil_nome)
         personalInfo         = findViewById(R.id.personal_info)
-        trainingData         = findViewById(R.id.training_data)
+        solicitarFicha       = findViewById(R.id.solicitar_ficha) // Mudança aqui
         preferences          = findViewById(R.id.preferences)
+        acessibilidade       = findViewById(R.id.acessibilidade)
         support              = findViewById(R.id.support)
         logoutButton         = findViewById(R.id.deslogar)
         bottomNavigationView = findViewById(R.id.bottom_navigation)
@@ -74,11 +76,17 @@ class TelaConfig : AppCompatActivity() {
         personalInfo.setOnClickListener {
             startActivity(Intent(this, TelaInformacoesPessoaisAluno::class.java))
         }
-        trainingData.setOnClickListener {
-            startActivity(Intent(this, TelaDadosDeTreino::class.java))
+
+        // Nova funcionalidade para solicitar ficha
+        solicitarFicha.setOnClickListener {
+            mostrarDialogSolicitarFicha()
         }
+
         preferences.setOnClickListener {
             startActivity(Intent(this, TelaPref::class.java))
+        }
+        acessibilidade.setOnClickListener {
+            startActivity(Intent(this, TelaAcessibilidade::class.java))
         }
         support.setOnClickListener {
             startActivity(Intent(this, TelaChat::class.java))
@@ -181,6 +189,75 @@ class TelaConfig : AppCompatActivity() {
         ) {
             Toast.makeText(this, "Permissão de fotos negada", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun mostrarDialogSolicitarFicha() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_solicitar_ficha, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
+
+        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
+        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
+
+        btnCancelar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnConfirmar.setOnClickListener {
+            dialog.dismiss()
+            enviarSolicitacaoFicha()
+        }
+    }
+
+    private fun enviarSolicitacaoFicha() {
+        val alunoDocId = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
+            .getString("alunoDocId", null) ?: return
+
+        // Buscar dados do aluno
+        db.collection("alunos").document(alunoDocId)
+            .get()
+            .addOnSuccessListener { alunoDoc ->
+                val nomeAluno = alunoDoc.getString("nome") ?: "Usuário"
+
+                // Criar notificação
+                val notificacao = hashMapOf(
+                    "tipo" to "solicitacao_ficha",
+                    "alunoId" to alunoDocId,
+                    "nomeAluno" to nomeAluno,
+                    "mensagem" to "$nomeAluno solicitou uma nova ficha de treino",
+                    "timestamp" to com.google.firebase.Timestamp.now(),
+                    "lida" to false
+                )
+
+                // Salvar notificação no Firestore
+                db.collection("notificacoes_funcionario")
+                    .add(notificacao)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            this,
+                            "Solicitação enviada com sucesso! Aguarde o retorno.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    .addOnFailureListener { ex ->
+                        Toast.makeText(
+                            this,
+                            "Erro ao enviar solicitação: ${ex.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+            }
+            .addOnFailureListener { ex ->
+                Toast.makeText(
+                    this,
+                    "Erro ao buscar dados do aluno: ${ex.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
     }
 
     private fun mostrarDialogLogout() {
