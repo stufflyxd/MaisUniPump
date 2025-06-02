@@ -1,64 +1,51 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- REMOVI A LINHA: <attr name="appFontFamily" format="reference" /> -->
+    <!-- Ela já existe em attrs.xml -->
+
     <!-- Base application theme. -->
     <style name="Base.Theme.UniPump" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/black</item>
-
         <item name="colorSecondary">@color/blue</item>
         <item name="colorSecondaryVariant">@color/red</item>
         <item name="colorOnSecondary">@color/black</item>
-
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-
-        <item name="appFontFamily">@font/default_app_font</item>
-
+        <!-- FONTE PADRÃO DO SISTEMA -->
+        <item name="android:fontFamily">sans-serif</item>
     </style>
-
 
     <!-- Temas de fonte -->
-    <style name="Fonte.Default" parent="Base.Theme.UniPump">
-        <item name="android:fontFamily">@font/default_app_font</item>
-        <item name="appFontFamily">@font/default_app_font</item>
-    </style>
-
     <style name="Theme.Fonte.Helvetica" parent="Base.Theme.UniPump">
         <item name="android:fontFamily">@font/helveticaroundedbold</item>
-        <item name="appFontFamily">@font/helveticaroundedbold</item>
     </style>
 
     <style name="Theme.Fonte.Verdana" parent="Base.Theme.UniPump">
         <item name="android:fontFamily">@font/verdanafont</item>
-        <item name="appFontFamily">@font/verdanafont</item>
     </style>
 
     <style name="Theme.Fonte.Minecraft" parent="Base.Theme.UniPump">
         <item name="android:fontFamily">@font/minecraftmojangles</item>
-        <item name="appFontFamily">@font/minecraftmojangles</item>
     </style>
 
     <style name="Theme.Fonte.Monsieur" parent="Base.Theme.UniPump">
         <item name="android:fontFamily">@font/monsieurdadoulaise</item>
-        <item name="appFontFamily">@font/monsieurdadoulaise</item>
     </style>
 
     <style name="Theme.Fonte.Nabla" parent="Base.Theme.UniPump">
         <item name="android:fontFamily">@font/nablaregular</item>
-        <item name="appFontFamily">@font/nablaregular</item>
     </style>
 
     <style name="Theme.Fonte.Redacted" parent="Base.Theme.UniPump">
         <item name="android:fontFamily">@font/redactedscript</item>
-        <item name="appFontFamily">@font/redactedscript</item>
     </style>
 
-
-
+    <!-- Outros estilos mantidos -->
     <style name="BACKGROUND">
         <item name="colorPrimary">#6200EE</item>
         <item name="colorOnBackground">#FFFFFF</item>
-
         <item name="android:background">#EFEFFA</item>
     </style>
 
@@ -88,20 +75,17 @@
     <style name="CARDBACKGROUND">
         <item name="cardBackgroundColor">@color/white</item>
         <item name="android:textColor">@color/black</item>
-
         <item name="android:background">@color/white</item>
     </style>
 
     <style name="CONTEINERBACKGROUND">
         <item name="android:backgroundTint">@color/azul_arroxeado</item>
         <item name="android:calendarTextColor">@color/black</item>
-
         <item name="android:background">@color/azul_arroxeado</item>
     </style>
 
     <style name="TEXTBOX">
         <item name="android:backgroundTint">@color/cinza</item>
-
         <item name="android:textColor">@color/black</item>
         <item name="itemIconTint">@color/black</item>
         <item name="itemTextColor">@color/black</item>
@@ -120,4 +104,5 @@
         <item name="android:drawableTint">@color/black</item>
         <item name="android:background">@color/invisivel</item>
     </style>
+
 </resources>

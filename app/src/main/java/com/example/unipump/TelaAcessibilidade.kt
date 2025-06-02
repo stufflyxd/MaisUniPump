@@ -2,6 +2,7 @@ package com.example.unipump
 
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -35,11 +36,11 @@ class TelaAcessibilidade : BaseActivity() {
         // Inicializar todas as views
         initializeViews()
 
-        // Configurar listeners
-        setupClickListeners()
-
-        // Configura o estado inicial da seleção de fonte
+        // Configura o estado inicial da seleção de fonte ANTES dos listeners
         setupInitialFontSelection()
+
+        // Configurar listeners DEPOIS
+        setupClickListeners()
     }
 
     private fun initializeViews() {
@@ -47,7 +48,7 @@ class TelaAcessibilidade : BaseActivity() {
         fontRadioGroup = findViewById(R.id.font_selection_radio_group)
         radioDefaultFont = findViewById(R.id.radio_default_font)
         radioHelvetica = findViewById(R.id.radio_helvetica)
-        radioVerdana = findViewById(R.id.radio_verdana)
+        /*radioVerdana = findViewById(R.id.radio_verdana)*/
         radioMinecraft = findViewById(R.id.radio_minecraft)
         radioMonsieur = findViewById(R.id.radio_monsieur)
         radioNabla = findViewById(R.id.radio_nabla)
@@ -62,10 +63,11 @@ class TelaAcessibilidade : BaseActivity() {
 
         // Configura o listener para mudanças no RadioGroup
         fontRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            // CORRIGIDO: Usar os nomes corretos dos estilos
             val selectedThemeResId = when (checkedId) {
-                R.id.radio_default_font -> R.style.Fonte_Default
+                R.id.radio_default_font -> R.style.Base_Theme_UniPump  // CORRIGIDO
                 R.id.radio_helvetica -> R.style.Theme_Fonte_Helvetica
-                R.id.radio_verdana -> R.style.Theme_Fonte_Verdana
+                /*R.id.radio_verdana -> R.style.Theme_Fonte_Verdana*/
                 R.id.radio_minecraft -> R.style.Theme_Fonte_Minecraft
                 R.id.radio_monsieur -> R.style.Theme_Fonte_Monsieur
                 R.id.radio_nabla -> R.style.Theme_Fonte_Nabla
@@ -76,6 +78,9 @@ class TelaAcessibilidade : BaseActivity() {
             // Salvar a preferência
             FontPreferenceManager.saveSelectedFontTheme(this, selectedThemeResId)
 
+            // Mostrar feedback
+            Toast.makeText(this, "Fonte alterada!", Toast.LENGTH_SHORT).show()
+
             // Recriar a activity para aplicar a nova fonte
             recreate()
         }
@@ -85,9 +90,8 @@ class TelaAcessibilidade : BaseActivity() {
         val currentFontTheme = FontPreferenceManager.getSelectedFontTheme(this)
         val radioButtonId = when (currentFontTheme) {
             R.style.Base_Theme_UniPump -> R.id.radio_default_font
-            R.style.Fonte_Default -> R.id.radio_default_font
             R.style.Theme_Fonte_Helvetica -> R.id.radio_helvetica
-            R.style.Theme_Fonte_Verdana -> R.id.radio_verdana
+            /*R.style.Theme_Fonte_Verdana -> R.id.radio_verdana*/
             R.style.Theme_Fonte_Minecraft -> R.id.radio_minecraft
             R.style.Theme_Fonte_Monsieur -> R.id.radio_monsieur
             R.style.Theme_Fonte_Nabla -> R.id.radio_nabla
@@ -95,10 +99,7 @@ class TelaAcessibilidade : BaseActivity() {
             else -> R.id.radio_default_font
         }
 
-        // Temporariamente remover o listener para evitar chamadas desnecessárias
-        fontRadioGroup.setOnCheckedChangeListener(null)
-        fontRadioGroup.check(radioButtonId)
-
+        // Marcar o RadioButton correto SEM acionar o listener
         fontRadioGroup.check(radioButtonId)
     }
 }
