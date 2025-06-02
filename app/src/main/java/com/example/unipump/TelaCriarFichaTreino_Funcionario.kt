@@ -19,7 +19,7 @@ import com.example.unipump.adapters.ExercicioGrupo
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 
-class TelaCriarFichaTreino_Funcionario : AppCompatActivity() {
+class TelaCriarFichaTreino_Funcionario : BaseActivity() {
 
     private lateinit var btnNavegacao: BottomNavigationView
     private lateinit var btnSetaVoltar: ImageButton
@@ -619,7 +619,7 @@ import com.example.unipump.adapters.ExercicioGrupo
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 
-class TelaCriarFichaTreino_Funcionario : AppCompatActivity() {
+class TelaCriarFichaTreino_Funcionario :  {
 
     private lateinit var btnNavegacao: BottomNavigationView
     private lateinit var btnSetaVoltar: ImageButton

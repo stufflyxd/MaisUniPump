@@ -9,7 +9,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
-class TelaInicial : AppCompatActivity() {
+class TelaInicial : BaseActivity() {
 
     private lateinit var btnAluno: Button
     private lateinit var btnFuncionario: Button

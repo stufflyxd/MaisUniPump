@@ -17,7 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
-class TelaNotificacao_funcionario : AppCompatActivity() {
+class TelaNotificacao_funcionario : BaseActivity() {
 
     private lateinit var btnSetaVoltar: ImageButton
     private lateinit var btnNavegacao: BottomNavigationView

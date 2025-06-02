@@ -12,7 +12,7 @@ import com.example.unipump.models.NotificacaoAlunoModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
-class TelaNotificacaoAluno : AppCompatActivity() {
+class TelaNotificacaoAluno : BaseActivity() {
 
     private lateinit var btnSetaVoltar: ImageButton
     private lateinit var recyclerNotificacoes: RecyclerView

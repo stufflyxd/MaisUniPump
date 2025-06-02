@@ -12,8 +12,48 @@
 
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
+        <item name="appFontFamily">@font/default_app_font</item>
 
     </style>
+
+
+    <!-- Temas de fonte -->
+    <style name="Fonte.Default" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/default_app_font</item>
+        <item name="appFontFamily">@font/default_app_font</item>
+    </style>
+
+    <style name="Theme.Fonte.Helvetica" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/helveticaroundedbold</item>
+        <item name="appFontFamily">@font/helveticaroundedbold</item>
+    </style>
+
+    <style name="Theme.Fonte.Verdana" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/verdanafont</item>
+        <item name="appFontFamily">@font/verdanafont</item>
+    </style>
+
+    <style name="Theme.Fonte.Minecraft" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/minecraftmojangles</item>
+        <item name="appFontFamily">@font/minecraftmojangles</item>
+    </style>
+
+    <style name="Theme.Fonte.Monsieur" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/monsieurdadoulaise</item>
+        <item name="appFontFamily">@font/monsieurdadoulaise</item>
+    </style>
+
+    <style name="Theme.Fonte.Nabla" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/nablaregular</item>
+        <item name="appFontFamily">@font/nablaregular</item>
+    </style>
+
+    <style name="Theme.Fonte.Redacted" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/redactedscript</item>
+        <item name="appFontFamily">@font/redactedscript</item>
+    </style>
+
+
 
     <style name="BACKGROUND">
         <item name="colorPrimary">#6200EE</item>

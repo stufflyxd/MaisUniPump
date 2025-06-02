@@ -16,7 +16,7 @@ import com.example.unipump.models.SerieAluno
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 
-class TelaFichaTreinoAluno : AppCompatActivity() {
+class TelaFichaTreinoAluno : BaseActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private lateinit var alunoDocId: String

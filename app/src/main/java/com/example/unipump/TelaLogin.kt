@@ -21,7 +21,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
-class TelaLogin : AppCompatActivity() {
+class TelaLogin : BaseActivity() {
 
     private lateinit var btnVoltar: Button
     private lateinit var textEsqueceuSenha: TextView

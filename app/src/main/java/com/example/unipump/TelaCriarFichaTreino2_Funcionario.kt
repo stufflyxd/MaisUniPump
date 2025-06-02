@@ -13,7 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class TelaCriarFichaTreino2_Funcionario : AppCompatActivity() {
+class TelaCriarFichaTreino2_Funcionario : BaseActivity() {
 
     private lateinit var btnNavegacao : BottomNavigationView
 

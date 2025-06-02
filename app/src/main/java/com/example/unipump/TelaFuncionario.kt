@@ -21,7 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
 
-class TelaFuncionario : AppCompatActivity() {
+class TelaFuncionario : BaseActivity() {
 
     private lateinit var profileImage: ImageView
     private lateinit var btnNavegacao: BottomNavigationView

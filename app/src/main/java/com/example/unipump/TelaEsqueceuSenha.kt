@@ -9,7 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 
-class TelaEsqueceuSenha : AppCompatActivity() {
+class TelaEsqueceuSenha : BaseActivity() {
 
     private lateinit var btnEnviar: Button
     private lateinit var edtEmailOuTelefone: EditText

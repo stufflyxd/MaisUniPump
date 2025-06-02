@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class TelaGerenciamentoAlunoNovo_Funcionario : AppCompatActivity() {
+class TelaGerenciamentoAlunoNovo_Funcionario : BaseActivity() {
 
     private lateinit var btnSetaVoltar : ImageButton
     private lateinit var btnNavegacao : BottomNavigationView

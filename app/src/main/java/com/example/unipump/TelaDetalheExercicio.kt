@@ -17,7 +17,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.unipump.adapters.SeriesAdapterFinalizadoAluno
 import com.example.unipump.models.ExercicioFinalizadoAluno
 
-class TelaDetalheExercicio : AppCompatActivity() {
+class TelaDetalheExercicio : BaseActivity() {
 
     // Guarda a posição que veio da tela anterior
     private var posicaoRecebida: Int = -1

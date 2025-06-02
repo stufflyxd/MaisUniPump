@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class TelaEsqueceuSenha3 : AppCompatActivity() {
+class TelaEsqueceuSenha3 : BaseActivity() {
 
     private lateinit var btnValidar : Button
     private lateinit var textInstruction : TextView

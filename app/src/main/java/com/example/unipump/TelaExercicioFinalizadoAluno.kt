@@ -22,7 +22,7 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 
-class TelaExercicioFinalizadoAluno : AppCompatActivity() {
+class TelaExercicioFinalizadoAluno : BaseActivity() {
 
     // 1) Registrar o launcher para receber resultado da TelaDetalheExercicio
     private val detalheLauncher = registerForActivityResult(

@@ -26,13 +26,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class TelaConfiguracao_Funcionario : AppCompatActivity() {
+class TelaConfiguracao_Funcionario : BaseActivity() {
 
     // Variáveis para componentes
     private lateinit var profileImage: ImageView
     private lateinit var perfilNome: TextView
     private lateinit var personalInfo: TextView
     private lateinit var preferences: TextView
+    private lateinit var acessibilidade: TextView
     private lateinit var support: TextView
     private lateinit var logoutButton: TextView
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -56,6 +57,7 @@ class TelaConfiguracao_Funcionario : AppCompatActivity() {
         perfilNome = findViewById(R.id.perfil_nome)
         personalInfo = findViewById(R.id.personal_info)
         preferences = findViewById(R.id.preferences)
+        acessibilidade = findViewById(R.id.acessibilidade)
         support = findViewById(R.id.support)
         logoutButton = findViewById(R.id.deslogar)
         bottomNavigationView = findViewById(R.id.bottom_navigation)
@@ -98,6 +100,10 @@ class TelaConfiguracao_Funcionario : AppCompatActivity() {
         preferences.setOnClickListener {
             val intent = Intent(this, TelaPref::class.java)
             startActivity(intent)
+        }
+
+        acessibilidade.setOnClickListener {
+            startActivity(Intent(this, TelaAcessibilidade::class.java))
         }
 
         support.setOnClickListener {

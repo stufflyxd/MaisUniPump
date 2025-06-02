@@ -17,7 +17,7 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import java.util.*
 
-class TelaRelatorioSemanal : AppCompatActivity() {
+class TelaRelatorioSemanal : BaseActivity() {
 
     private lateinit var btnVoltar: ImageButton
     private lateinit var tvTreinos: TextView

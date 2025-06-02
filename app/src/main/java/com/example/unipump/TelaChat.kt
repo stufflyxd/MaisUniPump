@@ -16,7 +16,7 @@ import com.example.unipump.models.ChatMessage
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.launch
 
-class TelaChat : AppCompatActivity() {
+class TelaChat : BaseActivity() {
 
     private lateinit var setaVoltar: ImageButton
     private lateinit var edtPergunta: EditText

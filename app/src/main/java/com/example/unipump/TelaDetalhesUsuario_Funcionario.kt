@@ -17,7 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
 
-class TelaDetalhesUsuario_Funcionario : AppCompatActivity() {
+class TelaDetalhesUsuario_Funcionario : BaseActivity() {
 
     // Views
     private lateinit var profileImage: ImageView

@@ -24,7 +24,7 @@ import java.io.File
 import java.util.Timer
 import java.util.TimerTask
 
-class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
+class TelaEdicaoFichaTreino_funcionario : BaseActivity() {
 
     private lateinit var profileImage: ImageView
     private lateinit var btnNavegacao: BottomNavigationView
@@ -740,7 +740,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Timer
 import java.util.TimerTask
 
-class TelaEdicaoFichaTreino_funcionario : AppCompatActivity() {
+class TelaEdicaoFichaTreino_funcionario :  {
 
     private lateinit var btnNavegacao: BottomNavigationView
     private lateinit var btnSetaVoltar: ImageButton

@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
-class TelaTreinoAluno : AppCompatActivity() {
+class TelaTreinoAluno : BaseActivity() {
 
     private lateinit var imgAvatar: ImageView
     private lateinit var nomeUser: TextView

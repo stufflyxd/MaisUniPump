@@ -5,7 +5,7 @@ import android.widget.ImageView
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 
-class TelaSobre : AppCompatActivity() {
+class TelaSobre : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

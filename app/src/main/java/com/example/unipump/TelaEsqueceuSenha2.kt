@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
-class TelaEsqueceuSenha2 : AppCompatActivity() {
+class TelaEsqueceuSenha2 : BaseActivity() {
 
     private lateinit var btnEditar : Button
     private lateinit var btnConfirmar : Button

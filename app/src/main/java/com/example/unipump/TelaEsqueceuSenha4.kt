@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
-class TelaEsqueceuSenha4 : AppCompatActivity() {
+class TelaEsqueceuSenha4 : BaseActivity() {
 
     private lateinit var edtNovaSenha: EditText
     private lateinit var edtConfirmaSenha: EditText

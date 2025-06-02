@@ -22,7 +22,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class TelaConfig : AppCompatActivity() {
+class TelaConfig : BaseActivity() {
     private lateinit var profileImage: ImageView
     private lateinit var perfilNome: TextView
     private lateinit var personalInfo: TextView

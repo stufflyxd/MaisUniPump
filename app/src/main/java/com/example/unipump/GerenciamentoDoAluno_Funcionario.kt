@@ -18,7 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
 
-class GerenciamentoDoAluno_Funcionario : AppCompatActivity(),
+class GerenciamentoDoAluno_Funcionario : BaseActivity(),
     FichaTreinoAdapter.OnFichaTreinoClickListener {
 
 
@@ -546,7 +546,7 @@ import com.example.unipump.models.FichaTreino
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 
-class GerenciamentoDoAluno_Funcionario : AppCompatActivity(),
+class GerenciamentoDoAluno_Funcionario : ,
     FichaTreinoAdapter.OnFichaTreinoClickListener {
 
     private lateinit var linkAdicionar: TextView

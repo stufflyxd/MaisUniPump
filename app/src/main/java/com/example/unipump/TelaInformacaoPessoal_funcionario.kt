@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 
-class TelaInformacaoPessoal_funcionario : AppCompatActivity() {
+class TelaInformacaoPessoal_funcionario : BaseActivity() {
 
     // Views
     private lateinit var nomeUsuarioEt: EditText

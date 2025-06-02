@@ -15,7 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 // import com.example.unipump.util.ThemePreferenceManager
 // Removido import não utilizado: com.google.android.material.bottomnavigation.BottomNavigationView
 
-class TelaPref : AppCompatActivity() {
+class TelaPref : BaseActivity() {
 
     private lateinit var backButton: ImageView
     private lateinit var languageOption: TextView

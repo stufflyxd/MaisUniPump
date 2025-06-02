@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
-class TelaExercicio2 : AppCompatActivity() {
+class TelaExercicio2 : BaseActivity() {
 
     private lateinit var voltar: Button
 
