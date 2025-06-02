@@ -42,7 +42,7 @@ class TelaTreinoAluno : BaseActivity() {
         nomeUser       = findViewById(R.id.nomeUser)
         btnNotificacao = findViewById(R.id.btn_notificacao)
         btnNotificacao.setOnClickListener {
-            startActivity(Intent(this, TelaNotificacao_funcionario::class.java))
+            startActivity(Intent(this, TelaNotificacaoAluno::class.java))
         }
 
         // 2) RecyclerView + Adapter
@@ -88,9 +88,19 @@ class TelaTreinoAluno : BaseActivity() {
     /** Garante que nome e avatar sejam carregados igual ao TelaConfig */
     private fun carregarPerfil() {
         val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
-        val uid   = prefs.getString("alunoDocId", null) ?: return
-        val nome  = prefs.getString("nome", "Usuário") ?: "Usuário"
-        nomeUser.text = "Olá, $nome!"
+        val uid = prefs.getString("alunoDocId", null) ?: return
+
+
+        val nome = prefs.getString("nome", "Usuario") ?: "Usuario"
+        val nomeUsuario = prefs.getString("nome_usuario", "") ?: ""
+
+        // Prioridade: nome_usuario se não estiver vazio, senão nome
+        nomeUser.text = if (nomeUsuario.isNotBlank()) {
+            "Olá, $nomeUsuario!"
+        } else {
+            "Olá, $nome!"
+        }
+
 
         db.collection("alunos").document(uid)
             .get()

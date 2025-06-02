@@ -40,6 +40,19 @@ class TelaNotificacao_funcionario : BaseActivity() {
         setupRecyclerView()
         carregarNotificacoes()
 
+
+        btnNavegacao.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_inicio ->
+                    startActivity(Intent(this, TelaFuncionario::class.java)).run { true }
+                R.id.nav_chat ->
+                    startActivity(Intent(this, TelaChat::class.java)).run { true }
+                R.id.nav_config ->
+                    startActivity(Intent(this, TelaConfiguracao_Funcionario::class.java)).run { true }
+                else -> false
+            }
+        }
+
         // Definindo o clique do botão de voltar
         btnSetaVoltar.setOnClickListener {
             finish()

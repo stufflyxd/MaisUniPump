@@ -64,13 +64,25 @@ class TelaFuncionario : BaseActivity() {
         val db = FirebaseFirestore.getInstance()
         val prefs = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
 
-        // Carregar nome
+
+        val nome = prefs.getString("nome", "Usuario") ?: "Usuario"
+        val nomeUsuario = prefs.getString("nome_usuario", "") ?: ""
+
+        // Prioridade: nome_usuario se não estiver vazio, senão nome
+        nomeUser.text = if (nomeUsuario.isNotBlank()) {
+            "Bem Vindo, \n $nomeUsuario!"
+        } else {
+            "Bem Vindo, \n $nome!"
+        }
+
+
+        /*// Carregar nome
         val nome = prefs.getString("nome_usuario", "Usuário")
-        nomeUser.text = "Bem Vindo, \n $nome!"
+        nomeUser.text = "Bem Vindo, \n $nome!"*/
 
         // CORREÇÃO: Buscar a chave correta do funcionário
         val funcionarioDocId = prefs.getString("funcionarioDocId", null)
-            ?: prefs.getString("alunoDocId", null)  // Fallback caso esteja salvo como alunoDocId
+           /* ?: prefs.getString("alunoDocId", null)*/  // Fallback caso esteja salvo como alunoDocId
 
         if (funcionarioDocId == null) {
             Log.e("FUNCIONARIO_CONFIG", "ID do funcionário não encontrado")

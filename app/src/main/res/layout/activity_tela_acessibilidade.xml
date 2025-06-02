@@ -5,6 +5,193 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/BACKGROUND"
+    tools:context=".TelaAcessibilidade">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/SetaVoltar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back"
+            style="@style/ICON"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Botao voltar" />
+
+        <TextView
+            android:id="@+id/title_acessibilidade"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Acessibilidade"
+            style="@style/TEXTCOLOR"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="48dp"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider_header"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- CORRIGIDO: LinearLayout estava na mesma linha que a View acima -->
+    <LinearLayout
+        android:id="@+id/font_selection_section"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/divider_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/font_selection_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fonte do Aplicativo"
+            style="@style/TEXTCOLOR"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"/>
+
+        <RadioGroup
+            android:id="@+id/font_selection_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_default_font"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Padrão do Sistema"
+                style="@style/TEXTCOLOR"
+                android:textSize="16sp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_helvetica"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Helvetica"
+                style="@style/TEXTCOLOR"
+                android:textSize="16sp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_verdana"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Verdana"
+                style="@style/TEXTCOLOR"
+                android:textSize="16sp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_minecraft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Minecraft"
+                style="@style/TEXTCOLOR"
+                android:textSize="16sp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_monsieur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Monsieur"
+                style="@style/TEXTCOLOR"
+                android:textSize="16sp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_nabla"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nabla"
+                style="@style/TEXTCOLOR"
+                android:textSize="16sp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_redacted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Redacted"
+                style="@style/TEXTCOLOR"
+                android:textSize="16sp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginBottom="8dp"/>
+
+        </RadioGroup>
+
+        <!-- ADICIONADO: Texto informativo -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A fonte será aplicada imediatamente após a seleção."
+            style="@style/TEXTCOLORSECONDARY"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     style="@style/BACKGROUND" tools:context=".TelaAcessibilidade">
 
     <LinearLayout
@@ -153,4 +340,4 @@
     </RadioGroup>
 </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>-->

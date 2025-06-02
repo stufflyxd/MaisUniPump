@@ -1,7 +1,134 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
     <style name="Base.Theme.UniPump" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/blue</item>
+        <item name="colorSecondaryVariant">@color/red</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- FONTE PADRÃO CONSISTENTE -->
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- Tema padrão (deve sempre existir) -->
+    <style name="Theme.UniPump" parent="Base.Theme.UniPump" />
+
+    <!-- Temas de fonte CONSISTENTES (mesmos nomes do light theme) -->
+    <style name="Theme.Fonte.Default" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Theme.Fonte.Helvetica" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/helveticaroundedbold</item>
+    </style>
+
+    <style name="Theme.Fonte.Verdana" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/verdanafont</item>
+    </style>
+
+    <style name="Theme.Fonte.Minecraft" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/minecraftmojangles</item>
+    </style>
+
+    <style name="Theme.Fonte.Monsieur" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/monsieurdadoulaise</item>
+    </style>
+
+    <style name="Theme.Fonte.Nabla" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/nablaregular</item>
+    </style>
+
+    <style name="Theme.Fonte.Redacted" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/redactedscript</item>
+    </style>
+
+    <!-- Estilos do tema escuro -->
+    <style name="BACKGROUND">
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorOnBackground">#B31010</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="BACKGROUNDTINT">
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/gray_line</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
+    <style name="TEXTCOLOR">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TEXTCOLORSECONDARY">
+        <item name="android:textColor">@color/gray_line</item>
+    </style>
+
+    <style name="TEXTCOLORLINK">
+        <item name="android:textColor">@color/azul_link</item>
+    </style>
+
+    <style name="TEXTCOLORBLUE">
+        <item name="android:textColor">#425FFD</item>
+    </style>
+
+    <style name="CARDBACKGROUND">
+        <item name="cardBackgroundColor">@color/field_background</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/field_background</item>
+    </style>
+
+    <style name="CONTEINERBACKGROUND">
+        <item name="android:backgroundTint">@color/dark_gray2</item>
+        <item name="android:calendarTextColor">@color/white</item>
+        <item name="android:background">@color/dark_gray2</item>
+    </style>
+
+    <style name="TEXTBOX">
+        <item name="android:backgroundTint">@color/field_background</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:drawableTint">@color/white</item>
+    </style>
+
+    <style name="BOTAO">
+        <item name="backgroundTint">@color/blue</item>
+    </style>
+
+    <style name="BOTAOBACK">
+        <item name="backgroundTint">@color/invisivel</item>
+    </style>
+
+    <style name="ICON">
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:drawableTint">@color/white</item>
+        <item name="android:background">@color/invisivel</item>
+    </style>
+
+</resources>
+
+
+
+
+<!--
+
+
+
+
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    &lt;!&ndash; Base application theme. &ndash;&gt;
+    <style name="Base.Theme.UniPump" parent="Theme.Material3.DayNight.NoActionBar">
+        &lt;!&ndash; Customize your dark theme here. &ndash;&gt;
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -16,7 +143,7 @@
 
     </style>
 
-    <!-- Temas de fonte -->
+    &lt;!&ndash; Temas de fonte &ndash;&gt;
     <style name="Fonte.Default" parent="Base.Theme.UniPump">
         <item name="android:fontFamily">@font/default_app_font</item>
         <item name="appFontFamily">@font/default_app_font</item>
@@ -124,3 +251,4 @@
     </style>
 
 </resources>
+-->

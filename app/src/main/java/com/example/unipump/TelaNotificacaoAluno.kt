@@ -1,5 +1,6 @@
 package com.example.unipump
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unipump.adapters.NotificacoesAlunoAdapter
 import com.example.unipump.models.NotificacaoAlunoModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
@@ -17,6 +19,7 @@ class TelaNotificacaoAluno : BaseActivity() {
     private lateinit var btnSetaVoltar: ImageButton
     private lateinit var recyclerNotificacoes: RecyclerView
     private lateinit var textSemNotificacoes: TextView
+    private lateinit var bottomNav: BottomNavigationView
 
     private val db = FirebaseFirestore.getInstance()
     private lateinit var notificacoesAlunoAdapter: NotificacoesAlunoAdapter
@@ -35,6 +38,21 @@ class TelaNotificacaoAluno : BaseActivity() {
 
         btnSetaVoltar.setOnClickListener {
             finish()
+        }
+
+        bottomNav = findViewById(R.id.bottom_navigation)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_inicio ->
+                    startActivity(Intent(this, TelaPrincipalAluno::class.java)).run { true }
+                R.id.nav_treinos ->
+                    startActivity(Intent(this, TelaTreinoAluno::class.java)).run {true}
+                R.id.nav_chat ->
+                    startActivity(Intent(this, TelaChat::class.java)).run { true }
+                R.id.nav_config ->
+                    startActivity(Intent(this, TelaConfig::class.java)).run { true }
+                else -> false
+            }
         }
     }
 

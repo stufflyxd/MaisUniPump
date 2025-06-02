@@ -27,11 +27,10 @@
                 android:id="@+id/profile_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:background="@drawable/ic_person"
+                android:src="@drawable/ic_person"
                 android:contentDescription="Profile picture"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_person"
-                style="@style/ICON"/>
+                android:background="@drawable/circle_background" />
 
             <!-- Profile Name -->
             <LinearLayout

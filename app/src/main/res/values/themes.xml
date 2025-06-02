@@ -1,8 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- REMOVI A LINHA: <attr name="appFontFamily" format="reference" /> -->
-    <!-- Ela já existe em attrs.xml -->
-
     <!-- Base application theme. -->
     <style name="Base.Theme.UniPump" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -13,11 +10,19 @@
         <item name="colorSecondaryVariant">@color/red</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- FONTE PADRÃO DO SISTEMA -->
+
+        <!-- FONTE PADRÃO CONSISTENTE -->
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
-    <!-- Temas de fonte -->
+    <!-- Tema padrão (deve sempre existir) -->
+    <style name="Theme.UniPump" parent="Base.Theme.UniPump" />
+
+    <!-- Temas de fonte CONSISTENTES -->
+    <style name="Theme.Fonte.Default" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
     <style name="Theme.Fonte.Helvetica" parent="Base.Theme.UniPump">
         <item name="android:fontFamily">@font/helveticaroundedbold</item>
     </style>
@@ -106,3 +111,115 @@
     </style>
 
 </resources>
+
+
+
+<!--
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    &lt;!&ndash; REMOVI A LINHA: <attr name="appFontFamily" format="reference" /> &ndash;&gt;
+    &lt;!&ndash; Ela já existe em attrs.xml &ndash;&gt;
+
+    &lt;!&ndash; Base application theme. &ndash;&gt;
+    <style name="Base.Theme.UniPump" parent="Theme.Material3.DayNight.NoActionBar">
+        &lt;!&ndash; Customize your light theme here. &ndash;&gt;
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/blue</item>
+        <item name="colorSecondaryVariant">@color/red</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        &lt;!&ndash; FONTE PADRÃO DO SISTEMA &ndash;&gt;
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    &lt;!&ndash; Temas de fonte &ndash;&gt;
+    <style name="Theme.Fonte.Helvetica" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/helveticaroundedbold</item>
+    </style>
+
+    <style name="Theme.Fonte.Verdana" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/verdanafont</item>
+    </style>
+
+    <style name="Theme.Fonte.Minecraft" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/minecraftmojangles</item>
+    </style>
+
+    <style name="Theme.Fonte.Monsieur" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/monsieurdadoulaise</item>
+    </style>
+
+    <style name="Theme.Fonte.Nabla" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/nablaregular</item>
+    </style>
+
+    <style name="Theme.Fonte.Redacted" parent="Base.Theme.UniPump">
+        <item name="android:fontFamily">@font/redactedscript</item>
+    </style>
+
+    &lt;!&ndash; Outros estilos mantidos &ndash;&gt;
+    <style name="BACKGROUND">
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorOnBackground">#FFFFFF</item>
+        <item name="android:background">#EFEFFA</item>
+    </style>
+
+    <style name="BACKGROUNDTINT">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/cinza_medio</item>
+        <item name="android:textColorHint">@color/black</item>
+    </style>
+
+    <style name="TEXTCOLOR">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TEXTCOLORSECONDARY">
+        <item name="android:textColor">@color/cinza_medio</item>
+    </style>
+
+    <style name="TEXTCOLORLINK">
+        <item name="android:textColor">@color/azul</item>
+    </style>
+
+    <style name="TEXTCOLORBLUE">
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
+    <style name="CARDBACKGROUND">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="CONTEINERBACKGROUND">
+        <item name="android:backgroundTint">@color/azul_arroxeado</item>
+        <item name="android:calendarTextColor">@color/black</item>
+        <item name="android:background">@color/azul_arroxeado</item>
+    </style>
+
+    <style name="TEXTBOX">
+        <item name="android:backgroundTint">@color/cinza</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="itemIconTint">@color/black</item>
+        <item name="itemTextColor">@color/black</item>
+        <item name="android:tint">@color/black</item>
+        <item name="android:drawableTint">@color/black</item>
+    </style>
+
+    <style name="BOTAO">
+        <item name="backgroundTint">@color/blue</item>
+    </style>
+
+    <style name="ICON">
+        <item name="itemIconTint">@color/black</item>
+        <item name="itemTextColor">@color/black</item>
+        <item name="android:tint">@color/black</item>
+        <item name="android:drawableTint">@color/black</item>
+        <item name="android:background">@color/invisivel</item>
+    </style>
+
+</resources>-->

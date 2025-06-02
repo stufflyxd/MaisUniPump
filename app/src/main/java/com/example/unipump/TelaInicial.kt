@@ -60,40 +60,72 @@ class TelaInicial : BaseActivity() {
 
     private fun verificarUsuarioLogado() {
         val usuarioAtual = auth.currentUser
+        Log.d("AutoLogin", "Usuário atual: ${usuarioAtual?.email}")
 
         if (usuarioAtual != null) {
             // Verifica nas duas SharedPreferences possíveis
             val prefsAluno = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
             val prefsFuncionario = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
 
+            // Log para debug das preferências
             val tipoAluno = prefsAluno.getString("tipo", null)
             val tipoFuncionario = prefsFuncionario.getString("tipo", null)
+            val uidAluno = prefsAluno.getString("uid", null)
+            val uidFuncionario = prefsFuncionario.getString("uid", null)
+            val alunoDocId = prefsAluno.getString("alunoDocId", null)
+            val funcionarioDocId = prefsFuncionario.getString("funcionarioDocId", null)
 
-            when {
-                tipoAluno == "aluno" -> {
-                    Log.d("AutoLogin", "Redirecionando para TelaPrincipalAluno")
-                    val intent = Intent(this, TelaPrincipalAluno::class.java)
-                    startActivity(intent)
-                    finish() // Encerra esta activity
-                }
-                tipoFuncionario == "funcionario" -> {
-                    Log.d("AutoLogin", "Redirecionando para TelaFuncionario")
-                    val intent = Intent(this, TelaFuncionario::class.java)
-                    startActivity(intent)
-                    finish() // Encerra esta activity
-                }
-                else -> {
-                    // Usuário logado mas sem dados salvos - força logout
-                    Log.d("AutoLogin", "Usuário sem dados salvos - fazendo logout")
-                    auth.signOut()
-                    limparPreferencias()
-                }
+            Log.d("AutoLogin", "=== DEBUG DAS PREFERÊNCIAS ===")
+            Log.d("AutoLogin", "tipoAluno: $tipoAluno")
+            Log.d("AutoLogin", "tipoFuncionario: $tipoFuncionario")
+            Log.d("AutoLogin", "uidAluno: $uidAluno")
+            Log.d("AutoLogin", "uidFuncionario: $uidFuncionario")
+            Log.d("AutoLogin", "alunoDocId: $alunoDocId")
+            Log.d("AutoLogin", "funcionarioDocId: $funcionarioDocId")
+
+            // Verifica se é aluno
+            if (tipoAluno == "aluno" && !uidAluno.isNullOrEmpty() && !alunoDocId.isNullOrEmpty()) {
+                Log.d("AutoLogin", "Redirecionando para TelaPrincipalAluno")
+                val intent = Intent(this, TelaPrincipalAluno::class.java)
+                startActivity(intent)
+                finish()
+                return
             }
+
+            // Verifica se é funcionário
+            if (tipoFuncionario == "funcionario" && !uidFuncionario.isNullOrEmpty() && !funcionarioDocId.isNullOrEmpty()) {
+                Log.d("AutoLogin", "Redirecionando para TelaFuncionario")
+                val intent = Intent(this, TelaFuncionario::class.java)
+                startActivity(intent)
+                finish()
+                return
+            }
+
+            // VERIFICAÇÃO ADICIONAL: Talvez os dados estejam salvos na preferência "errada"
+            // Verifica se tem dados de funcionário em alunoPrefs (possível erro de salvamento)
+            val tipoEmAlunoPrefs = prefsAluno.getString("tipo", null)
+            val funcionarioDocIdEmAlunoPrefs = prefsAluno.getString("funcionarioDocId", null)
+
+            if (tipoEmAlunoPrefs == "funcionario" && !funcionarioDocIdEmAlunoPrefs.isNullOrEmpty()) {
+                Log.d("AutoLogin", "Encontrados dados de funcionário em alunoPrefs - Redirecionando")
+                val intent = Intent(this, TelaFuncionario::class.java)
+                startActivity(intent)
+                finish()
+                return
+            }
+
+            // Se chegou até aqui, há usuário logado mas dados incompletos/corrompidos
+            Log.d("AutoLogin", "Usuário logado mas dados incompletos - fazendo logout")
+            auth.signOut()
+            limparPreferencias()
+        } else {
+            Log.d("AutoLogin", "Nenhum usuário logado")
         }
         // Se não há usuário logado, permanece na tela inicial normalmente
     }
 
     private fun limparPreferencias() {
+        Log.d("AutoLogin", "Limpando todas as preferências")
         val prefsAluno = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
         val prefsFuncionario = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
 

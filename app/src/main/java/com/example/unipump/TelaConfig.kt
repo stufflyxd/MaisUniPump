@@ -6,13 +6,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,7 +26,7 @@ class TelaConfig : BaseActivity() {
     private lateinit var profileImage: ImageView
     private lateinit var perfilNome: TextView
     private lateinit var personalInfo: TextView
-    private lateinit var solicitarFicha: TextView // Mudança aqui
+    private lateinit var solicitarFicha: TextView
     private lateinit var preferences: TextView
     private lateinit var acessibilidade: TextView
     private lateinit var support: TextView
@@ -34,7 +34,10 @@ class TelaConfig : BaseActivity() {
     private lateinit var bottomNavigationView: BottomNavigationView
 
     private val auth = FirebaseAuth.getInstance()
-    private val db   = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+
+    // Variável para controlar o tema atual
+    private var currentFontTheme: Int = -1
 
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -42,16 +45,20 @@ class TelaConfig : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Guardar o tema atual
+        currentFontTheme = FontPreferenceManager.getSelectedFontTheme(this)
+
         setContentView(R.layout.activity_tela_config)
 
-        profileImage         = findViewById(R.id.profile_image)
-        perfilNome           = findViewById(R.id.perfil_nome)
-        personalInfo         = findViewById(R.id.personal_info)
-        solicitarFicha       = findViewById(R.id.solicitar_ficha) // Mudança aqui
-        preferences          = findViewById(R.id.preferences)
-        acessibilidade       = findViewById(R.id.acessibilidade)
-        support              = findViewById(R.id.support)
-        logoutButton         = findViewById(R.id.deslogar)
+        profileImage = findViewById(R.id.profile_image)
+        perfilNome = findViewById(R.id.perfil_nome)
+        personalInfo = findViewById(R.id.personal_info)
+        solicitarFicha = findViewById(R.id.solicitar_ficha)
+        preferences = findViewById(R.id.preferences)
+        acessibilidade = findViewById(R.id.acessibilidade)
+        support = findViewById(R.id.support)
+        logoutButton = findViewById(R.id.deslogar)
         bottomNavigationView = findViewById(R.id.bottom_navigation)
 
         val user = auth.currentUser
@@ -77,7 +84,6 @@ class TelaConfig : BaseActivity() {
             startActivity(Intent(this, TelaInformacoesPessoaisAluno::class.java))
         }
 
-        // Nova funcionalidade para solicitar ficha
         solicitarFicha.setOnClickListener {
             mostrarDialogSolicitarFicha()
         }
@@ -85,18 +91,22 @@ class TelaConfig : BaseActivity() {
         preferences.setOnClickListener {
             startActivity(Intent(this, TelaPref::class.java))
         }
+
         acessibilidade.setOnClickListener {
             startActivity(Intent(this, TelaAcessibilidade::class.java))
         }
+
         support.setOnClickListener {
             startActivity(Intent(this, TelaChat::class.java))
         }
+
         logoutButton.setOnClickListener {
             mostrarDialogLogout()
         }
+
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_inicio  -> {
+                R.id.nav_inicio -> {
                     startActivity(Intent(this, TelaPrincipalAluno::class.java))
                     true
                 }
@@ -104,13 +114,23 @@ class TelaConfig : BaseActivity() {
                     startActivity(Intent(this, TelaTreinoAluno::class.java))
                     true
                 }
-                R.id.nav_chat    -> {
+                R.id.nav_chat -> {
                     startActivity(Intent(this, TelaChat::class.java))
                     true
                 }
-                R.id.nav_config  -> true
-                else             -> false
+                R.id.nav_config -> true
+                else -> false
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Verifica se o tema da fonte mudou enquanto estava em outra tela
+        val savedFontTheme = FontPreferenceManager.getSelectedFontTheme(this)
+        if (savedFontTheme != currentFontTheme) {
+            recreate()
         }
     }
 
@@ -118,24 +138,57 @@ class TelaConfig : BaseActivity() {
         val alunoDocId = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
             .getString("alunoDocId", null) ?: return
 
+        Log.d("TelaConfig", "Carregando dados do aluno: $alunoDocId")
+
         db.collection("alunos").document(alunoDocId)
             .get()
             .addOnSuccessListener { doc ->
-                perfilNome.text = doc.getString("nome") ?: "Usuário"
+                val nome = doc.getString("nome") ?: "Usuário"
+                val nomeUsuario = doc.getString("nome_usuario") ?: ""
+
+                // Prioridade: nome_usuario se não estiver vazio, senão nome
+                perfilNome.text = if (nomeUsuario.isNotBlank()) {
+                    nomeUsuario
+                } else {
+                    nome
+                }
+
                 val path = doc.getString("uri_foto")
+                Log.d("TelaConfig", "Caminho da foto no banco: $path")
+
                 if (!path.isNullOrBlank()) {
                     val file = File(path)
+                    Log.d("TelaConfig", "Arquivo existe? ${file.exists()}")
+                    Log.d("TelaConfig", "Caminho completo: ${file.absolutePath}")
+
                     if (file.exists()) {
+                        Log.d("TelaConfig", "Carregando foto com Glide...")
+
+                        // Limpar qualquer imagem anterior
+                        profileImage.setImageDrawable(null)
+
                         Glide.with(this)
                             .load(file)
+                            .placeholder(R.drawable.ic_person)
+                            .error(R.drawable.ic_person)
                             .circleCrop()
                             .skipMemoryCache(true)
                             .into(profileImage)
+
+                        Log.d("TelaConfig", "Comando Glide executado!")
+                    } else {
+                        Log.w("TelaConfig", "Arquivo da foto não encontrado! Usando placeholder")
+                        profileImage.setImageResource(R.drawable.ic_person)
                     }
+                } else {
+                    Log.d("TelaConfig", "Nenhuma foto salva no banco. Usando placeholder")
+                    profileImage.setImageResource(R.drawable.ic_person)
                 }
             }
-            .addOnFailureListener {
+            .addOnFailureListener { exception ->
+                Log.e("TelaConfig", "Erro ao carregar perfil", exception)
                 Toast.makeText(this, "Erro ao carregar perfil", Toast.LENGTH_SHORT).show()
+                profileImage.setImageResource(R.drawable.ic_person)
             }
     }
 
@@ -151,13 +204,17 @@ class TelaConfig : BaseActivity() {
             }
         }
 
+        // 🎯 NOVO: Limpar imagem anterior antes de carregar nova
+        profileImage.setImageDrawable(null)
+
         Glide.with(this)
             .load(destFile)
+            .placeholder(R.drawable.ic_person)
+            .error(R.drawable.ic_person)
             .circleCrop()
             .skipMemoryCache(true)
             .into(profileImage)
 
-        // Apaga arquivo antigo se existir
         db.collection("alunos").document(alunoDocId)
             .get()
             .addOnSuccessListener { doc ->
@@ -217,13 +274,11 @@ class TelaConfig : BaseActivity() {
         val alunoDocId = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
             .getString("alunoDocId", null) ?: return
 
-        // Buscar dados do aluno
         db.collection("alunos").document(alunoDocId)
             .get()
             .addOnSuccessListener { alunoDoc ->
                 val nomeAluno = alunoDoc.getString("nome") ?: "Usuário"
 
-                // Criar notificação
                 val notificacao = hashMapOf(
                     "tipo" to "solicitacao_ficha",
                     "alunoId" to alunoDocId,
@@ -233,7 +288,6 @@ class TelaConfig : BaseActivity() {
                     "lida" to false
                 )
 
-                // Salvar notificação no Firestore
                 db.collection("notificacoes_funcionario")
                     .add(notificacao)
                     .addOnSuccessListener {
@@ -279,17 +333,14 @@ class TelaConfig : BaseActivity() {
         btnConfirmar.setOnClickListener {
             dialog.dismiss()
 
-            // Logout do Firebase
             auth.signOut()
 
-            // Limpar apenas dados sensíveis (opcional - pode comentar se não quiser limpar)
             val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
             prefs.edit()
                 .remove("uid")
                 .remove("alunoDocId")
                 .apply()
 
-            // Navegar corretamente para TelaLogin
             val intent = Intent(this@TelaConfig, TelaLogin::class.java).apply {
                 putExtra("tipo", "aluno")
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

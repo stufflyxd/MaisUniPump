@@ -24,7 +24,7 @@ class TelaRelatorioSemanal : BaseActivity() {
     private lateinit var tvKcal: TextView
     private lateinit var tvMinutos: TextView
     private lateinit var calendar: MaterialCalendarView
-    private lateinit var todosReg: TextView
+    /*private lateinit var todosReg: TextView*/
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -37,12 +37,12 @@ class TelaRelatorioSemanal : BaseActivity() {
         tvKcal    = findViewById(R.id.tvKcalCount)
         tvMinutos = findViewById(R.id.tvMinutosCount)
         calendar  = findViewById(R.id.calendar_view)
-        todosReg  = findViewById(R.id.todosRegistros)
-
+        /*todosReg  = findViewById(R.id.todosRegistros)
+*/
         btnVoltar.setOnClickListener { finish() }
-        todosReg.setOnClickListener {
+        /*todosReg.setOnClickListener {
             startActivity(Intent(this, TelaDadosDeTreino::class.java))
-        }
+        }*/
 
         setupBottomNav()
         carregarResumoMes()

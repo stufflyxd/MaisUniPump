@@ -105,8 +105,18 @@ class TelaPrincipalAluno : BaseActivity() {
     private fun carregarPerfil() {
         val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
         val uid = prefs.getString("alunoDocId", null) ?: return
-        val nome = prefs.getString("nome", "Usuário") ?: "Usuário"
-        nomeUser.text = "Olá, $nome!"
+
+
+        val nome = prefs.getString("nome", "Usuario") ?: "Usuario"
+        val nomeUsuario = prefs.getString("nome_usuario", "") ?: ""
+
+        // Prioridade: nome_usuario se não estiver vazio, senão nome
+        nomeUser.text = if (nomeUsuario.isNotBlank()) {
+            "Olá, $nomeUsuario!"
+        } else {
+            "Olá, $nome!"
+        }
+
 
         db.collection("alunos").document(uid)
             .get()

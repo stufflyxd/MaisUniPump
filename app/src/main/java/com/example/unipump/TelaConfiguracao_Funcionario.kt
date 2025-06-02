@@ -1,12 +1,12 @@
 package com.example.unipump
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -42,6 +41,9 @@ class TelaConfiguracao_Funcionario : BaseActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
+    // Variável para controlar o tema atual
+    private var currentFontTheme: Int = -1
+
     // Launcher para seleção de imagem
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -49,8 +51,19 @@ class TelaConfiguracao_Funcionario : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Guardar o tema atual
+        currentFontTheme = FontPreferenceManager.getSelectedFontTheme(this)
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_tela_configuracao_funcionario)
+
+        // Configurar edge-to-edge (se você usa)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         // Inicializar componentes
         profileImage = findViewById(R.id.profile_image)
@@ -89,17 +102,21 @@ class TelaConfiguracao_Funcionario : BaseActivity() {
 
         // Configurar outros cliques
         personalInfo.setOnClickListener {
-            val intent = Intent(this, TelaInformacaoPessoal_funcionario::class.java)
-            startActivity(intent)
-        }
-
-        logoutButton.setOnClickListener {
-            mostrarDialogLogout()
+            try {
+                val intent = Intent(this, TelaInformacaoPessoal_funcionario::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Tela não disponível", Toast.LENGTH_SHORT).show()
+            }
         }
 
         preferences.setOnClickListener {
-            val intent = Intent(this, TelaPref::class.java)
-            startActivity(intent)
+            try {
+                val intent = Intent(this, TelaPref::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Tela não disponível", Toast.LENGTH_SHORT).show()
+            }
         }
 
         acessibilidade.setOnClickListener {
@@ -107,8 +124,16 @@ class TelaConfiguracao_Funcionario : BaseActivity() {
         }
 
         support.setOnClickListener {
-            val intent = Intent(this, TelaChat::class.java)
-            startActivity(intent)
+            try {
+                val intent = Intent(this, TelaChat::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Tela não disponível", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        logoutButton.setOnClickListener {
+            mostrarDialogLogout()
         }
 
         // Configurar bottom navigation
@@ -132,68 +157,143 @@ class TelaConfiguracao_Funcionario : BaseActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // Verifica se o tema da fonte mudou enquanto estava em outra tela
+        val savedFontTheme = FontPreferenceManager.getSelectedFontTheme(this)
+        if (savedFontTheme != currentFontTheme) {
+            recreate()
+        }
+    }
+
     private fun carregarDadosFuncionario() {
-        val funcionarioDocId = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
-            .getString("alunoDocId", null) ?: return
+        val prefs = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
+        val funcionarioDocId = prefs.getString("funcionarioDocId", null)
+
+        Log.d("TelaConfigFuncionario", "ID do funcionário: $funcionarioDocId")
+
+        if (funcionarioDocId == null) {
+            Log.e("TelaConfigFuncionario", "ID do funcionário não encontrado nas preferências")
+            perfilNome.text = "Funcionário"
+            profileImage.setImageResource(R.drawable.ic_person)
+            return
+        }
 
         db.collection("funcionarios").document(funcionarioDocId)
             .get()
             .addOnSuccessListener { doc ->
-                perfilNome.text = doc.getString("nome") ?: "Funcionário"
-                val path = doc.getString("uri_foto")
-                if (!path.isNullOrBlank()) {
-                    val file = File(path)
-                    if (file.exists()) {
-                        Glide.with(this)
-                            .load(file)
-                            .circleCrop()
-                            .skipMemoryCache(true)
-                            .into(profileImage)
+                Log.d("TelaConfigFuncionario", "Documento existe: ${doc.exists()}")
+
+                if (doc.exists()) {
+                    /*perfilNome.text = doc.getString("nome") ?: "Funcionário"*/
+                    val nome = doc.getString("nome") ?: "Funcionário"
+                    val nomeUsuario = doc.getString("nome_usuario") ?: ""
+
+                    // Prioridade: nome_usuario se não estiver vazio, senão nome
+                    perfilNome.text = if (nomeUsuario.isNotBlank()) {
+                        nomeUsuario
+                    } else {
+                        nome
                     }
+
+
+                    val path = doc.getString("uri_foto")
+                    Log.d("TelaConfigFuncionario", "Caminho da foto no banco: $path")
+
+                    if (!path.isNullOrBlank()) {
+                        val file = File(path)
+                        Log.d("TelaConfigFuncionario", "Arquivo existe? ${file.exists()}")
+                        Log.d("TelaConfigFuncionario", "Caminho completo: ${file.absolutePath}")
+
+                        if (file.exists()) {
+                            Log.d("TelaConfigFuncionario", "Carregando foto com Glide...")
+
+                            // 🎯 NOVO: Limpar qualquer imagem anterior
+                            profileImage.setImageDrawable(null)
+
+                            Glide.with(this)
+                                .load(file)
+                                .placeholder(R.drawable.ic_person) // Placeholder enquanto carrega
+                                .error(R.drawable.ic_person) // Imagem de erro
+                                .circleCrop()
+                                .skipMemoryCache(true)
+                                .into(profileImage)
+
+                            Log.d("TelaConfigFuncionario", "Comando Glide executado!")
+                        } else {
+                            Log.w("TelaConfigFuncionario", "Arquivo da foto não encontrado! Usando placeholder")
+                            profileImage.setImageResource(R.drawable.ic_person)
+                        }
+                    } else {
+                        Log.d("TelaConfigFuncionario", "Nenhuma foto salva no banco. Usando placeholder")
+                        profileImage.setImageResource(R.drawable.ic_person)
+                    }
+                } else {
+                    Log.e("TelaConfigFuncionario", "Documento do funcionário não encontrado!")
+                    perfilNome.text = "Funcionário"
+                    profileImage.setImageResource(R.drawable.ic_person)
                 }
             }
-            .addOnFailureListener {
+            .addOnFailureListener { exception ->
+                Log.e("TelaConfigFuncionario", "Erro ao carregar perfil", exception)
                 Toast.makeText(this, "Erro ao carregar perfil", Toast.LENGTH_SHORT).show()
+                profileImage.setImageResource(R.drawable.ic_person)
             }
     }
 
     private fun onImagePicked(uri: Uri) {
-        val funcionarioDocId = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
-            .getString("alunoDocId", null) ?: return
+        val prefs = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
+        val funcionarioDocId = prefs.getString("funcionarioDocId", null)
+
+        if (funcionarioDocId == null) {
+            Toast.makeText(this, "Erro: ID do funcionário não encontrado", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val destFile = File(filesDir, "profile_${UUID.randomUUID()}_$funcionarioDocId.jpg")
 
-        contentResolver.openInputStream(uri)?.use { input ->
-            FileOutputStream(destFile).use { output ->
-                input.copyTo(output)
-            }
-        }
-
-        Glide.with(this)
-            .load(destFile)
-            .circleCrop()
-            .skipMemoryCache(true)
-            .into(profileImage)
-
-        // Apaga arquivo antigo se existir
-        db.collection("funcionarios").document(funcionarioDocId)
-            .get()
-            .addOnSuccessListener { doc ->
-                val oldPath = doc.getString("uri_foto")
-                oldPath?.let {
-                    val oldFile = File(it)
-                    if (oldFile.exists()) oldFile.delete()
+        try {
+            contentResolver.openInputStream(uri)?.use { input ->
+                FileOutputStream(destFile).use { output ->
+                    input.copyTo(output)
                 }
-
-                db.collection("funcionarios").document(funcionarioDocId)
-                    .update("uri_foto", destFile.absolutePath)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Foto salva no perfil", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { ex ->
-                        Toast.makeText(this, "Erro ao salvar perfil: ${ex.message}", Toast.LENGTH_LONG).show()
-                    }
             }
+
+            // 🎯 NOVO: Limpar imagem anterior antes de carregar nova
+            profileImage.setImageDrawable(null)
+
+            Glide.with(this)
+                .load(destFile)
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .circleCrop()
+                .skipMemoryCache(true)
+                .into(profileImage)
+
+            // Apaga arquivo antigo se existir
+            db.collection("funcionarios").document(funcionarioDocId)
+                .get()
+                .addOnSuccessListener { doc ->
+                    val oldPath = doc.getString("uri_foto")
+                    oldPath?.let {
+                        val oldFile = File(it)
+                        if (oldFile.exists()) oldFile.delete()
+                    }
+
+                    db.collection("funcionarios").document(funcionarioDocId)
+                        .update("uri_foto", destFile.absolutePath)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Foto salva no perfil", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { ex ->
+                            Toast.makeText(this, "Erro ao salvar perfil: ${ex.message}", Toast.LENGTH_LONG).show()
+                        }
+                }
+        } catch (e: Exception) {
+            Log.e("TelaConfigFuncionario", "Erro ao processar imagem", e)
+            Toast.makeText(this, "Erro ao processar imagem", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -210,41 +310,46 @@ class TelaConfiguracao_Funcionario : BaseActivity() {
     }
 
     private fun mostrarDialogLogout() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_quit_layout, null)
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
+        try {
+            val dialogView = layoutInflater.inflate(R.layout.dialog_quit_layout, null)
+            val dialog = AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create()
 
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.show()
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.show()
 
-        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
-        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
+            val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
+            val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
 
-        btnCancelar.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnConfirmar.setOnClickListener {
-            dialog.dismiss()
-
-            // Logout do Firebase
-            auth.signOut()
-
-            // Limpar apenas dados sensíveis (opcional)
-            val prefs = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
-            prefs.edit()
-                .remove("uid")
-                .remove("funcionarioDocId")
-                .apply()
-
-            // Navegar corretamente para TelaLogin
-            val intent = Intent(this@TelaConfiguracao_Funcionario, TelaLogin::class.java).apply {
-                putExtra("tipo", "funcionario")
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            btnCancelar.setOnClickListener {
+                dialog.dismiss()
             }
-            startActivity(intent)
-            finishAffinity()
+
+            btnConfirmar.setOnClickListener {
+                dialog.dismiss()
+
+                // Logout do Firebase
+                auth.signOut()
+
+                // Limpar dados corretos
+                val prefs = getSharedPreferences("funcionarioPrefs", MODE_PRIVATE)
+                prefs.edit()
+                    .remove("uid")
+                    .remove("funcionarioDocId")
+                    .apply()
+
+                // Navegar corretamente para TelaLogin
+                val intent = Intent(this@TelaConfiguracao_Funcionario, TelaLogin::class.java).apply {
+                    putExtra("tipo", "funcionario")
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                startActivity(intent)
+                finishAffinity()
+            }
+        } catch (e: Exception) {
+            Log.e("TelaConfigFuncionario", "Erro ao mostrar dialog de logout", e)
+            Toast.makeText(this, "Erro ao processar logout", Toast.LENGTH_SHORT).show()
         }
     }
 }
