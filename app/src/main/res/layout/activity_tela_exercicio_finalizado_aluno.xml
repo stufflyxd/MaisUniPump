@@ -7,6 +7,14 @@
     android:layout_height="match_parent"
     style="@style/BACKGROUND">
 
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
     <!-- Botão de Voltar -->
     <ImageView
         android:id="@+id/btnVoltar"
@@ -14,7 +22,7 @@
         android:layout_height="24dp"
         android:src="@drawable/back_button"
         style="@style/ICON"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineTop"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="32dp"
         android:layout_marginStart="16dp" />
@@ -28,7 +36,7 @@
         style="@style/TEXTCOLOR"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineTop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"
@@ -54,7 +62,8 @@
         android:text="Finalizar"
         style="@style/TEXTCOLOR"
         android:backgroundTint="#0066FF"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center" />

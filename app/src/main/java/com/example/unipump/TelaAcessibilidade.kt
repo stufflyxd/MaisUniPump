@@ -15,7 +15,6 @@ class TelaAcessibilidade : BaseActivity() {
     private lateinit var fontRadioGroup: RadioGroup
     private lateinit var radioDefaultFont: RadioButton
     private lateinit var radioHelvetica: RadioButton
-    private lateinit var radioVerdana: RadioButton
     private lateinit var radioMinecraft: RadioButton
     private lateinit var radioMonsieur: RadioButton
     private lateinit var radioNabla: RadioButton
@@ -49,7 +48,6 @@ class TelaAcessibilidade : BaseActivity() {
         fontRadioGroup = findViewById(R.id.font_selection_radio_group)
         radioDefaultFont = findViewById(R.id.radio_default_font)
         radioHelvetica = findViewById(R.id.radio_helvetica)
-        radioVerdana = findViewById(R.id.radio_verdana)  // Descomentado
         radioMinecraft = findViewById(R.id.radio_minecraft)
         radioMonsieur = findViewById(R.id.radio_monsieur)
         radioNabla = findViewById(R.id.radio_nabla)
@@ -68,7 +66,6 @@ class TelaAcessibilidade : BaseActivity() {
             val selectedFontId = when (checkedId) {
                 R.id.radio_default_font -> FontPreferenceManager.FONT_DEFAULT
                 R.id.radio_helvetica -> FontPreferenceManager.FONT_HELVETICA
-                R.id.radio_verdana -> FontPreferenceManager.FONT_VERDANA
                 R.id.radio_minecraft -> FontPreferenceManager.FONT_MINECRAFT
                 R.id.radio_monsieur -> FontPreferenceManager.FONT_MONSIEUR
                 R.id.radio_nabla -> FontPreferenceManager.FONT_NABLA
@@ -107,7 +104,6 @@ class TelaAcessibilidade : BaseActivity() {
         val radioButtonId = when (currentFontId) {
             FontPreferenceManager.FONT_DEFAULT -> R.id.radio_default_font
             FontPreferenceManager.FONT_HELVETICA -> R.id.radio_helvetica
-            FontPreferenceManager.FONT_VERDANA -> R.id.radio_verdana
             FontPreferenceManager.FONT_MINECRAFT -> R.id.radio_minecraft
             FontPreferenceManager.FONT_MONSIEUR -> R.id.radio_monsieur
             FontPreferenceManager.FONT_NABLA -> R.id.radio_nabla

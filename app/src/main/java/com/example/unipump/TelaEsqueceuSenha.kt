@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class TelaEsqueceuSenha : BaseActivity() {
 
+    private lateinit var setaVoltar: ImageButton
     private lateinit var btnEnviar: Button
     private lateinit var edtEmailOuTelefone: EditText
 
@@ -27,6 +29,7 @@ class TelaEsqueceuSenha : BaseActivity() {
 
         /*auth = FirebaseAuth.getInstance()*/
 
+        setaVoltar = findViewById(R.id.btn_back)
 
         // Configura os eventos
         configurarEventos()
@@ -35,6 +38,10 @@ class TelaEsqueceuSenha : BaseActivity() {
     private fun configurarEventos() {
         btnEnviar.setOnClickListener {
             onEnviarClick()
+        }
+
+        setaVoltar.setOnClickListener {
+            finish()
         }
     }
 

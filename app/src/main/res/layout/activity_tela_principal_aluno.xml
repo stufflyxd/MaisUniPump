@@ -26,11 +26,10 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="2dp"
-            android:background="@drawable/circular_background"
-            android:backgroundTint="@color/blue"
-            android:contentDescription="@string/perfil_usuario"
             android:src="@drawable/ic_person"
-            android:scaleType="centerCrop"/>
+            android:contentDescription="Profile picture"
+            android:scaleType="centerCrop"
+            android:background="@drawable/circle_background" />
 
         <TextView
             android:id="@+id/nomeUser"

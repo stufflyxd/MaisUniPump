@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     style="@style/BACKGROUND">
 
+
     <!-- 1) Botão de Voltar no topo -->
     <ImageView
         android:id="@+id/btnBack"
@@ -16,8 +17,8 @@
         style="@style/ICON"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="16dp"/>
 
     <!-- 2) Título da tela -->
     <TextView
@@ -32,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"/>
 

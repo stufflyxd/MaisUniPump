@@ -8,7 +8,9 @@
     style="@style/BACKGROUND"
     tools:context=".TelaInformacoesPessoaisAluno">
 
+
     <ScrollView
+
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -22,8 +24,9 @@
             android:orientation="vertical"
             android:paddingBottom="16dp">
 
+
             <LinearLayout
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="50dp"
                 android:id="@+id/text_info_pessoais_aluno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +38,8 @@
                     android:layout_height="48sp"
                     android:contentDescription="@string/seta_voltar"
                     android:src="@drawable/ic_arrow_back"
-                    style="@style/ICON"/>
+                    style="@style/ICON"
+                    android:layout_marginStart="16dp"/>
 
                 <TextView
                     android:layout_width="match_parent"

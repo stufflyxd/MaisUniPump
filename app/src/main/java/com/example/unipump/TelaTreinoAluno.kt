@@ -17,6 +17,7 @@ import com.example.unipump.models.FichaTreinoAluno
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.File
 import java.util.*
 
 class TelaTreinoAluno : BaseActivity() {
@@ -85,11 +86,10 @@ class TelaTreinoAluno : BaseActivity() {
         carregarFichas()
     }
 
-    /** Garante que nome e avatar sejam carregados igual ao TelaConfig */
+    /** Carrega nome e avatar via Glide, com circleCrop */
     private fun carregarPerfil() {
         val prefs = getSharedPreferences("alunoPrefs", MODE_PRIVATE)
         val uid = prefs.getString("alunoDocId", null) ?: return
-
 
         val nome = prefs.getString("nome", "Usuario") ?: "Usuario"
         val nomeUsuario = prefs.getString("nome_usuario", "") ?: ""
@@ -101,24 +101,45 @@ class TelaTreinoAluno : BaseActivity() {
             "Olá, $nome!"
         }
 
-
         db.collection("alunos").document(uid)
             .get()
             .addOnSuccessListener { doc ->
                 val path = doc.getString("uri_foto")
+                Log.d("TelaPrincipalAluno", "Caminho da foto no banco: $path")
+
                 if (!path.isNullOrBlank()) {
-                    // Carrega foto via Glide com circleCrop
-                    Glide.with(this)
-                        .load(Uri.parse(path))
-                        .circleCrop()
-                        .skipMemoryCache(true)
-                        .into(imgAvatar)
+                    // 🎯 MUDANÇA PRINCIPAL: Usar File diretamente como na tela funcionando
+                    val file = File(path)
+                    Log.d("TelaPrincipalAluno", "Arquivo existe? ${file.exists()}")
+                    Log.d("TelaPrincipalAluno", "Caminho completo: ${file.absolutePath}")
+
+                    if (file.exists()) {
+                        Log.d("TelaPrincipalAluno", "Carregando foto com Glide...")
+
+                        // 🎯 NOVO: Limpar qualquer imagem anterior (igual na tela funcionando)
+                        imgAvatar.setImageDrawable(null)
+
+                        Glide.with(this)
+                            .load(file) // 🎯 Usar File diretamente, não Uri.parse()
+                            .placeholder(R.drawable.ic_person) // Placeholder enquanto carrega
+                            .error(R.drawable.ic_person) // Imagem de erro
+                            .circleCrop()
+                            .skipMemoryCache(true) // Manter igual à tela funcionando
+                            .into(imgAvatar)
+
+                        Log.d("TelaPrincipalAluno", "Comando Glide executado!")
+                    } else {
+                        Log.w("TelaPrincipalAluno", "Arquivo da foto não encontrado! Usando placeholder")
+                        imgAvatar.setImageResource(R.drawable.ic_person)
+                    }
                 } else {
+                    Log.d("TelaPrincipalAluno", "Nenhuma foto salva no banco. Usando placeholder")
                     imgAvatar.setImageResource(R.drawable.ic_person)
                 }
             }
-            .addOnFailureListener {
-                Log.e("TelaTreinoAluno", "Erro ao carregar perfil", it)
+            .addOnFailureListener { exception ->
+                Log.e("TelaPrincipalAluno", "Erro ao carregar perfil", exception)
+                imgAvatar.setImageResource(R.drawable.ic_person)
             }
     }
 

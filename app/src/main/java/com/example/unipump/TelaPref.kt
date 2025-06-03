@@ -22,7 +22,7 @@ class TelaPref : BaseActivity() {
     private lateinit var themeSwitch: Switch
     private lateinit var themeValueText: TextView // TextView para "(Tema Escuro)" etc.
     private lateinit var aboutOption: TextView
-    private lateinit var clearCacheOption: TextView
+/*    private lateinit var clearCacheOption: TextView*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +33,7 @@ class TelaPref : BaseActivity() {
         themeSwitch = findViewById(R.id.theme_switch)
         themeValueText = findViewById(R.id.theme_value) // Certifique-se que este ID existe no XML
         aboutOption = findViewById(R.id.about_option)
-        clearCacheOption = findViewById(R.id.clear_cache_option)
+        /*clearCacheOption = findViewById(R.id.clear_cache_option)*/
 
         // --- NOVO: Configura o estado inicial do Switch e do texto do tema ---
         val currentThemeMode = ThemePreferenceManager.getThemeMode(this)
@@ -75,9 +75,9 @@ class TelaPref : BaseActivity() {
             startActivity(intent)
         }
 
-        clearCacheOption.setOnClickListener {
+       /* clearCacheOption.setOnClickListener {
             Toast.makeText(this, "Cache limpo", Toast.LENGTH_SHORT).show()
-        }
+        }*/
     }
 
     // Função auxiliar para atualizar o texto "(Tema Escuro)" ou "(Tema Claro)"

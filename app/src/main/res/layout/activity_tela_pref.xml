@@ -11,12 +11,13 @@
         <!-- Back Button -->
         <ImageButton
             android:id="@+id/SetaVoltarTelaCriarFicha"
+            style="@style/ICON"
             android:layout_width="48sp"
             android:layout_height="48sp"
-            android:layout_margin="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="35dp"
             android:contentDescription="@string/seta_voltar"
-            android:src="@drawable/ic_arrow_back"
-            style="@style/ICON"/>
+            android:src="@drawable/ic_arrow_back" />
 
         <!-- Title -->
         <TextView
@@ -24,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="50dp"
             android:text="Minhas preferências"
             style="@style/TEXTCOLOR"
             android:textSize="18sp"
@@ -131,7 +132,7 @@
             </LinearLayout>
 
             <!-- Clear Cache Option -->
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -154,7 +155,7 @@
                     android:src="@drawable/ic_arrow_back"
                     android:contentDescription="Abrir limpar cache"
                     style="@style/ICON" />
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
 
