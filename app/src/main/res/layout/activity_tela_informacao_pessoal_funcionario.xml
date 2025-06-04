@@ -23,7 +23,7 @@
             android:paddingBottom="16dp">
 
             <LinearLayout
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="50dp"
                 android:id="@+id/text_info_pessoais_aluno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -33,6 +33,7 @@
                     android:id="@+id/SetaVoltarTelaGerenciamentoAluno"
                     android:layout_width="48sp"
                     android:layout_height="48sp"
+                    android:layout_marginStart="16dp"
                     android:contentDescription="@string/seta_voltar"
                     android:src="@drawable/ic_arrow_back"
                     style="@style/ICON"/>

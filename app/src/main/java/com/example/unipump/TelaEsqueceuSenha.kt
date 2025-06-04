@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class TelaEsqueceuSenha : BaseActivity() {
 
-    private lateinit var setaVoltar: ImageButton
+    private lateinit var setaVoltar: ImageView
     private lateinit var btnEnviar: Button
     private lateinit var edtEmailOuTelefone: EditText
 

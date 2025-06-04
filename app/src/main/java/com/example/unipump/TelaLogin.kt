@@ -64,9 +64,6 @@ class TelaLogin : BaseActivity() {
         configurarEventos()
     }
 
-    // REMOVIDA a verificação automática do onStart()
-    // A TelaLogin agora só faz login manual, não automático
-
     // NOVA FUNÇÃO: Configurar o toggle de visibilidade da senha
     private fun configurarToggleSenha() {
         edtSenha.setOnTouchListener { _, event ->
@@ -113,19 +110,32 @@ class TelaLogin : BaseActivity() {
         val tipo = intent.getStringExtra("tipo")
 
         btnVoltar.setOnClickListener {
-            val intent = Intent(this, TelaInicial::class.java)
-            startActivity(intent)
-            finish() // Adicionar finish() para não acumular activities
+            try {
+                val intent = Intent(this, TelaInicial::class.java)
+                // Limpar toda a pilha de Activities
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                // NÃO chamar finish() aqui - deixar o sistema gerenciar
+            } catch (e: Exception) {
+                Log.e("TelaLogin", "Erro ao voltar para TelaInicial", e)
+                super.onBackPressed()
+            }
         }
 
         textEsqueceuSenha.setOnClickListener {
-            val intent = Intent(this, TelaEsqueceuSenha::class.java)
-            if (tipo == "aluno") {
-                intent.putExtra("tipo", "aluno")
-            } else if (tipo == "funcionario") {
-                intent.putExtra("tipo", "funcionario")
+            try {
+                val intent = Intent(this, TelaEsqueceuSenha::class.java)
+                // CORREÇÃO: Pegar o tipo do intent ATUAL, não do novo intent
+                val tipoAtual = this.intent.getStringExtra("tipo")
+                intent.putExtra("tipo", tipoAtual)
+
+                // IMPORTANTE: Não finalizar TelaLogin ainda
+                startActivity(intent)
+                // Não chamar finish() aqui
+            } catch (e: Exception) {
+                Log.e("TelaLogin", "Erro ao abrir TelaEsqueceuSenha", e)
+                Toast.makeText(this, "Erro ao abrir tela de recuperação", Toast.LENGTH_SHORT).show()
             }
-            startActivity(intent)
         }
 
         // Evento do botão de login
@@ -190,8 +200,6 @@ class TelaLogin : BaseActivity() {
             Toast.makeText(this, "Formato de login inválido", Toast.LENGTH_SHORT).show()
         }
     }
-
-    // Apenas a parte do método loginComEmail que precisa ser corrigida:
 
     private fun loginComEmail(email: String, senha: String, tipo: String?) {
         auth.signInWithEmailAndPassword(email, senha)
@@ -259,13 +267,18 @@ class TelaLogin : BaseActivity() {
                                     }
 
                                     // Vai para a tela principal
-                                    val intent = if (tipo == "aluno") {
-                                        Intent(this, TelaPrincipalAluno::class.java)
-                                    } else {
-                                        Intent(this, TelaFuncionario::class.java)
+                                    try {
+                                        val intent = if (tipo == "aluno") {
+                                            Intent(this, TelaPrincipalAluno::class.java)
+                                        } else {
+                                            Intent(this, TelaFuncionario::class.java)
+                                        }
+                                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        startActivity(intent)
+                                    } catch (e: Exception) {
+                                        Log.e("TelaLogin", "Erro ao navegar para tela principal", e)
+                                        Toast.makeText(this, "Erro ao abrir tela principal", Toast.LENGTH_SHORT).show()
                                     }
-                                    startActivity(intent)
-                                    finish() // Encerra a tela de login
                                 }
                             }
                             .addOnFailureListener {
@@ -295,6 +308,36 @@ class TelaLogin : BaseActivity() {
             }
     }
 
+    override fun onBackPressed() {
+        try {
+            if (!isFinishing && !isDestroyed) {
+                val intent = Intent(this, TelaInicial::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+        } catch (e: Exception) {
+            Log.e("TelaLogin", "Erro no onBackPressed", e)
+            super.onBackPressed()
+        }
+    }
+
+    override fun onDestroy() {
+        try {
+            super.onDestroy()
+        } catch (e: Exception) {
+            Log.e("TelaLogin", "Erro no onDestroy", e)
+        }
+    }
+
+    override fun finish() {
+        try {
+            if (!isFinishing) {
+                super.finish()
+            }
+        } catch (e: Exception) {
+            Log.e("TelaLogin", "Erro no finish", e)
+        }
+    }
 
     private fun isValidEmail(email: String): Boolean {
         val emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"

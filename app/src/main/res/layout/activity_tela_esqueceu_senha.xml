@@ -61,7 +61,7 @@
         <!-- Título -->
         <TextView
             style="@style/TextViewTitle_esqueceuSenha"
-            android:text="@string/passo1"
+            android:text="Passo 1 de 2"
 
             />
 

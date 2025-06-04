@@ -62,12 +62,14 @@
             android:exported="false" /> <!-- Atividades da branch 'confia' -->
         <activity
             android:name=".TelaEdicaoFichaTreino_funcionario"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".TelaNotificacao_funcionario"
             android:exported="false" />
         <activity
             android:name=".TelaChat"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".TelaInformacaoPessoal_funcionario"

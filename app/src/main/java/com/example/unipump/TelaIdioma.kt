@@ -20,12 +20,7 @@ class TelaIdioma : BaseActivity() {
 
         // Opçoes de idioma
         val languages = listOf(
-            "Portuguese (Português - BR)",
-            "Polski (Polonês)",
-            "English (Inglês - EUA)",
-            "Español (Espanhol)",
-            "Русский (Russo)",
-            "Deutsch (Alemão)"
+            "Portuguese (Português - BR)"
         )
 
         // Set up the ListView with an ArrayAdapter

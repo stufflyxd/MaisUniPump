@@ -37,7 +37,7 @@ class TelaInformacaoPessoal_funcionario : BaseActivity() {
 
     // CORREÇÃO: Usar a chave correta salva no login
     private val funcionarioDocId: String?
-        get() = prefs.getString("alunoDocId", null) // Esta é a chave que você usa no login
+        get() = prefs.getString("funcionarioDocId", null) // Esta é a chave que você usa no login
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
