@@ -98,13 +98,13 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="4dp">
 
-                <TextView
-                    android:id="@+id/tvLabelTempoExecucao"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo de execução: "
-                    style="@style/TEXTCOLORSECONDARY"
-                    android:textSize="14sp"/>
+<!--                <TextView-->
+<!--                    android:id="@+id/tvLabelTempoExecucao"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Tipo de execução: "-->
+<!--                    style="@style/TEXTCOLORSECONDARY"-->
+<!--                    android:textSize="14sp"/>-->
 
                 <TextView
                     android:id="@+id/tvTempoExercicio"

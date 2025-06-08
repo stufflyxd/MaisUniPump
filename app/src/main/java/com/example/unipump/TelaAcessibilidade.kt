@@ -70,6 +70,7 @@ class TelaAcessibilidade : BaseActivity() {
                 R.id.radio_monsieur -> FontPreferenceManager.FONT_MONSIEUR
                 R.id.radio_nabla -> FontPreferenceManager.FONT_NABLA
                 R.id.radio_redacted -> FontPreferenceManager.FONT_REDACTED
+                R.id.radio_redacted -> FontPreferenceManager.FONT_REDACTED
                 else -> FontPreferenceManager.FONT_DEFAULT
             }
 

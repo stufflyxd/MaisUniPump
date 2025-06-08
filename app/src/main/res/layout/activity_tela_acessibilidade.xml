@@ -92,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:text="Padrão do Sistema"
                 style="@style/TEXTCOLOR"
+                android:fontFamily="@font/helvetica"
                 android:textSize="16sp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
@@ -101,12 +102,37 @@
                 android:id="@+id/radio_helvetica"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Helvetica"
+                android:text="Helvetica negrito"
                 style="@style/TEXTCOLOR"
+                android:fontFamily="@font/helveticaroundedbold"
                 android:textSize="16sp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:layout_marginBottom="8dp"/>
+
+<!--            <RadioButton-->
+<!--                android:id="@+id/radio_comicsans"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Comic Sans"-->
+<!--                style="@style/TEXTCOLOR"-->
+<!--                android:fontFamily="@font/comicsans"-->
+<!--                android:textSize="16sp"-->
+<!--                android:paddingStart="8dp"-->
+<!--                android:paddingEnd="8dp"-->
+<!--                android:layout_marginBottom="8dp"/>-->
+
+<!--            <RadioButton-->
+<!--                android:id="@+id/radio_disney"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Disney"-->
+<!--                style="@style/TEXTCOLOR"-->
+<!--                android:fontFamily="@font/disney"-->
+<!--                android:textSize="16sp"-->
+<!--                android:paddingStart="8dp"-->
+<!--                android:paddingEnd="8dp"-->
+<!--                android:layout_marginBottom="8dp"/>-->
 
             <!--<RadioButton
                 android:id="@+id/radio_verdana"
@@ -125,10 +151,23 @@
                 android:layout_height="wrap_content"
                 android:text="Minecraft"
                 style="@style/TEXTCOLOR"
+                android:fontFamily="@font/minecraftmojangles"
                 android:textSize="16sp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:layout_marginBottom="8dp"/>
+
+<!--            <RadioButton-->
+<!--                android:id="@+id/radio_burnbook"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Burn Book"-->
+<!--                style="@style/TEXTCOLOR"-->
+<!--                android:fontFamily="@font/burnbook"-->
+<!--                android:textSize="16sp"-->
+<!--                android:paddingStart="8dp"-->
+<!--                android:paddingEnd="8dp"-->
+<!--                android:layout_marginBottom="8dp"/>-->
 
             <RadioButton
                 android:id="@+id/radio_monsieur"
@@ -136,10 +175,12 @@
                 android:layout_height="wrap_content"
                 android:text="Monsieur"
                 style="@style/TEXTCOLOR"
+                android:fontFamily="@font/monsieurdadoulaise"
                 android:textSize="16sp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:layout_marginBottom="8dp"/>
+
 
             <RadioButton
                 android:id="@+id/radio_nabla"
@@ -147,10 +188,12 @@
                 android:layout_height="wrap_content"
                 android:text="Nabla"
                 style="@style/TEXTCOLOR"
+                android:fontFamily="@font/nablaregular"
                 android:textSize="16sp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:layout_marginBottom="8dp"/>
+
 
             <RadioButton
                 android:id="@+id/radio_redacted"
@@ -158,6 +201,7 @@
                 android:layout_height="wrap_content"
                 android:text="Redacted"
                 style="@style/TEXTCOLOR"
+                android:fontFamily="@font/redactedscript"
                 android:textSize="16sp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"

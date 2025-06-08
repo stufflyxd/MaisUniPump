@@ -54,7 +54,7 @@ class TelaDetalheExercicio : BaseActivity() {
         // ===== 4) Preencher o cabeçalho dentro do CardView =====
         findViewById<TextView>(R.id.tvTituloExercicio).text = exercicioAtual.nome
         // Pode-se exibir a execução textual ou fixa. Aqui deixamos do jeito que você tinha:
-        findViewById<TextView>(R.id.tvLabelTempoExecucao).text = "Execução normal"
+        // findViewById<TextView>(R.id.tvLabelTempoExecucao).text = "Execução normal"
         findViewById<TextView>(R.id.tvTempoExercicio).text = exercicioAtual.execucao
 
         // ===== 5) Configurar RecyclerView de séries (dentro do card) =====
