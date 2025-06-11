@@ -131,12 +131,13 @@
     <!-- 5) Botão "Voltar" fixo na base -->
     <Button
         android:id="@+id/btnVoltarBase"
+        style="@style/TEXTCOLOR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Voltar"
-        style="@style/TEXTCOLOR"
+        android:layout_margin="16dp"
         android:backgroundTint="#0066FF"
+        android:text="                              Voltar                              "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
